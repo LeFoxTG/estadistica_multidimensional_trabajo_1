@@ -53,6 +53,26 @@ En total, el dataset contiene 20 variables. Esto se puede evidenciar gracias a  
 
 ### Variables cuantitativas
 
+-   Edad
+-   Cantidad
+
 ## 4. Explicar:
 
 ### ¿Qué tipo de información contiene el dataset?
+
+El dataset contiene datos sobre homicidios, como lo són la ubicación, información de la victima y el arma usada.
+
+### Cantidad de homicidios por cada departamento en orden descendiente.
+
+```{r}
+library(dplyr)
+homicidios |> count(Departamento,sort=TRUE) 
+```
+
+### clase de sitio
+
+```{r}
+
+homicidios |> count(Clase.de.sitio, sort = TRUE)
+
+```
