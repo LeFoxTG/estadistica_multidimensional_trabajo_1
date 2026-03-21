@@ -1,0 +1,58 @@
+---
+output: html_document
+---
+
+# PARTE 1 - CARGA Y RECONOCIMIENTO
+
+## 1. Cargar el dataset:
+
+```{r}
+homicidios <- read.csv("Homicidios.csv", 
+                       sep = ";", 
+                       fileEncoding = "Latin1", 
+                      check.names = TRUE)
+# Corregir nombres de algunas columnas
+library(dplyr)
+homicidios <- homicidios %>% 
+  rename(Dia = D.a, 
+         Pais_Nacimiento = Pa.s.de.nacimiento,
+         Profesion = Profesi.n)
+```
+
+## 2. Mostrar:
+
+```{r}
+head(homicidios)
+str(homicidios)
+summary(homicidios)
+```
+
+## 3. Identificar:
+
+### Número de variables
+
+En total, el dataset contiene 20 variables. Esto se puede evidenciar gracias a  `str(homicidios)`.
+
+### Variables cualitativas
+
+* Departamento
+* Municipio
+* Dia
+* Barrio
+* Zona
+* Clase de sitio
+* Arma empleada
+* Movil Agresor
+* Movil Victima
+* Sexo
+* Estado civil
+* Pais de nacimiento
+* Clase de empleo
+* Profesión
+* Escolaridad
+
+### Variables cuantitativas
+
+## 4. Explicar:
+
+### ¿Qué tipo de información contiene el dataset?
