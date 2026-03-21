@@ -1,5 +1,17 @@
 ---
-output: html_document
+title: "Estadistica Multidimencional"
+author: "Angelo Alejandro Ibañez Hernandez 20212020007 <br> Alejandro Gomez Moyano 20222020073 <br> Juan David Córdoba Aguirre 20211020097 <br> Oscar Santiago Duran Benitez 20212020080"
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: '2'
+    df_print: paged
+  html_notebook:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+subtitle: "Analisis  de homicidios"
 ---
 
 # PARTE 1 - CARGA Y RECONOCIMIENTO
@@ -13,17 +25,32 @@ homicidios <- read.csv("Homicidios.csv",
                       check.names = TRUE)
 # Corregir nombres de algunas columnas
 library(dplyr)
+
 homicidios <- homicidios %>% 
   rename(Dia = D.a, 
          Pais_Nacimiento = Pa.s.de.nacimiento,
-         Profesion = Profesi.n)
+         Profesion = Profesi.n,
+         Clase_de_sitio = Clase.de.sitio,
+         Arma_empleada = Arma.empleada,
+         Movil_agresor = M.vil.Agresor,
+         Movil_victima = M.vil.Victima,
+         Estado_civil  = Estado.civil,
+         Clase_de_empleado = Clase.de.empleado,
+         Codigo_DANE = C.digo.DANE
+         )
 ```
 
 ## 2. Mostrar:
-
+### 2.1 head ()
 ```{r}
 head(homicidios)
+```
+### 2.2 str()
+```{r}
 str(homicidios)
+```
+### 2.3 summary
+```{r}
 summary(homicidios)
 ```
 
@@ -31,9 +58,11 @@ summary(homicidios)
 
 ### Número de variables
 
-En total, el dataset contiene 20 variables. Esto se puede evidenciar gracias a  `str(homicidios)`.
+En total, el dataset contiene 20 variables. Esto se puede evidenciar gracias a  `str(homicidios)` distribuidas en la siguiente forma.
 
-### Variables cualitativas
+#### Variables cualitativas
+
+18 variables cualitativas:
 
 * Departamento
 * Municipio
@@ -51,8 +80,19 @@ En total, el dataset contiene 20 variables. Esto se puede evidenciar gracias a  
 * Profesión
 * Escolaridad
 
-### Variables cuantitativas
+#### Variables cuantitativas
+
+2 variables cuantitativas
+
+* Edad
+* Cantidad
 
 ## 4. Explicar:
 
 ### ¿Qué tipo de información contiene el dataset?
+
+En el dataset se encuentra dos tipos de informacion:
+
+  * informacion sobre el lugar y el dia donde se cometio el asesinato, el arma que se uso y la forma de movilizarce del asesino.
+  * informacion de la victima y la manera en la que se estaba movilizando.
+  
