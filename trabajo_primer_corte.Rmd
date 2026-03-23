@@ -1,17 +1,22 @@
 ---
 title: "Estadistica Multidimencional"
-author: "Angelo Alejandro Ibañez Hernandez 20212020007 <br> Alejandro Gomez Moyano 20222020073 <br> Juan David Córdoba Aguirre 20211020097 <br> Oscar Santiago Duran Benitez 20212020080"
+author: Angelo Alejandro Ibañez Hernandez 20212020007 <br> Alejandro Gomez Moyano
+  20222020073 <br> Juan David Córdoba Aguirre 20211020097 <br> Oscar Santiago Duran
+  Benitez 20212020080
 date: "`r format(Sys.Date(), '%d/%m/%Y')`"
 output:
-  html_document:
+  pdf_document:
     toc: true
     toc_depth: '2'
-    df_print: paged
   html_notebook:
     toc: true
     toc_depth: 2
     number_sections: true
-subtitle: "Analisis  de homicidios"
+  html_document:
+    toc: true
+    toc_depth: '2'
+    df_print: paged
+subtitle: Analisis  de homicidios
 ---
 
 # PARTE 1 - CARGA Y RECONOCIMIENTO
@@ -95,4 +100,119 @@ En el dataset se encuentra dos tipos de informacion:
 
   * informacion sobre el lugar y el dia donde se cometio el asesinato, el arma que se uso y la forma de movilizarce del asesino.
   * informacion de la victima y la manera en la que se estaba movilizando.
-  
+
+# PARTE 2 - ANÁLISIS UNIVARIADO
+
+## Edad
+
+### 1. Tipo de variable
+
+La edad es una variable cuantitativa.
+
+### 2. Gráfico
+
+```{r}
+# Convertir a numérico (esto generará NAs donde dice "S.D.")
+homicidios$Edad <- as.numeric(as.character(homicidios$Edad))
+
+hist(homicidios$Edad, 
+     main = "Histograma de Edad", 
+     xlab = "Edad", 
+     ylab = "Frecuencia", 
+     col = "steelblue")
+
+boxplot(homicidios$Edad, horizontal = FALSE)
+```
+
+### 3. Interpretación
+
+Para la variable edad, se puede observar en el histograma que puede tener una distribución similar a la normal aunque desplazada hacia la izquierda.
+
+Se puede evidenciar que la mayor parte de los homicidios ocurren en el rango entre los 20 y 40 años de edad aproximadamente, es decir que los homicidios reportados se concentran en la población más joven.
+
+# PARTE 4 - ANÁLISIS MULTIVARIADO
+
+## 1. Matriz de correlación
+
+```{r}
+data_num <- na.omit(homicidios[, c("Edad", "Cantidad")])
+matriz_cor <- cor(data_num)
+library(corrplot)
+corrplot(matriz_cor, 
+         method = "color",
+         addCoef.col = "black",
+         tl.col = "black",
+         title = "Matriz de Correlación: Edad vs Cantidad",
+         mar = c(0,0,1,0))
+```
+
+### ¿Existe relación?
+No. Cómo se puede evidenciar en la matriz, la correlación entre `Edad` y `Cantidad` es de -0.04, muy cercano a cero, por lo tanto no se puede decir que haya correlación ni que una describa a la otra. Son independientes. Esto principalmente se debe a que el valor de `Cantidad` es 1 para cada prácticamente todos los registros, por lo que no se puede establecer una relación entre la edad y la cantidad.
+```{r}
+data_grafica <- na.omit(homicidios[, c("Edad", "Cantidad")])
+
+plot(x = data_grafica$Edad, y = data_grafica$Cantidad,
+     main = "Relación entre Edad y Cantidad de Homicidios",
+     xlab = "Edad de la Víctima",
+     ylab = "Cantidad de Casos",
+     pch = 19,      # Tipo de punto (sólido)
+     col = rgb(0, 0, 1, 0.2))
+```
+Está gráfica de dispersión es muy útil para entender por qué no hay relación. Al crecer la edad, no crece ni disminuye la cantidad, de hecho es una linea recta que se queda en 1 (exceptuando algunos valores anomalos), por lo que es imposible saber cual es la edad dada la cantidad.
+
+### ¿Es fuerte o débil?
+Más que fuerte o débil, es prácticamente nula. No hay relación lineal entre estas dos variables.
+
+## 2. Análisis combinado
+
+Se analizarán: Zona + Arma + Departamento
+
+### Facetas
+Para asegurar que la gráfica sea legible, se analizarán solo el top 6 de departamentos con más homicidios.
+
+```{R}
+library(ggplot2)
+library(dplyr)
+
+# Filtrar el Top 6 de departamentos para que el gráfico sea legible
+top_deptos <- homicidios %>%
+  group_by(Departamento) %>%
+  tally(sort = TRUE) %>%
+  top_n(6) %>%
+  pull(Departamento)
+
+data_filtrada <- homicidios %>% filter(Departamento %in% top_deptos)
+
+ggplot(data_filtrada, aes(y = Arma_empleada, fill = Zona)) +
+  geom_bar(position = "dodge") + 
+  facet_wrap(~Departamento) +
+  labs(title = "Armas empleadas por Zona en los principales Departamentos",
+       x = "Cantidad de Homicidios",
+       y = "Arma") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+### ¿Se observan patrones?
+
+El `arma de fuego` es predominante en todos los departamentos analizados sin excepción, así como el `arma blanca / cortopunzante` se mantiene en segundo lugar en todos.
+
+Estas mismas armas también suelen dominar en zonas urbanas más que rurales en la mayoría de departamentos. Sin embargo esto podría deberse a que en aquellos departamentos puede haber mayor población urbana que rural y por lo tanto podría haber más casos.
+
+Se observa también como, en algunos departamentos como Antioquia, hay predominancia de zonas urbanas, mientras que en otros como Nariño, predominan las zonas rurales.
+
+### ¿Hay grupos?
+
+Está el grupo urbano, en el cual los homicidios efectuados con cualquier arma son mayormente cometidos en zona urbana. Este grupo está constituido por:
+* Antioquia
+* Atlántico
+* Cundinamarca
+* Valle
+
+También está el grupo rural, en el cual los homicidios efectuados con cualquier arma son mayormente en zona rural Este grupo está consittuido por:
+* Cauca
+* Nariño
+
+### ¿Qué variables parecen estar relacionadas?
+
+Parece que el uso de armas de fuego podría estar relacionado con el tipo de zona del departamento. Se puede observar como en zonas urbanas el uso de las armas de fuego tiende a ser significativamente mayor que en zonas rurales, teniendo casos como en el Valle, Cundinamarca y Atlántico que las armas de fuego multiplican varias veces su uso en zona urbana frente a la rural.
