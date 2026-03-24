@@ -2,6 +2,24 @@
 output: html_document
 ---
 
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
+
 # PARTE 1 - CARGA Y RECONOCIMIENTO
 
 ## 1. Cargar el dataset:
@@ -31,25 +49,25 @@ summary(homicidios)
 
 ### Número de variables
 
-En total, el dataset contiene 20 variables. Esto se puede evidenciar gracias a  `str(homicidios)`.
+En total, el dataset contiene 20 variables. Esto se puede evidenciar gracias a `str(homicidios)`.
 
 ### Variables cualitativas
 
-* Departamento
-* Municipio
-* Dia
-* Barrio
-* Zona
-* Clase de sitio
-* Arma empleada
-* Movil Agresor
-* Movil Victima
-* Sexo
-* Estado civil
-* Pais de nacimiento
-* Clase de empleo
-* Profesión
-* Escolaridad
+-   Departamento
+-   Municipio
+-   Dia
+-   Barrio
+-   Zona
+-   Clase de sitio
+-   Arma empleada
+-   Movil Agresor
+-   Movil Victima
+-   Sexo
+-   Estado civil
+-   Pais de nacimiento
+-   Clase de empleo
+-   Profesión
+-   Escolaridad
 
 ### Variables cuantitativas
 
@@ -73,6 +91,138 @@ homicidios |> count(Departamento,sort=TRUE)
 
 ```{r}
 
-homicidios |> count(Clase.de.sitio, sort = TRUE)
+library(ggplot2)
+library(dplyr)
+# CONTAR 
+conteo_clase_sitios <- homicidios %>% count(Clase.de.sitio, sort = TRUE) %>% head(10)
+
+ggplot(conteo_clase_sitios, aes(x = n, y = reorder(Clase.de.sitio, n))) +
+  geom_col(fill = "steelblue") +
+  labs(title = "Homicidios por Clase de Sitio",
+       x = "Cantidad de Casos",
+       y = "Lugar") +
+  theme_minimal()
 
 ```
+
+### Parte #3 - Análisis bivariado
+
+### Día vs hora.
+
+```{r}
+#transformar horas a otro formato para poder hacer bien el conteo
+
+library(lubridate)
+#extraer hora
+homicidios$Hora_Int <- hour(hms(homicidios$Hora))
+
+
+
+conteo_dia_hora <- homicidios %>%
+  #mutate crea una nueva fila
+  mutate(rango_hora= case_when(
+    
+    Hora_Int >= 1 & Hora_Int < 6  ~ "01AM -06 AM",
+    Hora_Int >= 6 & Hora_Int < 12 ~ "06 AM-12 PM",
+    Hora_Int >= 12 & Hora_Int < 18 ~ "12 PM -06 PM",
+    TRUE                   ~ "06 PM -12 AM"
+    
+  )) %>%
+  # cuenta el dia y su hora.
+  count(Dia, rango_hora)
+
+# hacer grafica.
+
+#reorder le damos la variable que queremos ordenar, y n es la que usamos para calcularlo y sum la instrucción de que hacer con la variable
+ggplot(conteo_dia_hora,aes(x=reorder(Dia,n,sum),y=n,fill= rango_hora))+# los "+" siempre deben ir #al final de la linea
+  geom_col(position = "dodge") + #dodge #pone la barra al lado de la otra de una #categoria, la que abarca la otra.
+ labs(title = " Homicidios por Día y Rango Horario",
+      x = "Día de la semana",
+       y = "Cantidad de Casos",
+       fill = "Franja Horaria") +
+  theme_minimal()
+
+```
+
+### Interpretación:
+
+Se puede observar que las horas en las que hay homicidios está en el rango de hora entre las 6 pm a 12 am. además que los días en donde en ocurren más homicidios son los sabados y los Domingos,y en los domingos ocurren más casos en la madruga(1 am- 06 am) comparado con lso demás días que no superan los 275 casos.
+
+### departamento vs sexo
+
+```{r}
+# son muchos departamentos, entonces quiero el top 10 
+
+top_10_departa <- homicidios %>%
+  count(Departamento) %>%
+  #con slice max aseguramos cargar los n con más casos 
+  slice_max(n, n = 10) %>% 
+  pull(Departamento)
+# pull solo saca los nombres y deja ese vector
+
+
+conteo_depart_sexo <- homicidios %>%
+  filter(Departamento %in% top_10_departa) %>%# usa el vector para poder solo contar esos
+  count(Departamento, Sexo)# cuenta el sexo de los del top 10
+
+ggplot(conteo_depart_sexo,aes(x=reorder(Departamento,n,sum),y=n,fill=Sexo))+
+  geom_col(position = "dodge") + #dodge #pone la barra al lado de la otra de una #categoria, la que abarca la otra.
+ labs(title = " Homicidios por departamento vs sexo",
+      x = "departamento",
+       y = "Cantidad de Casos",
+       fill = "sexo") +
+  coord_flip()# para poder tener nombres verticales.
+  theme_minimal()
+
+
+```
+
+podemos observar como existe una tendencia en donde hay más casos para el sexo masculino mientras el femenino siempre es menor. aunque siempre hay una gran diferencia entre los casos femeninos en los primeros 3 comparados con los demás departamentos, es importante también considerar la población de estos.
+
+### Edad vs Sexo
+
+### boxplot:
+
+```{r}
+
+
+ggplot(homicidios, aes(x = Sexo, y = Edad, fill = Sexo)) +
+  geom_boxplot(outlier.colour = "red", outlier.shape = 16, outlier.size = 2) +
+  labs(title = "Distribución de Edad por Sexo",
+       x = "Género",
+       y = "Edad de la víctima") +
+  theme_minimal()
+
+
+
+
+```
+
+### interpretación:
+
+En los graficos no se alcanzar a percibir los bigotes, el rango de las mujeres en la edad es mayor en comparación con el masculino, igual que el promedio. Existe también una rango alto entre los outlier que se presentan en ambos sexos.
+
+```{r}
+conteo_departamentos <- homicidios %>%
+  count(Departamento)
+
+ggplot(conteo_departamentos, aes(x = n, y = reorder(Departamento, n))) +
+  geom_col(fill = "steelblue") +
+  labs(title = "Homicidios por Departamento",
+       x = "Cantidad de Casos",
+       y = "Departamento") +
+ 
+  theme_minimal()
+
+
+
+
+```
+
+### interpretación:
+
+Se puede ver que la mayoría de casos se concentran en Valle, Antioquia y cundinamarca. los primeros 5 sobresalen por mucho a los demás que manejan un rango entre 500 a 0.
+
+### conclusión:
+
+En este análisis bivariado se pudo sacar varias conclusiones sobre los datos de casos de homicidios en colombia, Los días que más se presentan casos son los fines de semanas en un rango de la noche y un poco en la madrugada. las victimas mantienen un mismo rango de edad entre ambos sexos pero el promedio de edad de las mujeres es mayor, existen demasiados outliers, los departamentos con más casos son Valle, Antioquia y cundinamarca. por ultimo el sexo masculino es el que más casos presenta en todos los departamentos con mucha diferencia con el sexo contrario.

@@ -494,12 +494,56 @@ gracias a <code>str(homicidios)</code>.</p>
 </div>
 <div id="variables-cuantitativas" class="section level3">
 <h3>Variables cuantitativas</h3>
+<ul>
+<li>Edad</li>
+<li>Cantidad</li>
+</ul>
 </div>
 </div>
 <div id="explicar" class="section level2">
 <h2>4. Explicar:</h2>
 <div id="qué-tipo-de-información-contiene-el-dataset" class="section level3">
 <h3>¿Qué tipo de información contiene el dataset?</h3>
+<p>El dataset contiene datos sobre homicidios, como lo són la ubicación,
+información de la victima y el arma usada.</p>
+</div>
+<div id="cantidad-de-homicidios-por-cada-departamento" class="section level3">
+<h3>Cantidad de homicidios por cada departamento</h3>
+<pre class="r"><code>library(dplyr)
+homicidios |&gt; count(Departamento,sort=TRUE) </code></pre>
+<pre><code>##          Departamento    n
+## 1               VALLE 2369
+## 2           ANTIOQUIA 1915
+## 3        CUNDINAMARCA 1555
+## 4               CAUCA  561
+## 5           ATLµNTICO  555
+## 6              NARI¥O  530
+## 7  NORTE DE SANTANDER  506
+## 8             BOLÖVAR  402
+## 9              TOLIMA  315
+## 10               META  281
+## 11          RISARALDA  274
+## 12            CàRDOBA  258
+## 13          SANTANDER  234
+## 14              CHOCà  228
+## 15            GUAJIRA  221
+## 16              CESAR  209
+## 17              HUILA  209
+## 18          MAGDALENA  201
+## 19            QUINDÖO  201
+## 20             CALDAS  187
+## 21            CAQUETµ  181
+## 22           PUTUMAYO  130
+## 23              SUCRE  116
+## 24             ARAUCA   85
+## 25             BOYACµ   75
+## 26           CASANARE   73
+## 27           GUAVIARE   38
+## 28    SAN ANDR\u0090S   23
+## 29            VICHADA   23
+## 30           AMAZONAS    5
+## 31            GUAINÖA    3
+## 32        VAUP\u0090S    2</code></pre>
 </div>
 </div>
 </div>
