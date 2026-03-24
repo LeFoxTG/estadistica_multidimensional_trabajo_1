@@ -173,6 +173,11 @@ Departamento es una variable cualitativa nominal.
 ### 2. Grafico
 
 ```{r}
+
+homicidios$Departamento <- iconv(homicidios$Departamento, to = "ASCII//TRANSLIT", sub = "")
+
+homicidios$Departamento <- gsub("[^a-zA-Z ]", "", homicidios$Departamento)
+
 freq_depto <- table(homicidios$Departamento)
 freq_depto_sorted <- sort(freq_depto, decreasing = TRUE)
 
@@ -245,6 +250,10 @@ Municipio es una variable cualitativa nominal.
 ### 2. Grafico
 
 ```{r}
+homicidios$Municipio <- iconv(homicidios$Municipio, to = "ASCII//TRANSLIT", sub = "")
+
+homicidios$Municipio <- gsub("[^[:alnum:][:space:]]", "", homicidios$Municipio)
+
 freq_municipio <- table(homicidios$Municipio)
 freq_municipio_sorted <- sort(freq_municipio, decreasing = TRUE)
 
@@ -317,7 +326,7 @@ Para la variable Escolaridad, se observa en el diagrama de barras que la mayor p
 ## 1. Matriz de correlación
 
 ```{r}
-aqapply(array, margin, aqz)data_num <- na.omit(homicidios[, c("Edad", "Cantidad")])
+data_num <- na.omit(homicidios[, c("Edad", "Cantidad")])
 matriz_cor <- cor(data_num)
 library(corrplot)
 corrplot(matriz_cor, 
@@ -329,7 +338,9 @@ corrplot(matriz_cor,
 ```
 
 ### ¿Existe relación?
+
 No. Cómo se puede evidenciar en la matriz, la correlación entre `Edad` y `Cantidad` es de -0.04, muy cercano a cero, por lo tanto no se puede decir que haya correlación ni que una describa a la otra. Son independientes. Esto principalmente se debe a que el valor de `Cantidad` es 1 para cada prácticamente todos los registros, por lo que no se puede establecer una relación entre la edad y la cantidad.
+
 ```{r}
 data_grafica <- na.omit(homicidios[, c("Edad", "Cantidad")])
 
@@ -340,9 +351,11 @@ plot(x = data_grafica$Edad, y = data_grafica$Cantidad,
      pch = 19,      # Tipo de punto (sólido)
      col = rgb(0, 0, 1, 0.2))
 ```
+
 Está gráfica de dispersión es muy útil para entender por qué no hay relación. Al crecer la edad, no crece ni disminuye la cantidad, de hecho es una linea recta que se queda en 1 (exceptuando algunos valores anomalos), por lo que es imposible saber cual es la edad dada la cantidad.
 
 ### ¿Es fuerte o débil?
+
 Más que fuerte o débil, es prácticamente nula. No hay relación lineal entre estas dos variables.
 
 ## 2. Análisis combinado
@@ -350,6 +363,7 @@ Más que fuerte o débil, es prácticamente nula. No hay relación lineal entre 
 Se analizarán: Zona + Arma + Departamento
 
 ### Facetas
+
 Para asegurar que la gráfica sea legible, se analizarán solo el top 6 de departamentos con más homicidios.
 
 ```{R}
