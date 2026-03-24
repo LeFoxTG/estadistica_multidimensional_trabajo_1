@@ -5,17 +5,20 @@ author: Angelo Alejandro Ibañez Hernandez 20212020007 <br> Alejandro Gomez Moya
   Benitez 20212020080
 date: "`r format(Sys.Date(), '%d/%m/%Y')`"
 output:
-  pdf_document:
-    toc: true
-    toc_depth: '2'
-  html_notebook:
-    toc: true
-    toc_depth: 2
-    number_sections: true
   html_document:
     toc: true
     toc_depth: '2'
     df_print: paged
+  html_notebook:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+  word_document:
+    toc: true
+    toc_depth: '2'
+  pdf_document:
+    toc: true
+    toc_depth: '2'
 subtitle: Analisis  de homicidios
 ---
 
@@ -28,6 +31,37 @@ homicidios <- read.csv("Homicidios.csv",
                        sep = ";", 
                        fileEncoding = "Latin1", 
                       check.names = TRUE)
+
+# --- Corrección de caracteres corruptos por encoding ---
+corrupcion_map <- list(
+  list(p = "\u00b5", r = "A"),   # µ → A
+  list(p = "\u00d6", r = "I"),   # Ö → I
+  list(p = "\u00e1", r = "O"),   # á → O
+  list(p = "\u00e9", r = "U"),   # é → U
+  list(p = "\u00a5", r = "N"),   # ¥ → N
+  list(p = "\u00a1", r = "i"),   # ¡ → i
+  list(p = "\u00a2", r = "o"),   # ¢ → o
+  list(p = "\u00ff", r = ""),    # ÿ → (eliminar)
+  list(p = "\x82",   r = "E"),   # Miércoles corrupto → Miercoles
+  list(p = "\xa0",   r = "A")    # Sábado corrupto → Sabado
+)
+
+# Función para aplicar todas las sustituciones a un texto
+fix_corrupcion <- function(x) {
+  for (entry in corrupcion_map) {
+    x <- gsub(entry$p, entry$r, x, fixed = TRUE, useBytes = TRUE)
+  }
+  Encoding(x) <- "UTF-8"
+  return(x)
+}
+
+# Corregir nombres de columnas
+names(homicidios) <- fix_corrupcion(names(homicidios))
+
+# Corregir valores en todas las columnas de tipo caracter
+cols_char <- sapply(homicidios, is.character)
+homicidios[cols_char] <- lapply(homicidios[cols_char], fix_corrupcion)
+
 # Corregir nombres de algunas columnas
 library(dplyr)
 
@@ -130,12 +164,160 @@ Para la variable edad, se puede observar en el histograma que puede tener una di
 
 Se puede evidenciar que la mayor parte de los homicidios ocurren en el rango entre los 20 y 40 años de edad aproximadamente, es decir que los homicidios reportados se concentran en la población más joven.
 
+## Departamento
+
+### 1. Tipo de variable
+
+Departamento es una variable cualitativa nominal.
+
+### 2. Grafico
+
+```{r}
+freq_depto <- table(homicidios$Departamento)
+freq_depto_sorted <- sort(freq_depto, decreasing = TRUE)
+
+barplot(freq_depto_sorted,
+        main = "Frecuencia de Homicidios por Departamento",
+        xlab = "Departamento",
+        ylab = "Frecuencia",
+        col = "steelblue",
+        las = 2,
+        cex.names = 0.6)
+```
+
+### 3. Interpretacion
+
+Para la variable Departamento, se observa en el diagrama de barras que los homicidios no se distribuyen de manera uniforme a lo largo del territorio nacional. Existen departamentos con una frecuencia de homicidios considerablemente mayor, lo que indica una concentracion geografica de la violencia. Los departamentos con mayor cantidad de casos corresponden a aquellos con mayor densidad poblacional y mayor actividad de conflicto armado o criminalidad.
+
+## Zona
+
+### 1. Tipo de variable
+
+Zona es una variable cualitativa nominal dicotomica (urbana/rural).
+
+### 2. Grafico
+
+```{r}
+freq_zona <- table(homicidios$Zona)
+
+barplot(freq_zona,
+        main = "Frecuencia de Homicidios por Zona",
+        xlab = "Zona",
+        ylab = "Frecuencia",
+        col = "steelblue")
+```
+
+### 3. Interpretacion
+
+Para la variable Zona, se observa en el diagrama de barras que la mayoria de los homicidios se concentran en la zona urbana, superando ampliamente a la zona rural. Esto puede estar relacionado con la mayor densidad poblacional en areas urbanas, asi como con factores asociados a la criminalidad urbana como el sicariato, las riñas y el crimen organizado.
+
+## Arma Empleada
+
+### 1. Tipo de variable
+
+Arma empleada es una variable cualitativa nominal.
+
+### 2. Grafico
+
+```{r}
+freq_arma <- table(homicidios$Arma_empleada)
+freq_arma_sorted <- sort(freq_arma, decreasing = TRUE)
+
+barplot(freq_arma_sorted,
+        main = "Frecuencia de Homicidios por Arma Empleada",
+        xlab = "Arma Empleada",
+        ylab = "Frecuencia",
+        col = "steelblue",
+        las = 2,
+        cex.names = 0.7)
+```
+
+### 3. Interpretacion
+
+Para la variable Arma empleada, se puede observar en el diagrama de barras que el arma de fuego es el medio mas utilizado en los homicidios, seguida por el arma blanca o cortopunzante. Los demas tipos de armas presentan frecuencias significativamente menores. Esto evidencia que los homicidios en Colombia estan asociados predominantemente al uso de armas de fuego, lo cual puede estar vinculado a la disponibilidad y circulacion ilegal de este tipo de armamento.
+
+## Municipio
+
+### 1. Tipo de variable
+
+Municipio es una variable cualitativa nominal.
+
+### 2. Grafico
+
+```{r}
+freq_municipio <- table(homicidios$Municipio)
+freq_municipio_sorted <- sort(freq_municipio, decreasing = TRUE)
+
+barplot(head(freq_municipio_sorted, 20),
+        main = "Top 20 Municipios con Mayor Frecuencia de Homicidios",
+        xlab = "Municipio",
+        ylab = "Frecuencia",
+        col = "steelblue",
+        las = 2,
+        cex.names = 0.6)
+```
+
+### 3. Interpretacion
+
+Para la variable Municipio, se observa en el diagrama de barras (limitado al top 20 para mayor legibilidad) que los homicidios se concentran fuertemente en unos pocos municipios, principalmente las grandes ciudades del pais. La distribucion es altamente asimetrica, con unas pocas ciudades capitales acumulando la mayor cantidad de casos, mientras que la gran mayoria de municipios presentan frecuencias bajas. Esto refleja la concentracion de la violencia homicida en los principales centros urbanos.
+
+## Profesion
+
+### 1. Tipo de variable
+
+Profesion es una variable cualitativa nominal.
+
+### 2. Grafico
+
+```{r}
+freq_profesion <- table(homicidios$Profesion)
+freq_profesion_sorted <- sort(freq_profesion, decreasing = TRUE)
+
+barplot(head(freq_profesion_sorted, 15),
+        main = "Frecuencia de Homicidios por Profesion",
+        xlab = "Profesion",
+        ylab = "Frecuencia",
+        col = "steelblue",
+        las = 2,
+        cex.names = 0.6)
+```
+
+### 3. Interpretacion
+
+Para la variable Profesion, se observa en el diagrama de barras que ciertas profesiones u ocupaciones presentan una frecuencia de homicidios notoriamente mayor que otras. Las victimas se concentran en determinados oficios, lo cual puede estar asociado a factores de exposicion y riesgo propios de dichas actividades laborales. Existe tambien una alta frecuencia de registros sin informacion, lo que puede afectar la completitud del analisis.
+
+## Escolaridad
+
+### 1. Tipo de variable
+
+Escolaridad es una variable cualitativa ordinal.
+
+### 2. Grafico
+
+```{r}
+freq_escolaridad <- table(homicidios$Escolaridad)
+freq_escolaridad_sorted <- sort(freq_escolaridad, decreasing = TRUE)
+
+barplot(freq_escolaridad_sorted,
+        main = "Frecuencia de Homicidios por Escolaridad",
+        xlab = "Escolaridad",
+        ylab = "Frecuencia",
+        col = "steelblue",
+        las = 2,
+        cex.names = 0.7)
+```
+
+### 3. Interpretacion
+
+Para la variable Escolaridad, se observa en el diagrama de barras que la mayor parte de las victimas de homicidio corresponden a niveles de escolaridad bajos o medios, como primaria y secundaria. Los niveles educativos superiores (tecnico, universitario, posgrado) presentan frecuencias considerablemente menores. Esto sugiere que las victimas de homicidio tienden a pertenecer a sectores de la poblacion con menor nivel educativo, lo cual puede estar asociado a condiciones socioeconomicas de vulnerabilidad.
+
+
 # PARTE 4 - ANÁLISIS MULTIVARIADO
 
 ## 1. Matriz de correlación
 
 ```{r}
-data_num <- na.omit(homicidios[, c("Edad", "Cantidad")])
+aqapply(array, margin, aqz)data_num <- na.omit(homicidios[, c("Edad", "Cantidad")])
 matriz_cor <- cor(data_num)
 library(corrplot)
 corrplot(matriz_cor, 
