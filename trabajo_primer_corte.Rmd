@@ -181,6 +181,8 @@ homicidios$Departamento <- gsub("[^a-zA-Z ]", "", homicidios$Departamento)
 freq_depto <- table(homicidios$Departamento)
 freq_depto_sorted <- sort(freq_depto, decreasing = TRUE)
 
+names(freq_depto_sorted) <- iconv(names(freq_depto_sorted), to = "ASCII//TRANSLIT")
+
 barplot(freq_depto_sorted,
         main = "Frecuencia de Homicidios por Departamento",
         xlab = "Departamento",
@@ -257,6 +259,8 @@ homicidios$Municipio <- gsub("[^[:alnum:][:space:]]", "", homicidios$Municipio)
 freq_municipio <- table(homicidios$Municipio)
 freq_municipio_sorted <- sort(freq_municipio, decreasing = TRUE)
 
+names(freq_municipio_sorted) <- iconv(names(freq_municipio_sorted), to = "ASCII//TRANSLIT")
+
 barplot(head(freq_municipio_sorted, 20),
         main = "Top 20 Municipios con Mayor Frecuencia de Homicidios",
         xlab = "Municipio",
@@ -281,6 +285,8 @@ Profesion es una variable cualitativa nominal.
 ```{r}
 freq_profesion <- table(homicidios$Profesion)
 freq_profesion_sorted <- sort(freq_profesion, decreasing = TRUE)
+
+names(freq_profesion_sorted) <- iconv(names(freq_profesion_sorted), to = "ASCII//TRANSLIT")
 
 barplot(head(freq_profesion_sorted, 15),
         main = "Frecuencia de Homicidios por Profesion",
@@ -320,6 +326,167 @@ barplot(freq_escolaridad_sorted,
 
 Para la variable Escolaridad, se observa en el diagrama de barras que la mayor parte de las victimas de homicidio corresponden a niveles de escolaridad bajos o medios, como primaria y secundaria. Los niveles educativos superiores (tecnico, universitario, posgrado) presentan frecuencias considerablemente menores. Esto sugiere que las victimas de homicidio tienden a pertenecer a sectores de la poblacion con menor nivel educativo, lo cual puede estar asociado a condiciones socioeconomicas de vulnerabilidad.
 
+## Sexo
+
+### 1. Tipo de variable
+
+Sexo es una variable cualitativa nominal dicotómica (Femenino/Masculino).
+
+### 2. Gráfico
+
+```{r}
+freq_sexo <- table(homicidios$Sexo)
+barplot(freq_sexo,
+        main = "Frecuencia de Homicidios por Sexo",
+        xlab = "Sexo",
+        ylab = "Frecuencia",
+        col = c("coral", "steelblue"))
+```
+
+### 3. Interpretacion
+
+La distribución por sexo revela una marcada asimetría: aproximadamente el 90% de las víctimas son de sexo masculino, mientras que el 10% son de sexo femenino. Este patrón sugiere que los homicidios en Colombia están fuertemente asociados a dinámicas de violencia donde los hombres tienen mayor exposición, incluyendo crimen organizado, sicariato y violencia vinculada a pandillas.
+
+## Dia
+
+### 1. Tipo de variable
+
+Día es una variable cualitativa nominal cíclica (Lunes a Domingo).
+
+### 2. Gráfico
+
+```{r}
+dias_orden <- c("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo")
+homicidios$Dia <- factor(homicidios$Dia, levels = dias_orden)
+
+barplot(table(homicidios$Dia),
+        main = "Frecuencia de Homicidios por Día de la Semana",
+        xlab = "Día",
+        ylab = "Frecuencia",
+        col = "steelblue",
+        las = 2)
+```
+
+### 3. Interpretacion
+
+La distribución de homicidios por día de la semana muestra un patrón relativamente uniforme durante los días laborales, con un ligero incremento hacia el fin de semana. Los sábados y domingos presentan frecuencias ligeramente superiores, posiblemente asociadas a situaciones de ocio nocturno, consumo de alcohol y mayor circulación en espacios públicos. Sin embargo, la diferencia no es drástica, lo que indica que la violencia homicida tiene componentes estructurales que operan independientemente del día de la semana.
+
+# PARTE 3 - ANÁLISIS BIVARIADO
+
+## Ejercicio 1: Edad vs Sexo
+
+### Tipo: numérico vs categórico
+### Gráfico: boxplot
+
+```{r}
+boxplot(Edad ~ Sexo, data = homicidios,
+        main = "Distribución de Edad según Sexo",
+        xlab = "Sexo",
+        ylab = "Edad (años)",
+        col = c("coral", "steelblue"))
+
+homicidios %>%
+  group_by(Sexo) %>%
+  summarise(
+    Media = mean(Edad, na.rm = TRUE),
+    Mediana = median(Edad, na.rm = TRUE),
+    Q1 = quantile(Edad, 0.25, na.rm = TRUE),
+    Q3 = quantile(Edad, 0.75, na.rm = TRUE)
+  )
+```
+
+### 3. Interpretacion
+
+Se observan diferencias significativas en la distribución de edad entre sexos. Las víctimas masculinas presentan una mediana aproximada de 27 años, mientras que las femeninas tienen una mediana cercana a 32 años. La dispersión es mayor en hombres, con presencia de valores atípicos en edades avanzadas. Esto sugiere que la violencia homicida afecta a hombres en edades más tempranas, posiblemente vinculada a dinámicas de crimen juvenil y pandillas, mientras que en mujeres la victimización se distribuye en un rango de edad más amplio.
+
+### 4. Conclusión
+
+Existen diferencias de edad significativas entre sexos: las víctimas masculinas son más jóvenes que las femeninas.
+
+## Ejercicio 2: Arma empleada vs Zona
+
+### Tipo: categórico vs categórico
+### Gráfico: barras agrupadas / tabla cruzada
+
+```{r}
+
+library(ggplot2)
+library(dplyr)
+
+tabla_arma_zona <- table(homicidios$Arma_empleada, homicidios$Zona)
+
+arma_zona_df <- homicidios %>%
+  filter(Arma_empleada %in% names(head(sort(table(Arma_empleada), decreasing = TRUE), 5)))
+
+ggplot(arma_zona_df, aes(x = Arma_empleada, fill = Zona)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Arma Empleada según Zona",
+       x = "Tipo de Arma",
+       y = "Frecuencia") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+### 3. Interpretacion
+
+El arma de fuego predomina en ambas zonas, pero su proporción es significativamente mayor en zonas urbanas, al igual que las armas blanca/cortopunzante 
+
+### 4. Conclusión
+
+La violencia con armas presenta una incidencia considerablemente mayor en las zonas urbanas, lo cual puede atribuirse, en gran medida, a la alta densidad poblacional que caracteriza estos entornos.
+
+## Ejercicio 3: Edad vs Tipo de arma
+
+### Tipo: numerico vs categórico
+### Gráfico: boxplot
+
+```{r}
+arma_edad_df <- homicidios %>%
+  filter(Arma_empleada %in% c("ARMA DE FUEGO", "ARMA BLANCA / CORTOPUNZANTE", "CONTUNDENTES"))
+
+boxplot(Edad ~ Arma_empleada, data = arma_edad_df,
+        main = "Distribución de Edad según Tipo de Arma",
+        xlab = "Tipo de Arma",
+        ylab = "Edad (años)",
+        col = c("darkred", "steelblue", "forestgreen"),
+        las = 2)
+
+```
+
+### 3. Interpretacion
+
+Las víctimas de arma de fuego presentan la mediana de edad más baja, seguidas por arma blanca y contundentes. El rango intercuartílico es más estrecho para arma de fuego, indicando concentración en adultos jóvenes.
+
+### 4. Conclusión
+
+Existe una relación inversa entre la letalidad del arma y la edad de la víctima: armas más mortal, se usan contra víctimas más jóvenes, probablemente en contextos de grupos criminales organizados; mientras que armas más accesibles (blanca, contundentes) aparecen en homicidios con víctimas de mayor edad, probablemente riñas y conflictos interpersonales.
+
+## Ejercicio 4: Departamento vs Cantidad
+
+### Tipo: numerico vs categórico
+### Gráfico: barras
+```{r}
+depto_cantidad <- homicidios %>%
+  group_by(Departamento) %>%
+  summarise(Total_Casos = sum(Cantidad, na.rm = TRUE)) %>%
+  arrange(desc(Total_Casos))
+
+barplot(height = head(depto_cantidad$Total_Casos, 10),
+        names.arg = head(depto_cantidad$Departamento, 10),
+        main = "Top 10 Departamentos - Total de Homicidios",
+        xlab = "Departamento",
+        ylab = "Total de casos",
+        col = "darkred",
+        las = 2,
+        cex.names = 0.7)
+```
+### 3. Interpretacion
+
+Los departamentos de Valle, Antioquia y Cundinamarca concentran la mayor cantidad de homicidios, destacándose significativamente por encima del resto. Esto sugiere una alta incidencia de este fenómeno en estas regiones en comparación con los demás departamentos analizados.
+
+### 4. Conclusión
+
+Los homicidios se concentran geográficamente en los departamentos más poblados y con mayores centros urbanos, aunque esto no necesariamente implica tasas más altas. La concentración en Antioquia y Valle refleja la persistencia de dinámicas de violencia en Medellín y Cali.
 
 # PARTE 4 - ANÁLISIS MULTIVARIADO
 
@@ -412,3 +579,21 @@ También está el grupo rural, en el cual los homicidios efectuados con cualquie
 ### ¿Qué variables parecen estar relacionadas?
 
 Parece que el uso de armas de fuego podría estar relacionado con el tipo de zona del departamento. Se puede observar como en zonas urbanas el uso de las armas de fuego tiende a ser significativamente mayor que en zonas rurales, teniendo casos como en el Valle, Cundinamarca y Atlántico que las armas de fuego multiplican varias veces su uso en zona urbana frente a la rural.
+
+# PARTE 5 - CONCLUSIONES
+
+## Conclusión 1: Perfil demográfico de la víctima
+Los homicidios en Colombia afectan predominantemente a hombres jóvenes (20-35 años), solteros, con nivel educativo básico (primaria o secundaria). Este perfil sugiere victimización vinculada a dinámicas de violencia urbana, crimen organizado y situaciones de vulnerabilidad socioeconómica donde los jóvenes hombres tienen mayor exposición.
+
+## Conclusión 2: Contexto espacial de la violencia
+La violencia homicida se concentra en zonas urbanas  y en departamentos con grandes centros poblados (Antioquia, Valle, Cundinamarca). En donde la proporción de armas de fuego es relativamente mayor.
+
+## Conclusión 3: Instrumentos de violencia
+El arma de fuego es el instrumento predominante en más del 60% de los casos, con mayor concentración en zonas urbanas y departamentos con presencia de criminalidad organizada. Su predominio está asociado a victimas más jóvenes, sugiriendo vinculación con pandillas y sicariato.
+
+## Conclusión 4: Diferencias de edad por sexo
+Existen diferencias significativas en la edad de victimización entre sexos: las víctimas masculinas son consistentemente más jóvenes (mediana ~27 años) que las femeninas (mediana ~32 años). Esto sugiere contextos de violencia diferenciados: crimen juvenil en hombres versus violencia intrafamiliar de pareja en mujeres.
+
+## Conclusión 5: Interacción de variables
+Existe una interacción significativa entre zona geográfica, departamento y tipo de arma. Los departamentos con mayor violencia organizada muestran similitudes en el uso de armas de fuego, mientras que en otros la zona (urbana/rural) diferencia el tipo de arma empleada, revelando patrones de violencia estructural versus violencia interpersonal.
+
