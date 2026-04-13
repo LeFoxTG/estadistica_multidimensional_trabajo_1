@@ -1,0 +1,27 @@
+---
+title: "Entrega EDA"
+author: Angelo Alejandro Ibañez Hernandez 20212020007 <br> Alejandro Gomez Moyano
+  20222020073 <br> Juan David Córdoba Aguirre 20211020097 <br> Oscar Santiago Duran
+  Benitez 20212020080
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: '2'
+    df_print: paged
+  html_notebook:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+  word_document:
+    toc: true
+    toc_depth: '2'
+  pdf_document:
+    toc: true
+    toc_depth: '2'
+subtitle: Student Depression Dataset
+---
+
+```{r}
+plot(cars)
+```
