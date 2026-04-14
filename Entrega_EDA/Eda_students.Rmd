@@ -65,7 +65,7 @@ df_filtrado <- df_filtrado %>%
   filter(!(Sleep.Duration=="Others" | Dietary.Habits=="Others" ))
     
 df_filtrado <- mutate(df_filtrado, Have.you.ever.had.suicidal.thoughts.. = case_when(
-  Have.you.ever.had.suicidal.thoughts.. =='No' ~ 0,             Dietary.Habits == 'Moderate' ~ 1,
+  Have.you.ever.had.suicidal.thoughts.. =='No' ~ 0,             
   Have.you.ever.had.suicidal.thoughts.. =='Yes' ~ 1
   
   ))
@@ -144,9 +144,9 @@ ggplot(df_filtrado, aes(x = Depression_Factor, y = Financial.Stress, fill = Depr
 
 -   **Gráfico**: boxplot
 
--   **Interpretación**: Se puede ver qué la media de personas que no sufren depresión está en 2, mientras que las que tienen depresión tienen un rango entre 3 a 5 el nivel de estrés financiero , la media maneja un estrés financiero de 4.
+-   **Interpretación**: Se puede ver qué la mediana de personas que no sufren depresión está en 2, reflejando una mayoria de estres financiero entre 2 y 4, mientras que las que tienen depresión tienen un rango entre 3 a 5 el nivel de estrés financiero , la mediana muestra que está repartida de forma uniforme el estres entre 3 - 4 y 4 - 5.
 
--   **Conclusión**: el alto nivel de estrés financiera está más presente en la población con depresión, lo demuestra comparando las medias: la población con depresión tiene 4 y la población sin depresión tiene una media de 2.
+-   **Conclusión**: el alto nivel de estrés financiera está más presente en la mitad de la  población con depresión, lo demuestra comparando las medianas con la mayoría del grupo sin depresión que mantienen en 2-4.
 
 ## Horas de estudio vs Depresión
 
@@ -190,9 +190,9 @@ ggplot(df_filtrado, aes(x = Depression_Factor, y = Work.Study.Hours, fill = Depr
 
 -   **Gráfico**: boxplot
 
--   **Interpretación**: en la gráfica boxplot se puede ver qué las personas con depresión poseen más horas de trabajo/ estudio, con una media de 8, más alta que la media de las personas sin depresión que tienen un rango intercuartilico más alto
+-   **Interpretación**: en la gráfica boxplot se puede ver qué la mayoría de  personas con depresión poseen menosrango de  horas de trabajo/ estudio, con una mediana de 8 con una forma más alargada inferior, igualando el rango de las personas sin depresión, pero estás la mayoria manejan un rango más alto.
 
--   **Conclusión**: la media de personas con depresión tienen alta carga de horas de estudio y trabajo, en comparación con la media que no tiene depresión manejan en promedio menos carga laboral o de estudio.
+-   **Conclusión**: la mayoria de personas con depresión tienen alta carga de horas de estudio y trabajo, en comparación con la mediana que no tiene depresión. estos manejan un poco menos carga laboral o de estudio.
 
 ```{r}
 
@@ -253,10 +253,9 @@ ggplot(df_filtrado, aes(x = Depression_Factor, y = Academic.Pressure, fill = Dep
 
 -   **Gráfico**: Boxplot.
 
--   **Interpretación**: los rangos que se manejan son casi completamente distintos,es un factor diferenciador, las medias están separadas por dos puntos en la escala de presión academica, el rango intercuartilico es el mismo para ambos.
+-   **Interpretación**: los rangos que se manejan son casi completamente distintos,es un factor diferenciador, las medianas están separadas por dos puntos en la escala de presión academica, el rango intercuartilico es el mismo para ambos.
 
--   **Conclusión**: el nivel de presión academico es un factor que separa a ambos grupos( los que tienen y no tienen depresión), la media de cada grupo está muy alejada, una presión academica puede ser un factor que genere depresión según el gráfico.
-
+-   **Conclusión**: el nivel de presión academico es un factor que separa a ambos grupos( los que tienen y no tienen depresión), la mediana de cada grupo está muy alejada, además de estar uniformemente en el centro, una presión academica puede ser un factor que genere depresión según el gráfico.
 
 ```{r}
 
