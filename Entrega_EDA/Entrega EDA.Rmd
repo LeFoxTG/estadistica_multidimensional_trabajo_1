@@ -1,13 +1,12 @@
 ---
-title: "Entrega EDA"
-author: Angelo Alejandro Ibañez Hernandez 20212020007 <br> Alejandro Gomez Moyano
-  20222020073 <br> Juan David Córdoba Aguirre 20211020097 <br> Oscar Santiago Duran
-  Benitez 20212020080
+title: "Análisis de la Depresión Estudiantil"
+author: Angelo Alejandro Ibañez Hernandez 20212020007 <br> Alejandro Gomez Moyano 20222020073 <br> Juan David Córdoba Aguirre 20211020097 <br> Oscar Santiago Duran Benitez 20212020080
 date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+subtitle: Student Depression Dataset
 output:
   html_document:
     toc: true
-    toc_depth: '2'
+    toc_depth: 2
     df_print: paged
   html_notebook:
     toc: true
@@ -15,30 +14,461 @@ output:
     number_sections: true
   word_document:
     toc: true
-    toc_depth: '2'
+    toc_depth: 2
   pdf_document:
+    latex_engine: xelatex   # 👈 AQUÍ está el cambio importante
     toc: true
-    toc_depth: '2'
-subtitle: Student Depression Dataset
+    toc_depth: 2
 ---
 
-# Dataset
+# PARTE 1 - DATASET
+
+## 1. Descripción del conjunto de datos
+
+El dataset utilizado corresponde a un conjunto de datos sobre depresión en estudiantes, el cual contiene información relacionada con factores académicos, personales y de salud mental.
+
+Este dataset cuenta con aproximadamente 27,901 registros y 18 variables, incluyendo tanto variables cualitativas como cuantitativas.
+
+### Tipo de problema
+
+El conjunto de datos es adecuado para un problema de clasificación, ya que contiene una variable objetivo denominada `Depression`, la cual indica si un estudiante presenta depresión (1) o no (0).
+
+### Justificación del dataset
+
+Este dataset es pertinente para un análisis estadístico multidimensional debido a que:
+
+- Contiene múltiples variables que describen diferentes dimensiones del individuo (académica, personal, económica y psicológica).
+- Permite analizar relaciones entre variables que potencialmente influyen en la depresión.
+- Presenta una combinación de variables numéricas y categóricas, lo cual es ideal para análisis univariado, bivariado y multivariado.
+
+### Carga del Dataset
+
+```{r}
+data <- read.csv("Student Depression Dataset.csv", stringsAsFactors = FALSE)
+```
+
+---
+
+# PARTE 2 - ANÁLISIS UNIVARIADO
+
+En esta sección se analizan todas las variables del dataset de manera individual. Se clasifican según su tipo y se justifica su relevancia dentro del análisis de depresión estudiantil.
+
+---
+
+## 🔹 Clasificación general de variables
+
+### Variables cuantitativas
+- Age
+- Academic Pressure
+- Work Pressure
+- CGPA
+- Study Satisfaction
+- Job Satisfaction
+- Work/Study Hours
+- Financial Stress
+
+### Variables cualitativas
+- Gender
+- City
+- Profession
+- Degree
+- Sleep Duration
+- Dietary Habits
+- Suicidal Thoughts
+- Family History of Mental Illness
+- Depression
+
+---
+
+# 🔹 VARIABLES CUANTITATIVAS
+
+## Edad (Age)
+
+### Tipo de variable
+Cuantitativa discreta
+
+### Justificación
+La edad es fundamental en estudios de salud mental, ya que diferentes etapas de la vida presentan distintos niveles de vulnerabilidad psicológica.
+
+### Gráficos
+
+```{r}
+hist(data$Age, col = "steelblue", xlab = "Edad" , main = "Distribución de la Edad")
+boxplot(data$Age, col = "steelblue",ylab = "Edad" , main = "Boxplot de la Edad")
+mean(data$Age, na.rm = TRUE)
+median(data$Age, na.rm = TRUE)
+sd(data$Age, na.rm = TRUE)
+```
+
+La distribución muestra una alta concentración entre los 18 y 27 años, lo cual confirma que la muestra representa principalmente estudiantes universitarios tradicionales. Sin embargo, la presencia de un segundo grupo entre los 28 y 35 años evidencia una población no homogénea, posiblemente compuesta por estudiantes de posgrado o educación continua.
+
+El boxplot evidencia valores atípicos en edades superiores a 45 años, lo que sugiere casos aislados. Estos no deben eliminarse automáticamente, pero sí considerarse en análisis posteriores, ya que pueden introducir sesgos si no se controlan.
+
+La edad no solo describe la población, sino que podria sugerir que la depresión deberia analizarse considerando diferencias generacionales, ya que las causas pueden variar entre estudiantes jóvenes y adultos.
+
+## Presión Académica (Academic Pressure)
+
+### Tipo de variable
+Cuantitativa ordinal
+
+### Justificación
+Es una de las variables más relevantes, ya que la carga académica es un factor directamente asociado con el estrés y la depresión en estudiantes.
+
+### Gráficos
+
+```{r}
+hist(data$Academic.Pressure, col = "steelblue", xlab = "Presión Académica" , main = "Distribución de la Presión Académica")
+boxplot(data$Academic.Pressure, col = "steelblue",ylab = "Presión Académica" , main = "Boxplot de la Presión Académica")
+mean(data$Academic.Pressure, na.rm = TRUE)
+median(data$Academic.Pressure, na.rm = TRUE)
+sd(data$Academic.Pressure, na.rm = TRUE)
+```
+La distribución se concentra en valores medios-altos (3 a 5), lo que indica que la presión académica es una condición generalizada en la muestra.
+
+La baja dispersión relativa sugiere que la presión no es un fenómeno aislado, sino estructural dentro del entorno estudiantil.
+
+Más que un factor diferenciador, la presión académica parece ser una condición base del sistema educativo, por lo que su impacto en la depresión debe analizarse en combinación con otras variables (no de forma aislada).
+
+## Presión Laboral (Work Pressure)
+
+### Justificación
+Permite analizar el impacto del trabajo en estudiantes que estudian y trabajan simultáneamente.
+
+### Gráficos
+
+```{r}
+hist(data$Work.Pressure, col = "steelblue", xlab = "Presión Laboral" , main = "Distribución de la Presión Laboral")
+boxplot(data$Work.Pressure, col = "steelblue",ylab = "Presión Laboral" , main = "Boxplot de la Presión Laboral")
+mean(data$Work.Pressure, na.rm = TRUE)
+median(data$Work.Pressure, na.rm = TRUE)
+sd(data$Work.Pressure, na.rm = TRUE)
+```
+
+La distribución está completamente sesgada hacia el valor 0, lo que indica ausencia casi total de presión laboral.
+
+Esta variable no tiene capacidad explicativa en este dataset y debería:
+
+  - eliminarse del modelo, o
+  - utilizarse únicamente para confirmar que la población es mayoritariamente no trabajadora.
+
+## CGPA (Rendimiento académico)
+
+### Tipo de variable
+Cuantitativa continua
+
+### Justificación
+El rendimiento académico puede influir directamente en el bienestar emocional.
+
+### Gráficos
+
+```{r}
+hist(data$CGPA, col = "steelblue", xlab = "CGPA" , main = "Distribución del Rendimiento académico")
+boxplot(data$CGPA, col = "steelblue",ylab = "CGPA" , main = "Boxplot de la Rendimiento académico")
+mean(data$CGPA, na.rm = TRUE)
+median(data$CGPA, na.rm = TRUE)
+sd(data$CGPA, na.rm = TRUE)
+```
+
+La distribución muestra una clara concentración en valores altos (7 a 10), con baja dispersión.
+
+Esto indica que:
+
+  - la mayoría de estudiantes tiene buen rendimiento
+  - no hay una gran variabilidad académica
+
+El alto rendimiento no actúa como factor protector contra la depresión, Por el contrario, puede estar asociado a:
+
+ - autoexigencia
+ - presión por mantener resultados
+
+Esto sugerir una relación interesante:
+“alto rendimiento ≠ bienestar emocional”
+
+## Estrés financiero
+
+### Tipo de variable
+Cuantitativa ordinal
+
+### Justificación
+El estrés económico es un factor clave en la salud mental.
+
+### Gráficos
+
+```{r}
+hist(data$Financial.Stress, col = "steelblue", xlab = "Estrés financiero" , main = "Distribución del Estrés financiero")
+boxplot(data$Financial.Stress, col = "steelblue",ylab = "Estrés financiero" , main = "Boxplot de la Estrés financiero")
+mean(data$Financial.Stress, na.rm = TRUE)
+median(data$Financial.Stress, na.rm = TRUE)
+sd(data$Financial.Stress, na.rm = TRUE)
+```
+Aunque los valores se distribuyen entre 1 y 5, existe una concentración alrededor de 3 y 4, lo que indica niveles moderados a altos de estrés económico.
+
+No es correcto decir que es homogéneo; porque hay suficiente variabilidad.
+
+El estrés financiero sí puede ser un factor discriminante importante, especialmente porque:
+
+  - no todos los estudiantes lo experimentan igual
+  - puede interactuar con otras variables (horas de trabajo, sueño, etc.)
+
+## Horas de estudio/trabajo (Work/Study Hours)
+
+### Justificación
+Relaciona carga diaria con fatiga.
+
+### Gráficos
+
+```{r}
+hist(data$Work.Study.Hours, col = "steelblue", xlab = "Horas de estudio/trabajo" , main = "Distribución de Horas de estudio/trabajo")
+boxplot(data$Work.Study.Hours, col = "steelblue",ylab = "Horas de estudio/trabajo" , main = "Boxplot de las Horas de estudio/trabajo")
+mean(data$Work.Study.Hours, na.rm = TRUE)
+median(data$Work.Study.Hours, na.rm = TRUE)
+sd(data$Work.Study.Hours, na.rm = TRUE)
+```
+La distribución muestra una concentración entre 6 y 10 horas, con algunos valores extremos cercanos a 12.
+
+El boxplot evidencia una asimetría hacia valores altos, indicando que hay estudiantes con cargas significativamente elevadas.
+
+Existe un grupo importante en riesgo de sobrecarga académica, lo que puede derivar en:
+
+  - fatiga
+  - burnout
+  - alteraciones del sueño
+
+## Género (Gender)
+
+### Tipo de variable
+Cualitativa nominal
+
+### Justificación
+Permite analizar diferencias de depresión entre hombres y mujeres.
+
+### Gráficos
+
+```{r}
+barplot(table(data$Gender),
+        main = "Distribución por Género",
+        col = c("coral", "steelblue"))
+```
+
+El gráfico muestra una distribución relativamente balanceada (aunque puede haber ligera diferencia).
+
+Por sí sola, esta variable no explica la depresión, pero es fundamental en análisis bivariados para detectar:
+
+  - diferencias en prevalencia
+  - vulnerabilidad diferencial
+
+## Ciudad (City)
+
+### Justificación
+Puede capturar diferencias contextuales.
+
+### Gráficos
+
+```{r}
+barplot(table(data$City),
+        main = "Distribución por Ciudad",
+        col = c("coral", "steelblue"))
+length(unique(data$City))
+```
+
+La alta cardinalidad (52 ciudades) dificulta su análisis univariado.
+
+No es útil de forma individual, pero tiene alto valor si se:
+
+  - agrupa (por región, tamaño de ciudad)
+  - usa en modelos predictivos
+
+Sin embargo para el caso de este analisis no se tendra en cuenta pues no parece tener una relacion con las causas de la depresion como otras variables
+
+## Profesión (Profession)
+
+### Gráficos
+
+```{r}
+barplot(table(data$Profession),
+        main = "Distribución por Profesion",
+        col = c("coral", "steelblue"))
+length(unique(data$Profession))
+```
+Similar a ciudad, presenta muchas categorías. Su análisis univariado no es informativo, pero puede ser útil en reducción de dimensionalidad o agrupación.
+
+## Duración del sueño (Sleep Duration)
+
+### Gráficos
+
+```{r}
+barplot(table(data$Sleep.Duration),
+        main = "Distribución por Duración del sueño",
+        col = c("coral", "steelblue"))
+```
+
+Se observa predominancia menos de 5 horas, lo cual está por debajo del rango recomendado.
+
+Esto evidencia un patrón preocupante: privación de sueño generalizada
+
+Y esto está fuertemente relacionado con:
+
+  - ansiedad
+  - depresión
+  - bajo bienestar
+
+## Hábitos alimenticios (Dietary Habits)
+
+### Gráficos
+
+```{r}
+barplot(table(data$Dietary.Habits),
+        main = "Distribución por Hábitos alimenticios",
+        col = c("coral", "steelblue"))
+```
+
+Predominan hábitos moderados, pero existe presencia de categorías no saludables.
+
+Más que un factor directo, parece actúar como indicador de:
+  - estilo de vida desorganizado
+  - posible falta de autocuidado
+
+## Pensamientos suicidas
+
+### Gráficos
+
+```{r}
+barplot(table(data$Have.you.ever.had.suicidal.thoughts),
+        main = "Distribución por Pensamientos Suicidas",
+        col = c("coral", "steelblue"))
+```
+
+La presencia significativa de respuestas “Yes” indica una población con alto riesgo psicológico.
+
+Esta es probablemente la variable más predictiva de depresión, y además:
+
+  - refleja gravedad del problema
+  - puede usarse como indicador temprano
+
+## Historial familiar
+
+### Gráficos
+
+```{r}
+barplot(table(data$Family.History.of.Mental.Illness),
+        main = "Distribución por Historial familiar",
+        col = c("coral", "steelblue"))
+```
+
+Existe una proporción importante de estudiantes con antecedentes familiares.
+
+Este factor podria sugerir:
+
+  - predisposición genética
+  - influencia del entorno familiar
+
+
+## Variable objetivo: Depresión
+
+### Gráficos
+
+```{r}
+barplot(table(data$Depression),
+        main = "Distribución por Depresión",
+        col = c("coral", "steelblue"))
+```
+
+Se observa una proporción de aproximadamente 58.5% con depresión, lo cual indica:
+
+  - el dataset está ligeramente desbalanceado hacia la clase positiva
+  - alta prevalencia del fenómeno
+  - No es un problema raro → es generalizado
+  - Se justifica completamente el análisis
+
+---
+
+# PARTE 4 - LIMPIEZA DE DATOS
+
+## 1. Visualización dataset base
+
+```{r}
+head(data)
+str(data)
+summary(data)
+
+colSums(is.na(data))
+```
+### Interpretacion Inicial
+
+La variable id no representa una característica propia de los individuos, sino únicamente un identificador de cada registro. Por esta razón, no aporta información relevante para el análisis y puede excluirse sin afectar la interpretación de los resultados.
+
+La variable Age (Edad) presenta una media y una mediana muy cercanas, lo que sugiere una distribución aproximadamente simétrica. Además, los valores se encuentran entre los 18 y los 59 años, indicando que la muestra no está compuesta únicamente por estudiantes de pregrado, sino también por estudiantes de posgrado o personas que continúan sus estudios en etapas posteriores de la vida. 
+
+Las variables relacionadas con presión muestran resultados diferentes. Por un lado, Academic Pressure (Presión académica) se mide en una escala de 0 a 5 y tiene una media superior a 3, lo que evidencia que gran parte de los estudiantes percibe niveles relevantes de presión académica. Por otro lado, Work Pressure (Presión de trabajo) tiene una media de apenas 0.00043, es decir, prácticamente todos los registros toman el valor 0. Esto indica que la mayoría de los estudiantes no reporta presión laboral o no se encuentra trabajando, por lo que esta variable no aporta información importante para el objetivo del estudio.
+
+De forma similar, las variables de satisfacción también presentan comportamientos contrastantes. La variable Study Satisfaction (Satisfacción con el estudio), medida en una escala de 0 a 5, tiene una media ligeramente inferior a 3. Esto representa una percepción neutral o levemente negativa hacia los estudios, lo que podría asociarse con falta de motivación, cansancio o desconexión académica. En contraste, Job Satisfaction (Satisfacción con el trabajo) tiene valores prácticamente nulos, al igual que la presión laboral, por lo que tampoco resulta útil dentro del análisis.
+
+Respecto al desempeño académico, la variable CGPA (Rendimiento académico) presenta una media cercana a 8, lo que indica que, en general, los estudiantes tienen un buen rendimiento. Este resultado es importante porque sugiere que la presencia de depresión en la población no necesariamente está vinculada a un bajo promedio académico. Es decir, un estudiante puede tener un buen desempeño y aun así experimentar síntomas de depresión.
+
+La variable Wor.Study.Hours (Horas de estudio/trabajo) tiene una media de 7.15 horas diarias y alcanza un máximo de 12 horas. Esto podría indicar que existe un grupo de estudiantes con una carga académica o laboral considerablemente alta, situación que puede favorecer el agotamiento, la fatiga o incluso el burnout.
+
+Por su parte, Financial Stress (Estrés financiero) también se mide en una escala de 0 a 5 y presenta una media superior a 3, lo que indica niveles moderados o altos de preocupación económica dentro de la población. Además, esta es la única variable que contiene valores faltantes, con tres registros nulos.
+
+Finalmente, la variable objetivo Depression (Depresión) está codificada como 0 para estudiantes sin depresión y 1 para estudiantes con depresión. Su media es de 0.5855, lo que permite interpretar que aproximadamente el 58.5 % de los estudiantes de la muestra presenta depresión. Este porcentaje es bastante alto y refuerza la importancia de analizar qué factores académicos, personales y económicos pueden estar influyendo en este fenómeno.
+
+#### Variables categoricas
+  
+Estas variables representan el contexto social, los habitos y los factores psicologicos
+  
+  - Gender
+  - City
+  - Profession
+  - Sleep.Duration
+  - Dietary.Habits
+  - Degree
+  - Suicidal thoughts
+  - Family history
+
+## 2. Eliminacion de duplicados
+
+Se eliminan registros duplicados para garantizar que cada observación represente un individuo único.
+
+```{r}
+data <- unique(data)
+```
+
+## 3. Correccion de tipos de datos
+
+Se convierten variables categóricas a tipo factor para permitir su correcto análisis estadístico y visualización.
+
+```{r}
+# Convertir variables categóricas a factor
+data$Gender <- as.factor(data$Gender)
+data$City <- as.factor(data$City)
+data$Profession <- as.factor(data$Profession)
+data$Sleep.Duration <- as.factor(data$Sleep.Duration)
+data$Dietary.Habits <- as.factor(data$Dietary.Habits)
+data$Have.you.ever.had.suicidal.thoughts <- as.factor(data$Have.you.ever.had.suicidal.thoughts)
+data$Family.History.of.Mental.Illness <- as.factor(data$Family.History.of.Mental.Illness)
+data$Depression <- as.factor(data$Depression)
+```
+
+## 4. Eliminacion de la variable ID 
+
+Se elimina porque solo identifica registros, no aporta informacion para el analisis
+
+```{r}
+data$ID <- NULL
+```
+
+# PARTE 6. Análisis Multivariado Básico
+
+## Matriz de Correlación
+
+Para la Matriz de Correlación, se descartarán las variables relacionadas con el trabajo, tales como 
 
 ```{r}
 library(dplyr)
-# Cargar librerías necesarias
-library(dplyr)
-library(corrplot)
-library(GGally)
-library(ggplot2)
-
-# Cargar datos
-df <- read.csv("Student Depression Dataset.csv")
-
-# Limpieza profunda
-df_clean <- df %>%
+# Creamos una copia solo con variables numéricas para el análisis multivariado
+# Excluimos las variables de "Work" que están casi en cero y no aportan
+data_num <- data %>%
   mutate(
-    # trimws() quita espacios en blanco accidentales antes o después del texto
+    # Convertimos Sleep y Diet a números para poder correlacionarlos
     Sleep_Num = case_when(
       trimws(Sleep.Duration) == "Less than 5 hours" ~ 4,
       trimws(Sleep.Duration) == "5-6 hours" ~ 5.5,
@@ -51,23 +481,19 @@ df_clean <- df %>%
       trimws(Dietary.Habits) == "Moderate" ~ 2,
       trimws(Dietary.Habits) == "Healthy" ~ 3,
       TRUE ~ NA_real_
-    )
+    ),
+    # Volvemos a pasar Depression a numérico (0 y 1) para la matriz
+    Depression_Num = as.numeric(as.character(Depression))
   ) %>%
-  # Seleccionar las columnas de interés
+  # Seleccionamos solo lo relevante y descartamos lo relacionado con WORK
   select(Age, Academic.Pressure, CGPA, Study.Satisfaction, 
-         Sleep_Num, Diet_Num, Work.Study.Hours, Financial.Stress, Depression) %>%
-  # Borrar los NAs, después de todas las transformaciones
+         Sleep_Num, Diet_Num, Financial.Stress, Depression_Num) %>%
   na.omit()
 ```
-# 6. Análisis Multivariado Básico
-
-## Matriz de Correlación
-
-Para la Matriz de Correlación, se descartarán las variables relacionadas con el trabajo, tales como 
 
 ```{r}
 library(corrplot)
-matriz_cor <- cor(df_clean)
+matriz_cor <- cor(data_num)
 
 # Crear una paleta de colores
 colores <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
@@ -86,7 +512,7 @@ corrplot(matriz_cor, method = "color", type = "upper",
 ```{r}
 
 library("PerformanceAnalytics")
-chart.Correlation(df_clean, histogram=TRUE, pch=19)
+#chart.Correlation(data_num, histogram=TRUE, pch=19)
 
 ```
 
@@ -96,32 +522,33 @@ EXPLICAR AQUI PQ SE DESCARTARON TODAS LAS RELACIOINADAS CON WORK (LA GRAN MAYORI
 
 ```{r}
 library(GGally)
-# Convertimos 'Depression' a factor solo para colorear el gráfico
-df_clean$Depression_Factor <- as.factor(df_clean$Depression)
 
-# Generamos el gráfico
-ggparcoord(data = df_clean, 
-           columns = 1:8, # Usamos las primeras 8 columnas numéricas
-           groupColumn = "Depression_Factor", 
-           scale = "std", # Estandariza los datos para que encajen en el mismo gráfico
-           alphaLines = 0.3) + # Hace las líneas un poco transparentes
+# 1. Creamos una columna temporal como factor para los colores
+data_num$Depression_Factor <- as.factor(data_num$Depression_Num)
+
+# 2. Generamos el gráfico
+ggparcoord(data = data_num, 
+           columns = 1:7, # Solo graficamos de Edad a Estrés Financiero
+           groupColumn = "Depression_Factor",
+           scale = "std", 
+           alphaLines = 0.05) +
   scale_color_manual(values = c("0" = "#1f77b4", "1" = "#d62728")) +
   theme_minimal() +
   labs(title = "Coordenadas Paralelas (Agrupadas por Depresión)",
        x = "Variables", y = "Valor Estandarizado") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-# Restauramos la columna Depression a numérico para la sección 7
-df_clean$Depression_Factor <- NULL
+# 3. Borramos la columna temporal para que no afecte la Parte 7 (Medidas descriptivas)
+data_num$Depression_Factor <- NULL
 ```
 
-# 7. Medidas descriptivas multivariantes
+# PARTE 7. Medidas descriptivas multivariantes
 
 ## Media Vectorial
 
 ```{r}
 # Calcula el promedio de cada columna.
-media_vectorial <- colMeans(df_clean)
+media_vectorial <- colMeans(data_num)
 print("--- Media Vectorial (El estudiante promedio) ---")
 print(round(media_vectorial, 2))
 ```
@@ -130,7 +557,7 @@ print(round(media_vectorial, 2))
 
 ```{r}
 # --- DISPERSIÓN (Varianza y Matriz de Covarianza) ---
-matriz_cov <- cov(df_clean)
+matriz_cov <- cov(data_num)
 print("--- Matriz de Varianza-Covarianza ---")
 print(round(matriz_cov, 2))
 
