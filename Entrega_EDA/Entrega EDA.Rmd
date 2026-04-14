@@ -22,6 +22,127 @@ output:
 subtitle: Student Depression Dataset
 ---
 
+# Dataset
+
 ```{r}
-plot(cars)
+library(dplyr)
+# Cargar librerías necesarias
+library(dplyr)
+library(corrplot)
+library(GGally)
+library(ggplot2)
+
+# Cargar datos
+df <- read.csv("Student Depression Dataset.csv")
+
+# Limpieza profunda
+df_clean <- df %>%
+  mutate(
+    # trimws() quita espacios en blanco accidentales antes o después del texto
+    Sleep_Num = case_when(
+      trimws(Sleep.Duration) == "Less than 5 hours" ~ 4,
+      trimws(Sleep.Duration) == "5-6 hours" ~ 5.5,
+      trimws(Sleep.Duration) == "7-8 hours" ~ 7.5,
+      trimws(Sleep.Duration) == "More than 8 hours" ~ 9,
+      TRUE ~ NA_real_
+    ),
+    Diet_Num = case_when(
+      trimws(Dietary.Habits) == "Unhealthy" ~ 1,
+      trimws(Dietary.Habits) == "Moderate" ~ 2,
+      trimws(Dietary.Habits) == "Healthy" ~ 3,
+      TRUE ~ NA_real_
+    )
+  ) %>%
+  # Seleccionar las columnas de interés
+  select(Age, Academic.Pressure, CGPA, Study.Satisfaction, 
+         Sleep_Num, Diet_Num, Work.Study.Hours, Financial.Stress, Depression) %>%
+  # Borrar los NAs, después de todas las transformaciones
+  na.omit()
+```
+# 6. Análisis Multivariado Básico
+
+## Matriz de Correlación
+
+Para la Matriz de Correlación, se descartarán las variables relacionadas con el trabajo, tales como 
+
+```{r}
+library(corrplot)
+matriz_cor <- cor(df_clean)
+
+# Crear una paleta de colores
+colores <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
+
+# Graficar ocultando la diagonal para que se vea más limpio
+corrplot(matriz_cor, method = "color", type = "upper", 
+         col = colores(200),
+         tl.col = "black", tl.srt = 45, 
+         addCoef.col = "black", number.cex = 0.7, 
+         diag = FALSE, 
+         title = "Matriz de Correlación", mar=c(0,0,1,0))
+```
+
+
+
+```{r}
+
+library("PerformanceAnalytics")
+chart.Correlation(df_clean, histogram=TRUE, pch=19)
+
+```
+
+EXPLICAR AQUI PQ SE DESCARTARON TODAS LAS RELACIOINADAS CON WORK (LA GRAN MAYORIA SON STUDENTS Y LAS VARIABLES COMO WORK PRESSURE O WORK SATISFACTION SON TODAS CERO PRACTICAMENTE)
+
+## Coordenadas Paralelas
+
+```{r}
+library(GGally)
+# Convertimos 'Depression' a factor solo para colorear el gráfico
+df_clean$Depression_Factor <- as.factor(df_clean$Depression)
+
+# Generamos el gráfico
+ggparcoord(data = df_clean, 
+           columns = 1:8, # Usamos las primeras 8 columnas numéricas
+           groupColumn = "Depression_Factor", 
+           scale = "std", # Estandariza los datos para que encajen en el mismo gráfico
+           alphaLines = 0.3) + # Hace las líneas un poco transparentes
+  scale_color_manual(values = c("0" = "#1f77b4", "1" = "#d62728")) +
+  theme_minimal() +
+  labs(title = "Coordenadas Paralelas (Agrupadas por Depresión)",
+       x = "Variables", y = "Valor Estandarizado") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Restauramos la columna Depression a numérico para la sección 7
+df_clean$Depression_Factor <- NULL
+```
+
+# 7. Medidas descriptivas multivariantes
+
+## Media Vectorial
+
+```{r}
+# Calcula el promedio de cada columna.
+media_vectorial <- colMeans(df_clean)
+print("--- Media Vectorial (El estudiante promedio) ---")
+print(round(media_vectorial, 2))
+```
+
+## Dispersión
+
+```{r}
+# --- DISPERSIÓN (Varianza y Matriz de Covarianza) ---
+matriz_cov <- cov(df_clean)
+print("--- Matriz de Varianza-Covarianza ---")
+print(round(matriz_cov, 2))
+
+# Extraemos solo las varianzas (la diagonal de la matriz)
+varianzas <- diag(matriz_cov)
+print("--- Varianzas individuales (Qué variables fluctúan más) ---")
+print(round(sort(varianzas, decreasing = TRUE), 2))
+```
+
+## Dependencia
+
+```{r}
+print("--- Dependencia (Correlación) ---")
+print(round(matriz_cor, 2))
 ```
