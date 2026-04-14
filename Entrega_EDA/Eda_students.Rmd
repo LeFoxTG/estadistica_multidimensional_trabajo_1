@@ -1,0 +1,232 @@
+---
+title: "EDA_StudentDepre"
+author: "Alejandro Gómez Moyano"
+date: "2026-04-13"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Limpieza de datos y transformación de los datos
+
+features como:
+
+-   Degree
+-   city
+-   Profession
+-   id
+
+no aportan datos importantes entonces es viable quitarlo
+
+```{r}
+#install.packages("dplyr")
+#install.packages("GGally")
+```
+
+```{r}
+
+df <- read.csv("Student Depression Dataset.csv")
+
+print(head(df))
+
+
+
+
+```
+
+hay variables categoricas que se pueden transformar en numericas:
+
+-   Sleep Duration: tiene un variables como antes de 5 horas, 5-6 horas, 7-8 horas y más de 8. existe un otros pero es mejor eliminarlos ya que es un 0.08 porciento del total.
+
+-   Dietary Habits: Unhealthy, Moderate y Healthy, eliminar other 12
+
+-   Family History of Mental Illness: boolean
+
+-   Have you ever had suicidal thoughts: boolean
+
+```{r}
+
+library(dplyr)
+library(tidyr) 
+library(GGally)
+
+
+#eliminar others de Dietary.habits y horas de sueño
+
+df_filtrado <- df %>%
+  select(-id,-Degree,-City,-Profession)
+
+
+df_filtrado <- df_filtrado %>%
+  filter(!(Sleep.Duration=="Others" | Dietary.Habits=="Others" ))
+    
+df_filtrado <- mutate(df_filtrado, Have.you.ever.had.suicidal.thoughts.. = case_when(
+  Have.you.ever.had.suicidal.thoughts.. =='No' ~ 0,             Dietary.Habits == 'Moderate' ~ 1,
+  Have.you.ever.had.suicidal.thoughts.. =='Yes' ~ 1
+  
+  ))
+
+df_filtrado <- mutate(df_filtrado, Family.History.of.Mental.Illness = case_when(
+  Family.History.of.Mental.Illness =='No' ~ 0,             Dietary.Habits == 'Moderate' ~ 1,
+  Family.History.of.Mental.Illness =='Yes' ~ 1
+  ))
+
+df_filtrado <- df_filtrado %>%
+  mutate(Dietary.Habits = case_when(
+    Dietary.Habits == 'Unhealthy' ~ 0,
+    Dietary.Habits == 'Moderate'  ~ 1,
+    Dietary.Habits == 'Healthy'   ~ 2,
+    TRUE ~ NA_real_
+  )) %>%
+  drop_na(Dietary.Habits)
+
+df_filtrado <- mutate(df_filtrado, Sleep.Duration = case_when(
+  Sleep.Duration =='Less than 5 hours' ~ 0,             Sleep.Duration == '7-8 hours' ~ 1,
+  Sleep.Duration =='5-6 hours' ~ 2,
+  Sleep.Duration =='More than 8 hours' ~ 3,
+  TRUE ~ NA_real_)) %>%
+  drop_na(Sleep.Duration)
+
+```
+
+### Resultado
+
+```{r}
+print(head(df_filtrado))
+
+
+df_numerico <- df_filtrado %>%
+  select(-Gender)
+
+```
+
+```{r}
+
+#cor_matrix <- cor(df_numerico, method = "pearson", use = "complete.obs")
+
+ggcorr(df_numerico, label = TRUE, label_size = 2, label_round = 2, hjust = 0.9, layout.exp = 2)
+```
+
+
+# PARTE 4 - ANÁLISIS BIVARIADO
+
+
+Haciendo uso de la matriz de correlación podemos identificar diferentes pares de relaciones, en su mayoría incluyen a la variables Depresión.
+
+
+
+
+
+
+## Estrés financiero vs Depresión
+
+```{r}
+
+library(ggplot2)
+
+# 1. Estrés Financiero vs Depresión (Boxplot)
+ggplot(df_filtrado, aes(x = factor(Depression), y = Financial.Stress, fill = factor(Depression))) +
+  geom_boxplot() +
+  labs(title = "Relación entre Estrés Financiero y Depresión", x = "Depresión (0=No, 1=Sí)", y = "Nivel de Estrés Financiero") +
+  theme_minimal()
+
+```
+
+
+## Horas de estudio vs Depresión
+
+```{r}
+
+library(ggplot2)
+
+
+
+df_filtrado$Depression_Factor <- factor(df_filtrado$Depression, 
+                                         levels = c(0, 1), 
+                                         labels = c("Sin Depresión", "Con Depresión"))
+
+# 2. Gráfico formal de Horas de Estudio vs Depresión
+ggplot(df_filtrado, aes(x = Depression_Factor, y = Work.Study.Hours, fill = Depression_Factor)) +
+  # Dibujamos el boxplot
+  geom_boxplot(
+    width = 0.5,               
+    outlier.shape = 16,        
+    outlier.size = 1.5,        
+    outlier.alpha = 0.5,       
+    color = "#2c3e50"          
+  ) +
+  # Etiquetas 
+  labs(
+    title = "Impacto de las Horas de Estudio en la Salud Mental",
+    subtitle = "Comparativa de la distribución de horas diarias según presencia de depresión",
+    x = "Estado del Estudiante",
+    y = "Horas de Estudio por Día",
+    caption = "Fuente: Student Depression Dataset"
+  ) +
+ 
+  scale_fill_manual(values = c("#A8DADC", "#E63946")) + 
+  
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = "none",             
+    plot.title = element_text(face = "bold", size = 14),
+    panel.grid.minor = element_blank(),    
+    panel.grid.major.x = element_blank()   
+  )
+
+
+```
+
+
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(ggplot2)
+
+
+ggplot(data = df_filtrado) + 
+  geom_bar(mapping = aes(x = factor(Dietary.Habits), fill = factor(Depression)), 
+           position = "dodge", 
+           color = "black") +
+  scale_x_discrete(labels = c("0" = "Unhealthy", "1" = "Moderate", "2" = "Healthy")) +
+  scale_fill_manual(values = c("#3498db", "#e74c3c"), 
+                    labels = c("Sin Depresión", "Con Depresión")) +
+  labs(title = "Relación entre Hábitos Alimenticios y Depresión",
+       x = "Hábito Alimenticio",
+       y = "Cantidad de Estudiantes",
+       fill = "Estado") +
+  theme_minimal()
+```
+```{r}
+# Gráfico de Horas de Estudio vs Pensamientos Suicidas
+ggplot(df_filtrado, aes(x = factor(Have.you.ever.had.suicidal.thoughts..), 
+                        y = Work.Study.Hours, 
+                        fill = factor(Have.you.ever.had.suicidal.thoughts..))) +
+  geom_boxplot(alpha = 0.7, outlier.color = "red") +
+  scale_x_discrete(labels = c("0" = "No", "1" = "Sí")) +
+  scale_fill_manual(values = c("#2ecc71", "#e74c3c")) + # Verde para No, Rojo para Sí
+  labs(title = "Relación: Horas de Estudio y Pensamientos Suicidas",
+       x = "Pensamientos Suicidas",
+       y = "Horas de Estudio Diarias") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+
+```
+
+```{r}
+ggplot(df_filtrado, aes(x = factor(Depression), y = Academic.Pressure, fill = factor(Depression))) +
+  geom_boxplot(width = 0.6, alpha = 0.8) +
+  scale_x_discrete(labels = c("0" = "Sin Depresión", "1" = "Con Depresión")) +
+  scale_fill_manual(values = c("#3498db", "#e74c3c")) +
+  labs(title = "Presión Académica vs Depresión",
+       x = "Estado",
+       y = "Nivel de Presión") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
