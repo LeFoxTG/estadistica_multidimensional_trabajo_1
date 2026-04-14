@@ -111,16 +111,9 @@ df_numerico <- df_filtrado %>%
 ggcorr(df_numerico, label = TRUE, label_size = 2, label_round = 2, hjust = 0.9, layout.exp = 2)
 ```
 
-
 # PARTE 4 - ANÁLISIS BIVARIADO
 
-
-Haciendo uso de la matriz de correlación podemos identificar diferentes pares de relaciones, en su mayoría incluyen a la variables Depresión.
-
-
-
-
-
+Haciendo uso de la matriz de correlación podemos identificar diferentes pares de relaciones, en su mayoría incluyen a la variable Depresión.
 
 ## Estrés financiero vs Depresión
 
@@ -128,30 +121,42 @@ Haciendo uso de la matriz de correlación podemos identificar diferentes pares d
 
 library(ggplot2)
 
-# 1. Estrés Financiero vs Depresión (Boxplot)
-ggplot(df_filtrado, aes(x = factor(Depression), y = Financial.Stress, fill = factor(Depression))) +
-  geom_boxplot() +
-  labs(title = "Relación entre Estrés Financiero y Depresión", x = "Depresión (0=No, 1=Sí)", y = "Nivel de Estrés Financiero") +
-  theme_minimal()
 
+# label para depresión
+df_filtrado$Depression_Factor <- factor(df_filtrado$Depression, 
+                                         levels = c(0, 1), 
+                                         labels = c("Sin Depresión", "Con Depresión"))
+
+# x depresión y y estrés financiero
+ggplot(df_filtrado, aes(x = Depression_Factor, y = Financial.Stress, fill = Depression_Factor)) +
+  geom_boxplot(width = 0.6, alpha = 0.8) +
+  scale_fill_manual(values = c("#3498db", "#e74c3c")) + # Colores consistentes con tus otros gráficos
+  labs(
+    title = "Relación entre Estrés Financiero y Depresión",
+    x = "Estado de Salud Mental",
+    y = "Nivel de Estrés Financiero"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none") # Quitamos la leyenda porque el eje X ya lo explica
 ```
 
+-   **tipo**: Categórico vs numérico
+
+-   **Gráfico**: boxplot
+
+-   **Interpretación**: Se puede ver qué la media de personas que no sufren depresión está en 2, mientras que las que tienen depresión tienen un rango entre 3 a 5 el nivel de estrés financiero , la media maneja un estrés financiero de 4.
+
+-   **Conclusión**: el alto nivel de estrés financiera está más presente en la población con depresión, lo demuestra comparando las medias: la población con depresión tiene 4 y la población sin depresión tiene una media de 2.
 
 ## Horas de estudio vs Depresión
 
 ```{r}
 
-library(ggplot2)
 
 
 
-df_filtrado$Depression_Factor <- factor(df_filtrado$Depression, 
-                                         levels = c(0, 1), 
-                                         labels = c("Sin Depresión", "Con Depresión"))
-
-# 2. Gráfico formal de Horas de Estudio vs Depresión
 ggplot(df_filtrado, aes(x = Depression_Factor, y = Work.Study.Hours, fill = Depression_Factor)) +
-  # Dibujamos el boxplot
+
   geom_boxplot(
     width = 0.5,               
     outlier.shape = 16,        
@@ -159,16 +164,16 @@ ggplot(df_filtrado, aes(x = Depression_Factor, y = Work.Study.Hours, fill = Depr
     outlier.alpha = 0.5,       
     color = "#2c3e50"          
   ) +
-  # Etiquetas 
+  # labels
   labs(
     title = "Impacto de las Horas de Estudio en la Salud Mental",
-    subtitle = "Comparativa de la distribución de horas diarias según presencia de depresión",
-    x = "Estado del Estudiante",
+   
+    x = "Estado de Salud Mental",
     y = "Horas de Estudio por Día",
-    caption = "Fuente: Student Depression Dataset"
+   
   ) +
  
-  scale_fill_manual(values = c("#A8DADC", "#E63946")) + 
+  scale_fill_manual(values = c("#A8DADC", "#e74c3c")) + 
   
   theme_minimal(base_size = 12) +
   theme(
@@ -181,19 +186,23 @@ ggplot(df_filtrado, aes(x = Depression_Factor, y = Work.Study.Hours, fill = Depr
 
 ```
 
+-   **tipo**: Categórico vs numérico
 
+-   **Gráfico**: boxplot
+
+-   **Interpretación**: en la gráfica boxplot se puede ver qué las personas con depresión poseen más horas de trabajo/ estudio, con una media de 8, más alta que la media de las personas sin depresión que tienen un rango intercuartilico más alto
+
+-   **Conclusión**: la media de personas con depresión tienen alta carga de horas de estudio y trabajo, en comparación con la media que no tiene depresión manejan en promedio menos carga laboral o de estudio.
 
 ```{r}
-library(ggplot2)
-library(dplyr)
-library(ggplot2)
+
 
 
 ggplot(data = df_filtrado) + 
   geom_bar(mapping = aes(x = factor(Dietary.Habits), fill = factor(Depression)), 
            position = "dodge", 
            color = "black") +
-  scale_x_discrete(labels = c("0" = "Unhealthy", "1" = "Moderate", "2" = "Healthy")) +
+  scale_x_discrete(labels = c("0" = "No saludable", "1" = "Moderado", "2" = "Saludable")) +
   scale_fill_manual(values = c("#3498db", "#e74c3c"), 
                     labels = c("Sin Depresión", "Con Depresión")) +
   labs(title = "Relación entre Hábitos Alimenticios y Depresión",
@@ -202,31 +211,48 @@ ggplot(data = df_filtrado) +
        fill = "Estado") +
   theme_minimal()
 ```
-```{r}
-# Gráfico de Horas de Estudio vs Pensamientos Suicidas
-ggplot(df_filtrado, aes(x = factor(Have.you.ever.had.suicidal.thoughts..), 
-                        y = Work.Study.Hours, 
-                        fill = factor(Have.you.ever.had.suicidal.thoughts..))) +
-  geom_boxplot(alpha = 0.7, outlier.color = "red") +
-  scale_x_discrete(labels = c("0" = "No", "1" = "Sí")) +
-  scale_fill_manual(values = c("#2ecc71", "#e74c3c")) + # Verde para No, Rojo para Sí
-  labs(title = "Relación: Horas de Estudio y Pensamientos Suicidas",
-       x = "Pensamientos Suicidas",
-       y = "Horas de Estudio Diarias") +
-  theme_minimal() +
-  theme(legend.position = "none")
 
+-   **tipo**: Categórico vs numérico.
 
-```
+-   **Gráfico**: Grafico de doble barra.
+
+-   **Interpretación**: En la gráfica de barras doble se puede ver qué en las barras de personas que tienen una dieta saludable hay más personas sin depresión, aunque la diferencia no es muy grande. En los otros 2 rangos menos saludables existe mayor presencia de gente con depresión, pero hay una mayor diferencia entre la cantidad con depresión que con la que no tiene depresión en la dieta no saludable.
+
+-   **Conclusión**: Se puede ver cómo entre menos saludable es la dieta hay una mayor presencia de personas con depresión.
 
 ```{r}
-ggplot(df_filtrado, aes(x = factor(Depression), y = Academic.Pressure, fill = factor(Depression))) +
-  geom_boxplot(width = 0.6, alpha = 0.8) +
-  scale_x_discrete(labels = c("0" = "Sin Depresión", "1" = "Con Depresión")) +
+
+ggplot(df_filtrado, aes(x = Depression_Factor, y = Academic.Pressure, fill = Depression_Factor)) +
+  geom_boxplot(
+    width = 0.5,
+    outlier.colour = "#e74c3c", 
+    outlier.shape = 16,
+    outlier.size = 2,
+    alpha = 0.7,
+    color = "#2c3e50"
+  ) +
   scale_fill_manual(values = c("#3498db", "#e74c3c")) +
-  labs(title = "Presión Académica vs Depresión",
-       x = "Estado",
-       y = "Nivel de Presión") +
-  theme_minimal() +
-  theme(legend.position = "none")
+  labs(
+    title = "Distribución de la Presión Académica según Estado Mental",
+    subtitle = "Comparativa de rangos intercuartílicos y medianas",
+    x = "Estado de Salud Mental",
+    y = "Nivel de Presión Académica"
+   
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(face = "bold", color = "#2c3e50"),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_blank()
+  )
+
 ```
+
+-   **tipo**: Categórico vs numérico.
+
+-   **Gráfico**: Boxplot.
+
+-   **Interpretación**: los rangos que se manejan son casi completamente distintos,es un factor diferenciador, las medias están separadas por dos puntos en la escala de presión academica, el rango intercuartilico es el mismo para ambos.
+
+-   **Conclusión**: el nivel de presión academico es un factor que separa a ambos grupos( los que tienen y no tienen depresión), la media de cada grupo está muy alejada, una presión academica puede ser un factor que genere depresión según el gráfico.
