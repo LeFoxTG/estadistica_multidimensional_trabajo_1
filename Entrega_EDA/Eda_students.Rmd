@@ -256,3 +256,39 @@ ggplot(df_filtrado, aes(x = Depression_Factor, y = Academic.Pressure, fill = Dep
 -   **Interpretación**: los rangos que se manejan son casi completamente distintos,es un factor diferenciador, las medias están separadas por dos puntos en la escala de presión academica, el rango intercuartilico es el mismo para ambos.
 
 -   **Conclusión**: el nivel de presión academico es un factor que separa a ambos grupos( los que tienen y no tienen depresión), la media de cada grupo está muy alejada, una presión academica puede ser un factor que genere depresión según el gráfico.
+
+
+```{r}
+
+df_filtrado$Sleep_Grafico <- factor(df_filtrado$Sleep.Duration, #usar nueva columna para no afectar la transformación
+                                     levels = c(0, 1, 2, 3), 
+                                     labels = c("Menos de 5h", "5-6h", "7-8h", "Más de 8h"))
+
+ggplot(df_filtrado, aes(x = Sleep_Grafico, fill = Depression_Factor)) +
+  geom_bar(position = "dodge")  + # "dodge" pone las barras dobles
+  scale_fill_manual(values = c("#3498db", "#e74c3c")) +
+  labs(
+    title = "Distribución de Depresión según Horas de Sueño",
+    subtitle = "Comparativa de frecuencia por cantidad de descanso diario",
+    x = "Duración del Sueño",
+    y = "Cantidad de Estudiantes",
+    fill = "Estado de Salud Mental"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    axis.title = element_text(face = "bold"),
+    legend.position = "top" # Ponemos la leyenda arriba para que no estorbe
+  )
+
+
+```
+
+
+-   **tipo**: Categórico vs numérico.
+
+-   **Gráfico**: Barras dobles.
+
+-   **Interpretación**: las  barras dobles muestran que no existe una gran diferencia entre el estado mental en las personas que duermen más de 8 horas pero a medida que duermen menos está diferencia se hace más grande.
+
+-   **Conclusión**: la mayoría de personas con depresión del dataset duermen menos, está diferencia contra la población que no tiene depresión es cada vez más grande entre menos tiempo duermen.
