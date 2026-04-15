@@ -456,19 +456,16 @@ Se elimina porque solo identifica registros, no aporta informacion para el anali
 data$ID <- NULL
 ```
 
+---
+
 # PARTE 6. Análisis Multivariado Básico
 
 ## Matriz de Correlación
 
-Para la Matriz de Correlación, se descartarán las variables relacionadas con el trabajo, tales como 
-
 ```{r}
 library(dplyr)
-# Creamos una copia solo con variables numéricas para el análisis multivariado
-# Excluimos las variables de "Work" que están casi en cero y no aportan
 data_num <- data %>%
   mutate(
-    # Convertimos Sleep y Diet a números para poder correlacionarlos
     Sleep_Num = case_when(
       trimws(Sleep.Duration) == "Less than 5 hours" ~ 4,
       trimws(Sleep.Duration) == "5-6 hours" ~ 5.5,
@@ -482,18 +479,23 @@ data_num <- data %>%
       trimws(Dietary.Habits) == "Healthy" ~ 3,
       TRUE ~ NA_real_
     ),
-    # Volvemos a pasar Depression a numérico (0 y 1) para la matriz
-    Depression_Num = as.numeric(as.character(Depression))
+    Depression_num = as.numeric(as.character(Depression)),
+    
+    Suicidal_Num = ifelse(trimws(Have.you.ever.had.suicidal.thoughts) == "Yes", 1, 0),
+    Family_History_Num = ifelse(trimws(Family.History.of.Mental.Illness) == "Yes", 1, 0)
   ) %>%
-  # Seleccionamos solo lo relevante y descartamos lo relacionado con WORK
+  
   select(Age, Academic.Pressure, CGPA, Study.Satisfaction, 
-         Sleep_Num, Diet_Num, Financial.Stress, Depression_Num) %>%
+         Work.Study.Hours,
+         Sleep_Num, Diet_Num, Financial.Stress, 
+         Suicidal_Num, Family_History_Num,
+         Depression_num, Depression) %>% 
   na.omit()
 ```
 
 ```{r}
 library(corrplot)
-matriz_cor <- cor(data_num)
+matriz_cor <- cor(data_num %>% select(-Depression))
 
 # Crear una paleta de colores
 colores <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
@@ -507,16 +509,13 @@ corrplot(matriz_cor, method = "color", type = "upper",
          title = "Matriz de Correlación", mar=c(0,0,1,0))
 ```
 
+### ¿Qué variables están mas relacionadas?
 
+La variable objetivo, ``Depression`, tiene una fuerte correlación positiva con `Academic.Pressure` (0.47) y `Financial.Stress` (0.36). Es decir, a mayor presión académica y estrés financiero, mayor probabilidad de depresión. Curiosamente, tiene una correlación negativa con `Age` (-0.23), sugiriendo que los estudiantes más jóvenes del dataset son más propensos a la depresión. Un hallazgo clave es que el `CGPA` (promedio de notas) no tiene relación alguna con la depresión (0.02). Como podría ser intuitivo, la relación más fuerte se encuentra con `Suicidal.Thoughts` (0.55), demostrando la alta relación que hay entre los pensamientos suicidas y la depresión, siendo una relación predecible a nivel intuitivo, aunque dificil de decir si los pensamientos suicidas son causa de la depresión o una consecuencia, pero lo cierto es que estan muy correlacionadas.
 
-```{r}
+## ¿Qué patrones globales se observan?
 
-library("PerformanceAnalytics")
-#chart.Correlation(data_num, histogram=TRUE, pch=19)
-
-```
-
-EXPLICAR AQUI PQ SE DESCARTARON TODAS LAS RELACIOINADAS CON WORK (LA GRAN MAYORIA SON STUDENTS Y LAS VARIABLES COMO WORK PRESSURE O WORK SATISFACTION SON TODAS CERO PRACTICAMENTE)
+Se observa que el estrés financiero y la presión académica se mueven en la misma dirección (tienen una correlación positiva entre sí del 0.15). El patrón global indica que la depresión estudiantil en este dataset es un problema impulsado por factores de carga mental y económica, más que por el rendimiento académico numérico (notas).
 
 ## Coordenadas Paralelas
 
@@ -524,11 +523,11 @@ EXPLICAR AQUI PQ SE DESCARTARON TODAS LAS RELACIOINADAS CON WORK (LA GRAN MAYORI
 library(GGally)
 
 # 1. Creamos una columna temporal como factor para los colores
-data_num$Depression_Factor <- as.factor(data_num$Depression_Num)
+data_num$Depression_Factor <- as.factor(data_num$Depression_num)
 
 # 2. Generamos el gráfico
-ggparcoord(data = data_num, 
-           columns = 1:7, # Solo graficamos de Edad a Estrés Financiero
+ggparcoord(data = data_num,
+           columns = 1:10,
            groupColumn = "Depression_Factor",
            scale = "std", 
            alphaLines = 0.05) +
@@ -542,30 +541,75 @@ ggparcoord(data = data_num,
 data_num$Depression_Factor <- NULL
 ```
 
+### Brecha entre deprimidos y no deprimidos
+
+Se observa una clara separación ("brecha") en los ejes de `Financial.Stress` y `Academic.Pressure`, donde la trayectoria del grupo con depresión se ubica sistemáticamente por encima del grupo sin depresión. Esto visualiza cómo estas dos cargas actúan en conjunto para perfilar a un estudiante en riesgo." En el caso de `Suicidal.Thoughts` y `Family.History` se ve la brecha más drástica y evidente de todas, en la que prácticamente todas las observaciones del grupo de deprimidos están en la parte alta y ocurre lo mismo con los no deprimidos en la parte baja, tanto así que parecen una sola linea, pero en realidad hay muchas observaciones concentradas ahí.
+
+### Puntos de cruce
+
+El patrón global muestra una relación inversa entre el estrés y los hábitos. Mientras las líneas del grupo con depresión alcanzan picos altos en presión y estrés, caen drásticamente en los ejes de `Study.Satisfaction` y `Sleep_Num`. El perfil del estudiante con depresión es el de un sistema sobrecargado y sin recuperación (poco sueño).
+
+### Puntos de choque
+
+Se puede evidenciar como en el eje del `CGPA` (rendimiento académico) las trayectorias de ambos grupos son casi idénticas. Gráficamente, esto demuestra que el rendimiento académico no discrimina entre un estudiante sano y uno deprimido en esta población. Esta información es acorde a lo establecido en la matriz de correlación, en la cual también se podía observar la prácticamente inexistente relación lineal entre `CGPA` y `Depression`.
+
+### ¿Existen grupos de observaciones similares?
+
+Sí. Se pueden perfilar dos grupos claros: El grupo de riesgo (alta presión, alto estrés financiero, peor dieta, historial familiar, ideaciones suicidas) y el grupo de bienestar (mayor satisfacción de estudio, menor presión, mejor alimentación, sin historial familiar, sin ideaciones suicidas).
+
 # PARTE 7. Medidas descriptivas multivariantes
 
 ## Media Vectorial
 
 ```{r}
-# Calcula el promedio de cada columna.
-media_vectorial <- colMeans(data_num)
-print("--- Media Vectorial (El estudiante promedio) ---")
-print(round(media_vectorial, 2))
+library(dplyr)
+# Comparación de vectores de medias por grupo de depresión
+tabla_centroides <- data_num %>%
+  group_by(Depression_num) %>%
+  summarise(across(where(is.numeric), mean)) %>%
+  print(width = Inf)
 ```
+
+### Reafirmación de hallazgos anteriores
+
+El hallazgo más impactante se encuentra en la variable `Suicidal.Thoughts`. Mientras que en el grupo sin depresión la media es de 0.32, en el grupo con depresión se dispara a 0.85. Esto indica que el 85% de los estudiantes identificados con depresión han experimentado pensamientos suicidas. Esta diferencia de 0.53 puntos es la distancia más amplia entre ambos vectores, convirtiendo a esta variable en el principal marcador clínico del dataset.
+
+Observamos un desplazamiento sistemático hacia valores más altos en los factores estresores para el grupo con depresión:
+* Presión Académica: Aumenta de 2.36 a 3.69.
+* Horas de Trabajo/Estudio: Sube de 6.24 a 7.81 horas diarias.
+* Estrés Financiero: Se eleva de 2.52 a 3.58.
+
+El estudiante deprimido promedio vive en un estado de "sobrecarga". No solo percibe más presión, sino que objetivamente dedica más horas al día a sus responsabilidades, lo que reduce su margen de recuperación.
+
+En el vector del grupo con depresión, las variables de bienestar muestran una caída:
+
+*Sueño (Sleep_Num): Cae de 6.53 a 6.20.
+*Dieta (Diet_Num): Disminuye de 2.10 a 1.77.
+
+Aunque la diferencia en horas de sueño parece pequeña, en términos poblacionales indica una tendencia a la privación crónica. Junto con una peor calidad de dieta, el centroide del grupo con depresión refleja un abandono de los hábitos biológicos básicos.
 
 ## Dispersión
 
 ```{r}
-# --- DISPERSIÓN (Varianza y Matriz de Covarianza) ---
-matriz_cov <- cov(data_num)
+matriz_cov <- cov(data_num %>% select(where(is.numeric)))
 print("--- Matriz de Varianza-Covarianza ---")
 print(round(matriz_cov, 2))
+```
 
+### ¿Qué tan dispersos están los datos?
+
+Se pueden encontrar covarianzas conjuntas críticas: la relación entre Work.Study.Hours y Academic.Pressure (0.49) confirma que la carga horaria no es solo fatiga física, sino que crece de la mano con la presión psicológica. Asimismo, la covarianza positiva entre Financial.Stress y Academic.Pressure (0.30) sugiere que las tensiones económicas y académicas no vienen solas; suelen presentarse como un bloque de presión acumulada que aumenta la dispersión del bienestar del estudiante.
+
+```{r}
 # Extraemos solo las varianzas (la diagonal de la matriz)
 varianzas <- diag(matriz_cov)
 print("--- Varianzas individuales (Qué variables fluctúan más) ---")
 print(round(sort(varianzas, decreasing = TRUE), 2))
 ```
+
+### ¿Qué variables varían más?
+
+Observando las varianzas individuales (la diagonal principal), `Age` (24.07) y `Work.Study.Hours` (13.75) son las que más fluctúan. Sin embargo, cabe aclarar que esto se debe a la escala de medida. La edad se mide en años y las horas de trabajo van en un rango amplio, mientras que variables como `Study.Satisfaction` o `Financial.Stress` se mueven en escalas mucho más pequeñas (ej. de 1 a 5), por lo que su varianza matemática siempre será menor (alrededor de 1.8 a 2.0).
 
 ## Dependencia
 
@@ -573,3 +617,9 @@ print(round(sort(varianzas, decreasing = TRUE), 2))
 print("--- Dependencia (Correlación) ---")
 print(round(matriz_cor, 2))
 ```
+
+### ¿Cómo se relacionan entre sí?
+
+La relación más alarmante es la de Suicidal_Num con Depression_num (0.55). Esta es la correlación más alta de todo el estudio, indicando que la depresión en esta muestra está vinculada de manera casi intrínseca a un riesgo de vida.
+
+Por otro lado, la Presión Académica (0.47) y el Estrés Financiero (0.36) emergen como los dos motores externos más fuertes de la depresión. Es notable que el CGPA (0.02) prácticamente no tiene relación con el estado depresivo, lo que rompe el mito de que el buen rendimiento protege la salud mental. Finalmente, observamos una correlación negativa importante entre los Hábitos Alimenticios (Diet_Num) y la Depresión (-0.21), lo que sugiere que el deterioro de la salud física y la falta de autocuidado son señales tempranas del colapso emocional.
