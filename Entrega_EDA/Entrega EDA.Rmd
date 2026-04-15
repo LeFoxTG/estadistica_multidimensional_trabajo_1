@@ -4,10 +4,10 @@ author: Angelo Alejandro Ibañez Hernandez 20212020007 <br> Alejandro Gomez Moya
 date: "`r format(Sys.Date(), '%d/%m/%Y')`"
 subtitle: Student Depression Dataset
 output:
-  html_document:
+  pdf_document:
+    latex_engine: xelatex   # 👈 AQUÍ está el cambio importante
     toc: true
     toc_depth: 2
-    df_print: paged
   html_notebook:
     toc: true
     toc_depth: 2
@@ -15,10 +15,10 @@ output:
   word_document:
     toc: true
     toc_depth: 2
-  pdf_document:
-    latex_engine: xelatex   # 👈 AQUÍ está el cambio importante
+  html_document:
     toc: true
     toc_depth: 2
+    df_print: paged
 ---
 
 # PARTE 1 - DATASET
@@ -382,7 +382,7 @@ Se observa una proporción de aproximadamente 58.5% con depresión, lo cual indi
 
 ---
 
-# PARTE 4 - LIMPIEZA DE DATOS
+# PARTE 3 - LIMPIEZA DE DATOS
 
 ## 1. Visualización dataset base
 
@@ -455,6 +455,188 @@ Se elimina porque solo identifica registros, no aporta informacion para el anali
 ```{r}
 data$ID <- NULL
 ```
+
+# PARTE 4 - ANÁLISIS BIVARIADO
+
+En esta sección se analizan las relaciones entre pares de variables, especialmente aquellas que potencialmente influyen en la depresión estudiantil. Se utilizan visualizaciones apropiadas según el tipo de variables involucradas.
+
+---
+
+## 4.1 Preparación de datos para análisis bivariado
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+# Crear factor de depresión para etiquetas consistentes
+data$Depression_Factor <- factor(data$Depression, 
+                                  levels = c(0, 1), 
+                                  labels = c("Sin Depresión", "Con Depresión"))
+
+# Transformar variables categóricas ordinales a numéricas para análisis
+data_bivariado <- data %>%
+  mutate(
+    Sleep_Num = case_when(
+      trimws(Sleep.Duration) == "Less than 5 hours" ~ 0,
+      trimws(Sleep.Duration) == "5-6 hours" ~ 1,
+      trimws(Sleep.Duration) == "7-8 hours" ~ 2,
+      trimws(Sleep.Duration) == "More than 8 hours" ~ 3,
+      TRUE ~ NA_real_
+    ),
+    Diet_Num = case_when(
+      trimws(Dietary.Habits) == "Unhealthy" ~ 0,
+      trimws(Dietary.Habits) == "Moderate" ~ 1,
+      trimws(Dietary.Habits) == "Healthy" ~ 2,
+      TRUE ~ NA_real_
+    ),
+    Suicidal_Num = case_when(
+      Have.you.ever.had.suicidal.thoughts == "No" ~ 0,
+      Have.you.ever.had.suicidal.thoughts == "Yes" ~ 1,
+      TRUE ~ NA_real_
+    ),
+    Family_History_Num = case_when(
+      Family.History.of.Mental.Illness == "No" ~ 0,
+      Family.History.of.Mental.Illness == "Yes" ~ 1,
+      TRUE ~ NA_real_
+    )
+  ) %>%
+  filter(!is.na(Sleep_Num), !is.na(Diet_Num))  # Eliminar "Others" de estas variables
+```
+
+
+## 4.2 Estrés financiero vs Depresión
+
+**Tipo de análisis:** Categórica (Depresión) vs Numérica (Estrés Financiero)  
+**Gráfico:** Boxplot
+
+```{r}
+ggplot(data_bivariado, aes(x = Depression_Factor, y = Financial.Stress, fill = Depression_Factor)) +
+  geom_boxplot(width = 0.6, alpha = 0.8) +
+  scale_fill_manual(values = c("#3498db", "#e74c3c")) +
+  labs(
+    title = "Relación entre Estrés Financiero y Depresión",
+    x = "Estado de Salud Mental",
+    y = "Nivel de Estrés Financiero (1-5)"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+-   **Interpretación**: Se puede ver qué la mediana de personas que no sufren depresión está en 2, reflejando una mayoria de estres financiero entre 2 y 4, mientras que las que tienen depresión tienen un rango entre 3 a 5 el nivel de estrés financiero , la mediana muestra que está repartida de forma uniforme el estres entre 3 - 4 y 4 - 5.
+
+-   **Conclusión**: el alto nivel de estrés financiera está más presente en la mitad de la  población con depresión, lo demuestra comparando las medianas con la mayoría del grupo sin depresión que mantienen en 2-4.
+
+## 4.3 Horas de estudio/trabajo vs Depresión
+
+**Tipo de análisis:** Categórica (Depresión) vs Numérica (Horas)
+**Gráfico:** Boxplot
+
+```{r}
+ggplot(data_bivariado, aes(x = Depression_Factor, y = Work.Study.Hours, fill = Depression_Factor)) +
+  geom_boxplot(width = 0.5, outlier.shape = 16, outlier.size = 1.5, 
+               outlier.alpha = 0.5, color = "#2c3e50") +
+  labs(
+    title = "Impacto de las Horas de Estudio/Trabajo en la Salud Mental",
+    x = "Estado de Salud Mental",
+    y = "Horas de Estudio/Trabajo por Día"
+  ) +
+  scale_fill_manual(values = c("#A8DADC", "#e74c3c")) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(face = "bold", size = 14),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_blank()
+  )
+```
+
+-   **Interpretación**: en la gráfica boxplot se puede ver qué la mayoría de  personas con depresión poseen menosrango de  horas de trabajo/ estudio, con una mediana de 8 con una forma más alargada inferior, igualando el rango de las personas sin depresión, pero estás la mayoria manejan un rango más alto.
+
+-   **Conclusión**: la mayoria de personas con depresión tienen alta carga de horas de estudio y trabajo, en comparación con la mediana que no tiene depresión. estos manejan un poco menos carga laboral o de estudio.
+
+
+## 4.4 Hábitos alimenticios vs Depresión
+
+**Tipo de análisis:** Categórica ordinal vs Categórica nominal
+**Gráfico:** Barras agrupadas (dodge)
+
+```{r}
+ggplot(data_bivariado, aes(x = factor(Diet_Num), fill = Depression_Factor)) +
+  geom_bar(position = "dodge", color = "black") +
+  scale_x_discrete(labels = c("0" = "No saludable", "1" = "Moderado", "2" = "Saludable")) +
+  scale_fill_manual(values = c("#3498db", "#e74c3c")) +
+  labs(
+    title = "Relación entre Hábitos Alimenticios y Depresión",
+    x = "Hábito Alimenticio",
+    y = "Cantidad de Estudiantes",
+    fill = "Estado"
+  ) +
+  theme_minimal()
+```
+
+-   **Interpretación**: En la gráfica de barras doble se puede ver qué en las barras de personas que tienen una dieta saludable hay más personas sin depresión, aunque la diferencia no es muy grande. En los otros 2 rangos menos saludables existe mayor presencia de gente con depresión, pero hay una mayor diferencia entre la cantidad con depresión que con la que no tiene depresión en la dieta no saludable.
+
+-   **Conclusión**: Se puede ver cómo entre menos saludable es la dieta hay una mayor presencia de personas con depresión.
+
+## 4.5 Presión académica vs Depresión
+
+**Tipo de análisis:** Categórica (Depresión) vs Numérica ordinal
+**Gráfico:** Boxplot
+
+```{r}
+ggplot(data_bivariado, aes(x = Depression_Factor, y = Academic.Pressure, fill = Depression_Factor)) +
+  geom_boxplot(width = 0.5, outlier.colour = "#e74c3c", outlier.shape = 16,
+               outlier.size = 2, alpha = 0.7, color = "#2c3e50") +
+  scale_fill_manual(values = c("#3498db", "#e74c3c")) +
+  labs(
+    title = "Distribución de la Presión Académica según Estado Mental",
+    subtitle = "Comparativa de rangos intercuartílicos y medianas",
+    x = "Estado de Salud Mental",
+    y = "Nivel de Presión Académica (0-5)"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(face = "bold", color = "#2c3e50"),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_blank()
+  )
+```
+
+-   **Interpretación**: los rangos que se manejan son casi completamente distintos,es un factor diferenciador, las medianas están separadas por dos puntos en la escala de presión academica, el rango intercuartilico es el mismo para ambos.
+
+-   **Conclusión**: el nivel de presión academico es un factor que separa a ambos grupos( los que tienen y no tienen depresión), la mediana de cada grupo está muy alejada, además de estar uniformemente en el centro, una presión academica puede ser un factor que genere depresión según el gráfico.
+
+## 4.6 Duración del sueño vs Depresión
+
+**Tipo de análisis:** Categórica ordinal vs Categórica nominal
+**Gráfico:** Barras agrupadas (dodge)
+
+```{r}
+data_bivariado$Sleep_Grafico <- factor(data_bivariado$Sleep_Num,
+                                        levels = c(0, 1, 2, 3),
+                                        labels = c("Menos de 5h", "5-6h", "7-8h", "Más de 8h"))
+
+ggplot(data_bivariado, aes(x = Sleep_Grafico, fill = Depression_Factor)) +
+  geom_bar(position = "dodge") +
+  scale_fill_manual(values = c("#3498db", "#e74c3c")) +
+  labs(
+    title = "Distribución de Depresión según Horas de Sueño",
+    subtitle = "Comparativa de frecuencia por cantidad de descanso diario",
+    x = "Duración del Sueño",
+    y = "Cantidad de Estudiantes",
+    fill = "Estado de Salud Mental"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    axis.title = element_text(face = "bold"),
+    legend.position = "top"
+  )
+```
+
+-   **Interpretación**: las  barras dobles muestran que no existe una gran diferencia entre el estado mental en las personas que duermen más de 8 horas pero a medida que duermen menos está diferencia se hace más grande.
+
+-   **Conclusión**: la mayoría de personas con depresión del dataset duermen menos, está diferencia contra la población que no tiene depresión es cada vez más grande entre menos tiempo duermen.
 
 # PARTE 6. Análisis Multivariado Básico
 
