@@ -838,63 +838,150 @@ El test arroja un p-valor de 0 tanto para la asimetría como para la curtosis. E
 
 ---
 
-## Distancia de Mahalanobis y Detección de Outliers
+## Nube de datos
+
+Nubes de datos de las variables más correlacionadas.
+
 
 ```{r}
-# Calculamos el vector de medias y la matriz de covarianza
-medias <- colMeans(data_pca)
-matriz_cov <- cov(data_pca)
+g_age_suicidal <- ggplot(data_pca, aes(Age, Suicidal_Num)) +
+  geom_point(alpha = 0.45, size = 1.6) +
+  stat_ellipse(type = "norm", linewidth = 1.1) +
+  coord_equal() +
+  labs(
+    title = "Nube de datos (Age y Suicidal_num)",
+    subtitle = "La elipse muestra una dirección natural de máxima variabilidad",
+    x = "Academic.Pressure",
+    y = "Work.Study.Hours"
+  ) +
+  theme_minimal(base_size = 13)
 
-# Calculamos las distancias de Mahalanobis para cada fila
-dist_mahalanobis <- mahalanobis(data_pca, center = medias, cov = matriz_cov)
+plotly::ggplotly(g_age_suicidal)
 
-# Añadimos la distancia al dataframe para evaluarla
-data_pca$Mahalanobis <- dist_mahalanobis
+g_academic_financial <- ggplot(data_pca, aes(Academic.Pressure, Financial.Stress)) +
+  geom_point(alpha = 0.45, size = 1.6) +
+  stat_ellipse(type = "norm", linewidth = 1.1) +
+  coord_equal() +
+  labs(
+    title = "Nube de datos (Academic.Pressure y Financial.Stress)",
+    subtitle = "La elipse muestra una dirección natural de máxima variabilidad",
+    x = "Academic.Pressure",
+    y = "Work.Study.Hours"
+  ) +
+  theme_minimal(base_size = 13)
 
-# Determinamos un punto de corte (usando Chi-cuadrado con p=0.001)
-# df = número de variables (ncol(data_pca) - 1, descontando la columna Mahalanobis)
-grados_libertad <- ncol(data_pca) - 1
-corte <- qchisq(p = 0.999, df = grados_libertad)
+plotly::ggplotly(g_academic_financial)
 
-# Filtramos el dataset eliminando los valores atípicos severos
-data_limpia <- data_pca[data_pca$Mahalanobis < corte, ]
-# Quitamos la columna Mahalanobis para que no afecte el PCA
-data_limpia$Mahalanobis <- NULL
-```
+g_academic_suicidal <- ggplot(data_pca, aes(Academic.Pressure, Suicidal_Num)) +
+  geom_point(alpha = 0.45, size = 1.6) +
+  stat_ellipse(type = "norm", linewidth = 1.1) +
+  coord_equal() +
+  labs(
+    title = "Nube de datos (Academic.Pressure y Suicidal_num)",
+    subtitle = "La elipse muestra una dirección natural de máxima variabilidad",
+    x = "Academic.Pressure",
+    y = "Work.Study.Hours"
+  ) +
+  theme_minimal(base_size = 13)
 
----
+plotly::ggplotly(g_academic_suicidal)
 
-## Elipse de covarianza
+g_work_suicidal <- ggplot(data_pca, aes(Work.Study.Hours, Suicidal_Num)) +
+  geom_point(alpha = 0.45, size = 1.6) +
+  stat_ellipse(type = "norm", linewidth = 1.1) +
+  coord_equal() +
+  labs(
+    title = "Nube de datos (Work.Study.Hours y Suicidal_num)",
+    subtitle = "La elipse muestra una dirección natural de máxima variabilidad",
+    x = "Academic.Pressure",
+    y = "Work.Study.Hours"
+  ) +
+  theme_minimal(base_size = 13)
 
-### Academic.pressure y Financial.stress
+plotly::ggplotly(g_work_suicidal)
 
-```{r}
-dataEllipse(data_limpia$Academic.Pressure, data_limpia$Financial.Stress, 
-            levels = 0.95, 
-            main = "Elipse de Covarianza (95%)",
-            xlab = "Presión Académica", 
-            ylab = "Estrés Financiero",
-            xlim = c(-1, 8),
-            ylim = c(-2, 6),
-            pch = 19, col = "darkblue", center.pch = 19)
+g_financial_suicidal <- ggplot(data_pca, aes(Financial.Stress, Suicidal_Num)) +
+  geom_point(alpha = 0.45, size = 1.6) +
+  stat_ellipse(type = "norm", linewidth = 1.1) +
+  coord_equal() +
+  labs(
+    title = "Nube de datos (Financial.Stress y Suicidal_num)",
+    subtitle = "La elipse muestra una dirección natural de máxima variabilidad",
+    x = "Academic.Pressure",
+    y = "Work.Study.Hours"
+  ) +
+  theme_minimal(base_size = 13)
+
+plotly::ggplotly(g_financial_suicidal)
 ```
 
 ### Resultados
 
-Se observa una elipse con una ligera inclinación positiva, lo que sugiere una correlación directa entre ambos factores. Los puntos están distribuidos en una cuadrícula (indicando variables categóricas o de escala Likert), con una mayor densidad en los niveles medios de ambas escalas.
+
+
+---
+
+## Estandarización
+
+```{r}
+summary(data_pca)
+```
+
+```{r}
+data_pca <- as.data.frame(scale(data_pca))
+summary(data_pca)
+```
+
+---
+
+## Autovalores y Autovectores
+
+```{r}
+S <- cov(data_pca)
+eig <- eigen(S)
+
+var_exp <- eig$values / sum(eig$values)
+
+data.frame(
+  Componente = paste0("PC", seq_along(eig$values)),
+  Autovalor = eig$values,
+  Varianza_Explicada = var_exp,
+  Varianza_Acumulada = cumsum(var_exp)
+)
+```
+
 ---
 
 ## Análisis de Componentes Principales (PCA)
 
 ```{r}
-# Corremos el PCA. scale.unit = TRUE es VITAL para estandarizar las unidades.
-res_pca <- PCA(data_limpia, scale.unit = TRUE, graph = FALSE)
+pca <- prcomp(data_pca, center = TRUE, scale. = TRUE)
 
-# Gráfico de Sedimentación
-fviz_eig(res_pca, 
-         addlabels = TRUE, 
-         ylim = c(0, 50),
-         title = "Varianza Explicada por Componente (Scree Plot)")
+summary(pca)
+
+var <- (pca$sdev^2) / sum(pca$sdev^2)
+
+df_var <- data.frame(
+  Componente = paste0("PC", seq_along(var)),
+  Varianza = var,
+  Acumulada = cumsum(var)
+)
+
+df_var
+
+library(scales)
+
+ggplot(df_var, aes(Componente, Varianza)) +
+  geom_col() +
+  geom_line(aes(y = Acumulada, group = 1), linewidth = 1.1) +
+  geom_point(aes(y = Acumulada), size = 3) +
+  scale_y_continuous(labels = percent_format()) +
+  labs(
+    title = "PCA",
+    x = "Componente principal",
+    y = "Proporción de varianza"
+  ) +
+  theme_minimal(base_size = 13)
 ```
 
 ### Resultados
@@ -902,8 +989,11 @@ fviz_eig(res_pca,
 El primer componente explica el 22% de la varianza, mientras que el segundo el 14.5%. En conjunto, las primeras dos dimensiones capturan el 36.5% de la variabilidad total. La caída suave en el gráfico (Scree Plot) sugiere que el fenómeno es complejo y depende de múltiples factores con pesos similares.
 
 ---
+
 ```{r}
 # Círculo de Correlaciones
+res_pca <- PCA(data_pca, scale.unit = TRUE, graph = FALSE)
+
 fviz_pca_var(res_pca, 
              col.var = "contrib",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
@@ -917,6 +1007,55 @@ Las variables con mayor contribución (en color naranja/rojo) son Sleep_Num (hor
 
 ---
 
+## Visualización de Scores
+
+```{r}
+scores_pca <- as.data.frame(pca$x)
+scores_pca$Depression <- data_num$Depression
+
+g_scores <- ggplot(scores_pca, aes(PC1, PC2, color = Depression)) +
+  geom_point(size = 2.5, alpha = 0.85) +
+  labs(
+    title = "Visualización de scores",
+    subtitle = "Cada punto es un estudiante; el color representa la depresión",
+    x = "PC1",
+    y = "PC2",
+    color = "Depression"
+  ) +
+  theme_minimal(base_size = 13)
+
+g_scores
+```
+## Visualización de Loadings
+
+```{r}
+loadings_pca <- as.data.frame(pca$rotation) 
+loadings_pca$Variable <- rownames(pca$rotation)
+
+loadings_pca
+
+loadings_long <- loadings_pca %>%
+  tidyr::pivot_longer(
+    cols = starts_with("PC"),
+    names_to = "Componente", 
+    values_to = "Loading"
+  )
+
+ggplot(loadings_long %>% filter(Componente %in% c("PC1", "PC2", "PC3", "PC4", "PC5", "PC6")),
+       aes(x = reorder(Variable, Loading), y = Loading, fill = Componente)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  labs(
+    title = "Loadings de las Componentes",
+    subtitle = "Muestra la contribución de cada variable a las PC",
+    x = "Variable original",
+    y = "Loading"
+  ) +
+  theme_minimal(base_size = 13)
+```
+
 ## Conclusiones del PCA
 
 Los resultados revelan que la depresión en este grupo de estudiantes no sigue una distribución normal y está fuertemente ligada a factores externos y biológicos específicos. El análisis de componentes principales demuestra que la falta de sueño y la ideación suicida son los indicadores con mayor carga de contribución al perfil de riesgo, seguidos de cerca por la presión financiera y académica. Esta estructura de datos confirma que cualquier intervención de bienestar debe priorizar la regulación de hábitos de descanso y el apoyo financiero para reducir efectivamente los índices de depresión.
+
+En este caso, utilizando las variables numéricas del dataset, en análisis del PCA deja ver como, para conservar un 80-90% de la variabilidad de los datos, se deberían escoger al menos 5 componentes. Teniendo en cuenta el anterior análsis, se puede concluir que no es del todo conveniente utilzar componentes, al menos haciendo el análisis unicamente con los datos númericos, debido a que la reducción de dimensionalidad no es considerable, siendo de 7 variables originales a al menos 5 componentes. Sin una reducción de dimensionalidad considerable, podría no valer la pena perder la información individual que aporta cada dato por separado al transformarlos en componentes.
