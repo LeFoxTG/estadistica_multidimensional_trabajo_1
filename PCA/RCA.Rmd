@@ -832,6 +832,10 @@ resultado_mardia <- mardia(data_pca)
 print(resultado_mardia)
 ```
 
+### Resultados
+
+El test arroja un p-valor de 0 tanto para la asimetría como para la curtosis. Esto indica un rechazo de la hipótesis nula de normalidad, lo que significa que los datos presentan una distribución no normal con colas pesadas o sesgo significativo.
+
 ---
 
 ## Distancia de Mahalanobis y Detección de Outliers
@@ -870,9 +874,14 @@ dataEllipse(data_limpia$Academic.Pressure, data_limpia$Financial.Stress,
             main = "Elipse de Covarianza (95%)",
             xlab = "Presión Académica", 
             ylab = "Estrés Financiero",
+            xlim = c(-1, 8),
+            ylim = c(-2, 6),
             pch = 19, col = "darkblue", center.pch = 19)
 ```
 
+### Resultados
+
+Se observa una elipse con una ligera inclinación positiva, lo que sugiere una correlación directa entre ambos factores. Los puntos están distribuidos en una cuadrícula (indicando variables categóricas o de escala Likert), con una mayor densidad en los niveles medios de ambas escalas.
 ---
 
 ## Análisis de Componentes Principales (PCA)
@@ -886,7 +895,14 @@ fviz_eig(res_pca,
          addlabels = TRUE, 
          ylim = c(0, 50),
          title = "Varianza Explicada por Componente (Scree Plot)")
+```
 
+### Resultados
+
+El primer componente explica el 22% de la varianza, mientras que el segundo el 14.5%. En conjunto, las primeras dos dimensiones capturan el 36.5% de la variabilidad total. La caída suave en el gráfico (Scree Plot) sugiere que el fenómeno es complejo y depende de múltiples factores con pesos similares.
+
+---
+```{r}
 # Círculo de Correlaciones
 fviz_pca_var(res_pca, 
              col.var = "contrib",
@@ -894,3 +910,13 @@ fviz_pca_var(res_pca,
              repel = TRUE,
              title = "Variables y sus contribuciones al PCA")
 ```
+
+### Resultados
+
+Las variables con mayor contribución (en color naranja/rojo) son Sleep_Num (horas de sueño), Suicidal_Num (ideación suicida) y Financial_Stress. Se nota que el sueño tiene una correlación negativa fuerte con el componente vertical (Dim2), mientras que la presión académica y financiera se agrupan hacia la derecha (Dim1).
+
+---
+
+## Conclusiones del PCA
+
+Los resultados revelan que la depresión en este grupo de estudiantes no sigue una distribución normal y está fuertemente ligada a factores externos y biológicos específicos. El análisis de componentes principales demuestra que la falta de sueño y la ideación suicida son los indicadores con mayor carga de contribución al perfil de riesgo, seguidos de cerca por la presión financiera y académica. Esta estructura de datos confirma que cualquier intervención de bienestar debe priorizar la regulación de hábitos de descanso y el apoyo financiero para reducir efectivamente los índices de depresión.
