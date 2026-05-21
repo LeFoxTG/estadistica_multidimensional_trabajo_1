@@ -1326,7 +1326,7 @@ ggplot(loadings_long %>% filter(Componente %in% c("PC1", "PC2", "PC3", "PC4", "P
 
 En la grafica de loading podemos ver como
 
--    PC1 representa "la carga de nivel academico, financiero " cuando
+-   PC1 representa "la carga de nivel academico, financiero " cuando
     está aumenta existe una tendencia a ideación suicida
 
 -   PC2 representa "habitos" como la cantidad de horas de horas de sueño
@@ -1359,7 +1359,7 @@ al menos 5 componentes. Sin una reducción de dimensionalidad
 considerable, podría no valer la pena perder la información individual
 que aporta cada dato por separado al transformarlos en componentes.
 
----
+------------------------------------------------------------------------
 
 # PARTE 10: PCA COMPLETO
 
@@ -1378,7 +1378,7 @@ data_pca_completo <- data_num %>%
          Suicidal_Num, Family_History_Num)
 ```
 
----
+------------------------------------------------------------------------
 
 ## Normalidad Multivariante
 
@@ -1387,7 +1387,7 @@ resultado_mardia <- mardia(data_pca_completo)
 print(resultado_mardia)
 ```
 
----
+------------------------------------------------------------------------
 
 ## Nube de datos
 
@@ -1464,7 +1464,8 @@ g_financial_suicidal <- ggplot(data_pca_completo, aes(Financial.Stress, Suicidal
 
 plotly::ggplotly(g_financial_suicidal)
 ```
----
+
+------------------------------------------------------------------------
 
 ## Estandarización
 
@@ -1477,7 +1478,7 @@ data_pca_completo <- as.data.frame(scale(data_pca_completo))
 summary(data_pca_completo)
 ```
 
----
+------------------------------------------------------------------------
 
 ## Autovalores y Autovectores
 
@@ -1495,7 +1496,7 @@ data.frame(
 )
 ```
 
----
+------------------------------------------------------------------------
 
 ## Análisis de Componentes Principales (PCA)
 
@@ -1540,7 +1541,7 @@ fviz_pca_var(res_pca,
              title = "Variables y sus contribuciones al PCA")
 ```
 
----
+------------------------------------------------------------------------
 
 ## Visualización de Scores
 
@@ -1562,7 +1563,7 @@ g_scores <- ggplot(scores_pca, aes(PC1, PC2, color = Depression)) +
 g_scores
 ```
 
----
+------------------------------------------------------------------------
 
 ## Visualización de Loadings
 
@@ -1591,3 +1592,46 @@ ggplot(loadings_long %>% filter(Componente %in% c("PC1", "PC2", "PC3", "PC4", "P
   ) +
   theme_minimal(base_size = 13)
 ```
+
+# Parte 11 Monova y anova
+
+```{r}
+library(MVN)
+
+
+head(data_bivariado)
+
+#no se puede porque todo se relaciona con depresión
+#suicidal num y financial stress
+#suicidal num y academic pressure
+#academic presure y financial stress
+
+
+
+# manova test
+
+modelo_manova<- manova(cbind(Suicidal_Num,Academic.Pressure, Financial.Stress, Diet_Num) ~ Depression,data=data_bivariado) 
+summary(modelo_manova)
+
+summary.aov(modelo_manova)
+
+
+```
+```{r}
+summary.aov(modelo_manova)
+
+```
+Se puede ver que el valor de F entre las variables separadas con base a la depresión, entonces el orden es:
+
+- Riesgo suicida. 
+- Presión académica. 
+- Estrés Financiero. 
+- Dieta.
+
+Todos tus valores Pr(>F) son menores a 2.2e-16. Esto significa que:
+
+- la depresión no es un fenómeno aislado.}
+
+- la depresión afecta la salud mental, desempeño, estrés financiero y el autocuidado.
+
+
