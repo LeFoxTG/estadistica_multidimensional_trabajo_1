@@ -4,10 +4,10 @@ author: Angelo Alejandro Ibañez Hernandez 20212020007 <br> Alejandro Gomez Moya
 date: "`r format(Sys.Date(), '%d/%m/%Y')`"
 subtitle: Student Depression Dataset
 output:
-  html_document:
+  pdf_document:
+    latex_engine: xelatex   # 👈 AQUÍ está el cambio importante
     toc: true
     toc_depth: 2
-    df_print: paged
   html_notebook:
     toc: true
     toc_depth: 2
@@ -15,10 +15,10 @@ output:
   word_document:
     toc: true
     toc_depth: 2
-  pdf_document:
-    latex_engine: xelatex   # 👈 AQUÍ está el cambio importante
+  html_document:
     toc: true
     toc_depth: 2
+    df_print: paged
 editor_options: 
   markdown: 
     wrap: 72
@@ -1387,6 +1387,11 @@ resultado_mardia <- mardia(data_pca_completo)
 print(resultado_mardia)
 ```
 
+Mardia Skewness (Asimetría): Registra un estadístico de 3239.86 con un p-valor de 0 (exactamente $< 0.05$). Esto significa que los datos presentan una deformación o falta de simetría significativa en su distribución conjunta multidimensional.
+
+Mardia Kurtosis (Curtosis): Registra un estadístico de -65.16 y un p-valor de 0 ($< 0.05$). Al ser significativamente distinto de los valores teóricos de una campana perfecta, indica que las colas de la distribución de los datos son más ligeras o pesadas de lo normal (distribución no platicúrtica/mesocúrtica estándar).
+
+Dado que ambos p-valores son estrictamente menores a 0.05, se rechaza formalmente la hipótesis nula de normalidad. Los datos NO siguen una distribución normal multivariante. Sin embargo, al tratarse de una muestra sumamente grande ($N \approx 27,868$), las desviaciones de la normalidad matemática son perfectamente normales en variables de comportamiento humano y encuestas. El tamaño de la muestra garantiza que los cálculos posteriores del PCA siguen siendo geométricamente estables y totalmente válidos para describir las relaciones del dataset.
 ------------------------------------------------------------------------
 
 ## Nube de datos
@@ -1465,6 +1470,8 @@ g_financial_suicidal <- ggplot(data_pca_completo, aes(Financial.Stress, Suicidal
 plotly::ggplotly(g_financial_suicidal)
 ```
 
+Las nubes de datos demuestran que el empeoramiento de la salud mental no ocurre de forma aislada. Existe un patrón de agrupación en el que a medida de que los puntos se desplazan hacia niveles altos de estrés financiero y presión académica, se mueven de manera simultánea hacia los rangos de riesgo suicida e indicadores de depresión, las variables van de la mano, lo que justifica matemáticamente el uso del PCA para fusionarlas en factores comunes.
+
 ------------------------------------------------------------------------
 
 ## Estandarización
@@ -1478,6 +1485,14 @@ data_pca_completo <- as.data.frame(scale(data_pca_completo))
 summary(data_pca_completo)
 ```
 
+Al comparar el primer summary() con el segundo, se observa la transformación matemática de los datos. Antes de la transformación, las variables tenían escalas totalmente heterogéneas donde por ejemplo la edad promediaba los 25.8 años con un máximo de 59, mientras que variables como la ideación suicida (Suicidal_Num) o el historial familiar eran binarias (0 o 1).
+
+Tras aplicar scale(), todas las variables cuantitativas pasan a estar en la misma escala métrica:
+
+La media de todas las distribuciones se desplaza exactamente a 0.0000.
+
+Los valores numéricos ahora representan cuántas desviaciones estándar se aleja un estudiante respecto a la media de la muestra. Por ejemplo, un estudiante con el máximo nivel de presión académica está a 1.34 desviaciones estándar por encima del promedio, mientras que el valor máximo de edad (6.76) revela un caso atípico extremo en la distribución de edades.
+    
 ------------------------------------------------------------------------
 
 ## Autovalores y Autovectores
@@ -1541,6 +1556,14 @@ fviz_pca_var(res_pca,
              title = "Variables y sus contribuciones al PCA")
 ```
 
+Al examinar los resultados del summary() y los gráficos generados se destaca lo siguiente:
+
+Desviaciones Estándar: Las raíces cuadradas de los autovalores para los tres primeros componentes superan la unidad (PC1 = 1.277, PC2 = 1.022, PC3 = 1.012), mostrando matemáticamente su dominio de información sobre el resto.
+
+En el Scree Plot las barras muestran la proporción de varianza individual decreciente, mientras que la línea continua con puntos mapea el crecimiento de la varianza acumulada, cruzando el umbral del 37% al llegar al tercer nodo.
+
+Círculo de Correlaciones proyecta las variables sobre los ejes principales. La longitud y el color de las flechas (siguiendo el gradiente de contribución) revelan qué variables tienen un peso determinante y cómo se agrupan vectorialmente en el espacio latente.
+
 ------------------------------------------------------------------------
 
 ## Visualización de Scores
@@ -1563,6 +1586,8 @@ g_scores <- ggplot(scores_pca, aes(PC1, PC2, color = Depression)) +
 g_scores
 ```
 
+Al observar la distribución espacial en el gráfico observamos que existe una clara e indiscutible división en el plano. Los estudiantes diagnosticados con depresión se agrupan marcadamente hacia el extremo izquierdo y superior, mientras que la población sin depresión se concentra firmemente en la zona derecha e inferior.
+    
 ------------------------------------------------------------------------
 
 ## Visualización de Loadings
@@ -1592,6 +1617,19 @@ ggplot(loadings_long %>% filter(Componente %in% c("PC1", "PC2", "PC3", "PC4", "P
   ) +
   theme_minimal(base_size = 13)
 ```
+
+PC1: Este primer componente define el núcleo de la vulnerabilidad psicológica. Demuestra de forma matemática que suicidal_num, la presión por los estudios y el estrés económico se mueven juntos en la misma dirección.
+
+PC2: El signo opuesto entre el rendimiento académico y el bienestar indica que los estudiantes con altas calificaciones (CGPA hacia el negativo) experimentan un impacto directo que reduce drásticamente sus horas de sueño y la satisfacción con su carrera.
+
+PC3: Muestra un grupo de estudiantes con calificaciones sobresalientes y buen sueño, pero que se desmarcan y se oponen a la variable de antecedentes familiares, sugiriendo un esfuerzo académico individual y desconectado de su contexto del hogar.
+
+PC4: Al tener una carga tan masiva y dominante en la historia familiar, este componente representa la vulnerabilidad heredada o preexistente. Separa las crisis del día a día universitario (exámenes o dinero) y aísla el peso que representa para el estudiante que podria arrastrar antecedentes psiquiátricos desde su hogar.
+
+PC5: Muestra un perfil donde el esfuerzo por mantener notas altas y estar satisfecho con la carrera choca de frente con una pérdida severa de las horas de sueño, marcando un patrón de autoexigencia extrema a costa del descanso básico.
+
+PC6: Concluye que jornadas extensas de estudio y trabajo desestabilizan y transforman directamente los hábitos más básicos del estudiante representando el desgaste por rutina o burnout físico.
+
 
 # Parte 11: MANOVA
 
@@ -1630,7 +1668,7 @@ Se puede ver que el valor de F entre las variables separadas con base a la depre
 
 Todos tus valores Pr(>F) son menores a 2.2e-16. Esto significa que:
 
-- la depresión no es un fenómeno aislado.}
+- la depresión no es un fenómeno aislado.demuestra con total certeza matemática que la depresión es una patología sistémica. No afecta a una sola área de la vida del estudiante, sino que se manifiesta de forma simultánea en su mente, sus finanzas, sus estudios y sus hábitos biológicos.
 
 - la depresión afecta la salud mental, desempeño, estrés financiero y el autocuidado.
 
@@ -1650,6 +1688,13 @@ cat("Tamaño del Efecto (Eta Cuadrado):\n")
 print(eta_squared(anova_suicidal))
 ```
 
+ F-value (11,860) y p-value ($< 2\times 10^{-16}$): El estadístico $F$ es excepcionalmente alto y viene acompañado de la máxima significancia estadística. Esto demuestra que la diferencia en los niveles de ideación suicida entre los estudiantes deprimidos y los no deprimidos es real, rotunda y no se debe al azar.
+ 
+ Eta al Cuadrado ($\eta^2 = 0.30$): Este indicador mide la proporción de la varianza de la ideación suicida que es explicada directamente por la depresión. En el ámbito de las ciencias sociales y de la salud, un valor de $0.30$ (30%) se clasifica como un tamaño del efecto grande.
+
+
+La depresión ejerce un impacto directo y severo sobre la ideación suicida, logrando explicar por sí sola el 30% de toda su variabilidad en la muestra. Los datos concluyen matemáticamente que los pensamientos suicidas no son una conducta aislada o secundaria, sino un síntoma central y profundamente arraigado al diagnóstico depresivo dentro de la población estudiantil
+
 ## 2. Presión Académica
 
 ```{r}
@@ -1659,6 +1704,12 @@ summary(anova_academic)
 cat("Tamaño del Efecto (Eta Cuadrado):\n")
 print(eta_squared(anova_academic))
 ```
+
+F-value (8,112) y p-value ($< 2\times 10^{-16}$): El valor del estadístico $F$ es sumamente alto y el p-valor arroja la máxima significancia estadística confirmando que existe una diferencia real y muy marcada en los niveles de presión académica percibidos entre los estudiantes sanos y los estudiantes deprimidos.
+
+Eta al Cuadrado ($\eta^2 = 0.23$): Este indicador demuestra que la variable depresión explica por sí sola el 23% de toda la variabilidad observada en la presión académica de la muestra.
+
+La presión académica está profundamente ligada al estado de salud mental de los estudiantes, actuando la depresión como un factor explicativo clave de casi una cuarta parte de su varianza total. Los datos concluyen estadísticamente que la carga universitaria y la exigencia institucional no afectan a todos por igual, sino que se manifiestan con una intensidad significativamente más severa y dañina en la población estudiantil que padece depresión
 
 # 3. Estrés Financiero
 
@@ -1670,6 +1721,12 @@ cat("Tamaño del Efecto (Eta Cuadrado):\n")
 print(eta_squared(anova_financial))
 ```
 
+F-value (4,243) y p-value ($< 2\times 10^{-16}$): El estadístico $F$ es considerablemente alto y cuenta con el nivel máximo de significancia estadística. Esto demuestra de forma irrefutable que las diferencias en los niveles de angustia o estrés económico entre estudiantes sanos y deprimidos son reales y altamente significativas.
+
+Eta al Cuadrado ($\eta^2 = 0.13$): Este valor indica que la presencia de depresión explica de manera directa el 13% de toda la variabilidad del estrés financiero en la muestra.
+
+El factor económico tiene un vínculo estrecho y comprobado con el bienestar mental del estudiantado. Aunque su capacidad explicativa directa (13%) es un poco menor en comparación con el impacto observado en la ideación suicida o la presión académica.
+
 # 4. Duración del Sueño
 
 ```{r}
@@ -1679,6 +1736,12 @@ summary(anova_sleep)
 cat("Tamaño del Efecto (Eta Cuadrado):\n")
 print(eta_squared(anova_sleep))
 ```
+
+F-value (199.8) y p-value ($< 2\times 10^{-16}$): A pesar de que el valor $F$ es considerablemente menor en comparación con las variables de presión o ideación suicida, su p-valor conserva la significancia estadística máxima. Esto confirma que la diferencia en las horas de descanso entre ambos grupos de estudiantes sigue siendo estadísticamente real.
+
+Eta al Cuadrado ($\eta^2 = 7.12\times 10^{-3}$ o $0.0071$): Este indicador revela que la depresión explica únicamente el 0.71% de la varianza total de la duración del sueño.
+
+La duración del sueño tiene una relación estadísticamente significativa con la depresión, pero su impacto práctico es sumamente bajo en comparación con los estresores académicos y económicos.
 
 ## Visualización de la variablidad
 
@@ -1713,3 +1776,27 @@ ggplot(data_anova_visual, aes(x = Depression, y = Valor, fill = Depression)) +
     panel.grid.minor = element_blank()
   )
 ```
+
+### Ideación Suicida
+
+Detalle del Gráfico: Al ser una variable binaria, los boxplots se muestran completamente colapsados o polarizados. En el grupo azul (Sin Depresión), la caja se aplasta por completo en el valor 0, mientras que en el grupo rojo (Con Depresión), la mediana se desplaza drásticamente hacia el valor 1.
+
+Conclusión: Esta asimetría visual tan extrema es el reflejo gráfico del Eta Cuadrado de 0.30 (el más alto del estudio). Confirma que la variabilidad de esta variable está prácticamente segmentada por la presencia de la patología: el riesgo de ideación suicida es un comportamiento concentrado casi con exclusividad en el sector estudiantil deprimido.
+
+### Presión Académica
+
+Detalle del Gráfico: La caja roja (Con Depresión) muestra un clarísimo desplazamiento vertical hacia el tope de la escala (valores de 4 y 5), situando su mediana significativamente por encima de la caja azul, la cual se distribuye de forma más equilibrada en la zona media de la puntuación (valores de 2 a 3).
+
+Conclusión: Visualiza de forma limpia el efecto grande obtenido en el ANOVA ($\eta^2 = 0.23$). Aunque la presión académica es un mal común en la universidad, el gráfico demuestra que la población con depresión experimenta una concentración sistemática en los niveles de exigencia más severos e intolerables.
+
+### Estrés Financiero 
+
+Detalle del Gráfico: Se observa un patrón muy similar al de la presión académica. La caja de los estudiantes con depresión se encuentra visiblemente desplazada hacia la parte alta de la escala de estrés económico, mientras que el grupo sin depresión abarca un rango más amplio hacia las puntuaciones bajas.
+
+Conclusión: Este desfase representa el tamaño de efecto mediano-alto ($\eta^2 = 0.13$). La gráfica evidencia que la falta de recursos y la preocupación financiera actúan de forma constante como una barrera o un peso mayor en los estudiantes que cargan con un diagnóstico de depresión.
+
+### Horas de Sueño
+
+Detalle del Gráfico: Ambas cajas (azul y roja) se encuentran prácticamente alineadas en el mismo nivel horizontal, compartiendo rangos y medianas casi idénticas a lo largo del eje del valor, con una ligera dispersión o presencia de valores atípicos (outliers) en las colas.
+
+Conclusión: Es la traducción gráfica perfecta de un Eta Cuadrado despreciable ($0.71\%$). Aunque el ANOVA dio estadísticamente significativo por el gran tamaño de la muestra, el gráfico de cajas demuestra que, en la práctica, la duración del sueño es sumamente homogénea en toda la universidad. Dormir pocas horas es una realidad generalizada del ecosistema estudiantil, no un rasgo exclusivo de la depresión.
