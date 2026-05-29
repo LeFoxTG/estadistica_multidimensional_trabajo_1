@@ -4,10 +4,10 @@ author: Angelo Alejandro Ibañez Hernandez 20212020007 <br> Alejandro Gomez Moya
 date: "`r format(Sys.Date(), '%d/%m/%Y')`"
 subtitle: Student Depression Dataset
 output:
-  pdf_document:
-    latex_engine: xelatex   # 👈 AQUÍ está el cambio importante
+  html_document:
     toc: true
     toc_depth: 2
+    df_print: paged
   html_notebook:
     toc: true
     toc_depth: 2
@@ -15,10 +15,10 @@ output:
   word_document:
     toc: true
     toc_depth: 2
-  html_document:
+  pdf_document:
+    latex_engine: xelatex   # 👈 AQUÍ está el cambio importante
     toc: true
     toc_depth: 2
-    df_print: paged
 editor_options: 
   markdown: 
     wrap: 72
@@ -1633,47 +1633,81 @@ PC6: Concluye que jornadas extensas de estudio y trabajo desestabilizan y transf
 
 # Parte 11: MANOVA
 
-```{r}
-library(MVN)
+## Definición de Grupos
 
+Para evaluar el impacto de la salud mental en el entorno del estudiante, se definen dos grupos mutuamente excluyentes basados en la variable objetivo del estudio:
+* **Grupo 0 (Control):** Estudiantes que no reportan diagnóstico ni sintomatología depresiva.
+* **Grupo 1 (Casos):** Estudiantes con diagnóstico de depresión.
 
-head(data_bivariado)
+## Formulación de Hipótesis Estadísticas
 
-#no se puede porque todo se relaciona con depresión
-#suicidal num y financial stress
-#suicidal num y academic pressure
-#academic presure y financial stress
+Definiendo $\boldsymbol{\mu}$ como el vector que contiene las medias poblacionales de las cuatro variables continuas analizadas:
 
+$$\boldsymbol{\mu} = \begin{bmatrix} \mu_{\text{Ideación Suicida}} \\ \mu_{\text{Presión Académica}} \\ \mu_{\text{Estrés Financiero}} \\ \mu_{\text{Horas de Sueño}} \end{bmatrix}$$
 
+Planteamos las siguientes hipótesis de investigación:
 
-# manova test
+* **Hipótesis Nula ($H_0$):** $\boldsymbol{\mu}_{\text{Sin Depresión}} = \boldsymbol{\mu}_{\text{Con Depresión}}$
+  * *Interpretación:* El vector de medias combinadas es idéntico entre estudiantes con y sin depresión. La salud mental no genera diferencias en el perfil multivariado de estas variables.
+  
+* **Hipótesis Alternativa ($H_1$):** $\boldsymbol{\mu}_{\text{Sin Depresión}} \neq \boldsymbol{\mu}_{\text{Con Depresión}}$
+  * *Interpretación:* Existe una diferencia significativa en al menos una de las variables continuas al contrastar ambos grupos. Los centros de gravedad (centroides) de las nubes de datos están separados en el espacio multidimensional.
 
-modelo_manova<- manova(cbind(Suicidal_Num,Academic.Pressure, Financial.Stress, Diet_Num) ~ Depression,data=data_bivariado) 
-summary(modelo_manova)
+## Ejecución del Modelo y Contraste de Wilks' Lambda
 
-summary.aov(modelo_manova)
+A continuación, se ajusta el modelo multivariado en R y se extrae específicamente el estadístico **Lambda de Wilks** para verificar la significancia del modelo global.
 
+```{r modelo-manova-wilks}
 
+variables_dependientes <- cbind(
+  data_num$Age, 
+  data_num$Academic.Pressure, 
+  data_num$CGPA,
+  data_num$Study.Satisfaction,
+  data_num$Work.Study.Hours,
+  data_num$Sleep_Num,
+  data_num$Diet_Num,
+  data_num$Financial.Stress,
+  data_num$Suicidal_Num,
+  data_num$Family_History_Num
+)
+
+# Les ponemos nombres para que la salida sea fácil de leer
+colnames(variables_dependientes) <- c("Age", "Academic.Pressure", "CGPA", 
+                                      "Study.Satisfaction", "Work.Study.Hours", 
+                                      "Sleep_Num", "Diet_Num", "Financial.Stress", 
+                                      "Suicidal_Num", "Family_History_Num")
+
+# Ajustamos el modelo MANOVA basado en el factor Depression
+modelo_manova <- manova(variables_dependientes ~ Depression, data = data_num)
+
+# Extraemos el resumen utilizando estrictamente la aproximación de Wilks
+cat("--- RESULTADOS GLOBAL MANOVA (WILKS' LAMBDA) ---\n")
+summary(modelo_manova, test = "Wilks")
 ```
-```{r}
+
+A partir de la salida del modelo MANOVA, se puede evidenciar lo siguiente:
+
+1. El valor Wilks' $\boldsymbol{\lambda}$ es de 0.48315. Este valor oscila entre 0 y 1, donde 1 indicaría que los grupos son idénticos y 0 que están completamente separados. Un valor de 0.48315 revela que existe una separación multivariada sustancial entre los grupos. En términos prácticos, significa que aproximadamente el 52% (1 - 0.48315) de la varianza general de este conjunto de variables (su centroide) está fuertemente determinada por la presencia o ausencia de depresión.
+2. Con un p-valor tan por debajo del umbral estándar ($\alpha = 0.05$), se rechaza contundentemente la Hipótesis Nula ($H_0$).
+
+Con base en los valores encontrados se puede afirmar que el perfil completo del estudiante difiere significativamente dependiendo de si padece o no depresión.
+
+Al haberse comprobado que existe una diferencia global real, se justifica metodológicamente el paso hacia los Análisis Posteriores (ANOVAs individuales) para desglosar este impacto variable por variable.
+
+```{r modelo-manova-summary}
 summary.aov(modelo_manova)
-
 ```
-Se puede ver que el valor de F entre las variables separadas con base a la depresión, entonces el orden es:
+Al descomponer el modelo multivariado en análisis univariados (ANOVA), se procede a evaluar los estadísticos F de cada variable. Un estadístico F elevado indica que la variable tiene un alto poder discriminante entre estudiantes con y sin depresión. Observando los resultados, las variables que arrojaron los valores F más altos fueron:
 
-- Riesgo suicida. 
-- Presión académica. 
-- Estrés Financiero. 
-- Dieta.
-
-Todos tus valores Pr(>F) son menores a 2.2e-16. Esto significa que:
-
-- la depresión no es un fenómeno aislado.demuestra con total certeza matemática que la depresión es una patología sistémica. No afecta a una sola área de la vida del estudiante, sino que se manifiesta de forma simultánea en su mente, sus finanzas, sus estudios y sus hábitos biológicos.
-
-- la depresión afecta la salud mental, desempeño, estrés financiero y el autocuidado.
-
+1. Suicidal_num = 11860
+2. Academic.pressure = 8112.4
+3. Financial.stress = 4243.3
+4. Age = 1511.3
 
 # PARTE 12: ANOVA
+
+Con base en el análisis anterior, se determinaron las 4 variables más discriminantes entre estudiantes con y sin depresión, por lo que se les realizará ANOVA a cada una de ellas.
 
 ## 1. Ideación Suicida
 
@@ -1695,21 +1729,22 @@ print(eta_squared(anova_suicidal))
 
 La depresión ejerce un impacto directo y severo sobre la ideación suicida, logrando explicar por sí sola el 30% de toda su variabilidad en la muestra. Los datos concluyen matemáticamente que los pensamientos suicidas no son una conducta aislada o secundaria, sino un síntoma central y profundamente arraigado al diagnóstico depresivo dentro de la población estudiantil
 
-## 2. Presión Académica
+
+# 2. Presión Academica
 
 ```{r}
 anova_academic <- aov(Academic.Pressure ~ Depression, data = data_num)
-cat("\n--- ANOVA: Presión Académica ---\n")
+cat("\n--- ANOVA: Presión Academica ---\n")
 summary(anova_academic)
 cat("Tamaño del Efecto (Eta Cuadrado):\n")
 print(eta_squared(anova_academic))
 ```
+ F-value (8,112) y p-value ($< 2\times 10^{-16}$): El estadístico $F$ es el segundo más alto y viene acompañado de la máxima significancia estadística. Esto demuestra que la diferencia en los niveles de ideación suicida entre los estudiantes deprimidos y los no deprimidos es real, rotunda y no se debe al azar.
+ 
+ Eta al Cuadrado ($\eta^2 = 0.23$): Este indicador mide la proporción de la varianza de la ideación suicida que es explicada directamente por la depresión. En el ámbito de las ciencias sociales y de la salud, un valor de $0.23$ (23%) se clasifica como un tamaño del efecto grande.
 
-F-value (8,112) y p-value ($< 2\times 10^{-16}$): El valor del estadístico $F$ es sumamente alto y el p-valor arroja la máxima significancia estadística confirmando que existe una diferencia real y muy marcada en los niveles de presión académica percibidos entre los estudiantes sanos y los estudiantes deprimidos.
 
-Eta al Cuadrado ($\eta^2 = 0.23$): Este indicador demuestra que la variable depresión explica por sí sola el 23% de toda la variabilidad observada en la presión académica de la muestra.
-
-La presión académica está profundamente ligada al estado de salud mental de los estudiantes, actuando la depresión como un factor explicativo clave de casi una cuarta parte de su varianza total. Los datos concluyen estadísticamente que la carga universitaria y la exigencia institucional no afectan a todos por igual, sino que se manifiestan con una intensidad significativamente más severa y dañina en la población estudiantil que padece depresión
+La depresión ejerce un impacto directo y severo sobre la Presión Academica, logrando explicar por sí sola el 23% de toda su variabilidad en la muestra. Los datos concluyen matemáticamente que la Presión Academica no es un dato aislado ni al azar, sino que tiene un impacto profundo y diferencial entre los estudiantes con depresión y los que no tienen.
 
 # 3. Estrés Financiero
 
@@ -1727,35 +1762,34 @@ Eta al Cuadrado ($\eta^2 = 0.13$): Este valor indica que la presencia de depresi
 
 El factor económico tiene un vínculo estrecho y comprobado con el bienestar mental del estudiantado. Aunque su capacidad explicativa directa (13%) es un poco menor en comparación con el impacto observado en la ideación suicida o la presión académica.
 
-# 4. Duración del Sueño
+## 4. Edad
 
 ```{r}
-anova_sleep <- aov(Sleep_Num ~ Depression, data = data_num)
-cat("\n--- ANOVA: Duración del Sueño ---\n")
-summary(anova_sleep)
+anova_age <- aov(Age ~ Depression, data = data_num)
+cat("\n--- ANOVA: Edad ---\n")
+summary(anova_age)
 cat("Tamaño del Efecto (Eta Cuadrado):\n")
-print(eta_squared(anova_sleep))
+print(eta_squared(anova_age))
 ```
+F-value (1,511) y p-value ($< 2\times 10^{-16}$): El estadístico $F$ sigue siendo considerablemente alto, siendo la cuarta entre las variables más altas, y cuenta con el nivel máximo de significancia estadística. Esto demuestra que la edad es diferencial entre estudiantes sanos y deprimidos de forma significativa.
 
-F-value (199.8) y p-value ($< 2\times 10^{-16}$): A pesar de que el valor $F$ es considerablemente menor en comparación con las variables de presión o ideación suicida, su p-valor conserva la significancia estadística máxima. Esto confirma que la diferencia en las horas de descanso entre ambos grupos de estudiantes sigue siendo estadísticamente real.
+Eta al Cuadrado ($\eta^2 = 0.05$): Este valor indica que la presencia de depresión explica de manera directa el 5% de toda la variabilidad de la edad en la muestra.
 
-Eta al Cuadrado ($\eta^2 = 7.12\times 10^{-3}$ o $0.0071$): Este indicador revela que la depresión explica únicamente el 0.71% de la varianza total de la duración del sueño.
-
-La duración del sueño tiene una relación estadísticamente significativa con la depresión, pero su impacto práctico es sumamente bajo en comparación con los estresores académicos y económicos.
+La edad tiene un vínculo significativo y comprobado con el bienestar mental del estudiantado. Aunque su capacidad explicativa directa (5%) es la menor de las 4 variables analizadas en esta sección, es la cuarta con mayor porcentaje de explicabilidad directa entre todas las variables.
 
 ## Visualización de la variablidad
 
 ```{r}
 # Preparamos los datos en formato largo para ggplot
 data_anova_visual <- data_num %>%
-  select(Depression, Suicidal_Num, Academic.Pressure, Financial.Stress, Sleep_Num) %>%
+  select(Depression, Suicidal_Num, Academic.Pressure, Financial.Stress, Age) %>%
   pivot_longer(cols = -Depression, names_to = "Variable", values_to = "Valor")
 
 # Ajustamos los nombres para que se vean mejor en el gráfico
 data_anova_visual$Variable <- factor(data_anova_visual$Variable,
-                                     levels = c("Suicidal_Num", "Academic.Pressure", "Financial.Stress", "Sleep_Num"),
+                                     levels = c("Suicidal_Num", "Academic.Pressure", "Financial.Stress", "Age"),
                                      labels = c("Ideación Suicida (0-1)", "Presión Académica (1-5)", 
-                                                "Estrés Financiero (1-5)", "Horas de Sueño"))
+                                                "Estrés Financiero (1-5)", "Edad"))
 
 # Generamos el gráfico de cajas agrupado
 ggplot(data_anova_visual, aes(x = Depression, y = Valor, fill = Depression)) +
@@ -1795,8 +1829,8 @@ Detalle del Gráfico: Se observa un patrón muy similar al de la presión acadé
 
 Conclusión: Este desfase representa el tamaño de efecto mediano-alto ($\eta^2 = 0.13$). La gráfica evidencia que la falta de recursos y la preocupación financiera actúan de forma constante como una barrera o un peso mayor en los estudiantes que cargan con un diagnóstico de depresión.
 
-### Horas de Sueño
+### Edad
 
-Detalle del Gráfico: Ambas cajas (azul y roja) se encuentran prácticamente alineadas en el mismo nivel horizontal, compartiendo rangos y medianas casi idénticas a lo largo del eje del valor, con una ligera dispersión o presencia de valores atípicos (outliers) en las colas.
+Detalle del Gráfico: Se puede evidenciar que la caja roja (estudiantes con depresión) tiende a estar un poco más abajo que la caja azul (estudiantes sin depresión), lo cual reafirma que a menor edad, puede haber más depresión y hay una diferenciación notable entre estos dos grupos con respecto a esta variable. Sin embargo, de entre las 4 variables escogidas, esta es en la que las cajas de ambos grupos más se solapan, las medianas están mas cerca una de la otra y por poco se podría decir que una contiene a la otra. La diferenciación es notable pero muy pequeña
 
-Conclusión: Es la traducción gráfica perfecta de un Eta Cuadrado despreciable ($0.71\%$). Aunque el ANOVA dio estadísticamente significativo por el gran tamaño de la muestra, el gráfico de cajas demuestra que, en la práctica, la duración del sueño es sumamente homogénea en toda la universidad. Dormir pocas horas es una realidad generalizada del ecosistema estudiantil, no un rasgo exclusivo de la depresión.
+Conclusión: Esta solapación es coherente con el efecto medio-bajo que se calculó con el ($\eta^2 = 0.05$), lo cual indica que solo un 5% de la varianza de la edad es explicada directamente por la depresión, siendo el porcentaje más pequeño de las variables escogidas y explicando por qué las cajas no están tan separadas como en otras variables. La edad puede dar indicios, pero por si sola no diferencia los grupos tanto como la Ideación suicida o la Presión Académica.
