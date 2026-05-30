@@ -1834,3 +1834,213 @@ Conclusión: Este desfase representa el tamaño de efecto mediano-alto ($\eta^2 
 Detalle del Gráfico: Se puede evidenciar que la caja roja (estudiantes con depresión) tiende a estar un poco más abajo que la caja azul (estudiantes sin depresión), lo cual reafirma que a menor edad, puede haber más depresión y hay una diferenciación notable entre estos dos grupos con respecto a esta variable. Sin embargo, de entre las 4 variables escogidas, esta es en la que las cajas de ambos grupos más se solapan, las medianas están mas cerca una de la otra y por poco se podría decir que una contiene a la otra. La diferenciación es notable pero muy pequeña
 
 Conclusión: Esta solapación es coherente con el efecto medio-bajo que se calculó con el ($\eta^2 = 0.05$), lo cual indica que solo un 5% de la varianza de la edad es explicada directamente por la depresión, siendo el porcentaje más pequeño de las variables escogidas y explicando por qué las cajas no están tan separadas como en otras variables. La edad puede dar indicios, pero por si sola no diferencia los grupos tanto como la Ideación suicida o la Presión Académica.
+
+# Análisis factorial
+
+hallar correlación del dataset sin variable objetivo 
+
+```{r}
+#usar la matriz corr pero sin variable objetivo
+data_af <- as.data.frame(scale(data_num %>% select(-Depression,-Depression_num)))
+                         
+matriz_cor_af <- cor(data_af)
+
+matriz_cor_af
+
+# ya con la matriz de corr podemos ir a encontrar kmo,  para ver si es adecuada
+
+
+
+
+
+
+```
+```{r}
+head(data_af)
+
+```
+
+
+
+
+### KMO
+
+## Interpretación general
+
+| KMO | Interpretación |
+|---|---|
+| > 0.90 | Excelente |
+| > 0.80 | Muy bueno |
+| > 0.70 | Aceptable |
+| > 0.60 | Regular |
+| < 0.50 | Inadecuado |
+
+```{r}
+
+library(psych)
+
+psych::KMO(matriz_cor_af)
+
+
+
+```
+el resultado arroja que tiene un resultado regular cercano al aceptable para el dataset en general pero destacan algunas variables como: Work.Study.Hours,  diet num y  financial stress  que son las más cercanas a un resultado "muy bueno", significa que puede haber una estructura común entre las variables 
+
+### Barlett
+
+
+```{r bartlett}
+psych::cortest.bartlett(matriz_cor_af, n = nrow(data_af))
+```
+El p value al ser menor que 0.05 se rechaza la hipotesis nula que dice que no existe relación entre las variables, además de presentar un valor chi cuadrado grande que demuestra la diferencia entre la matriz de correlación y la matriz identidad.
+al tener un grado de libertad alto ya que se usaron 10 variables la prueba puede ser más flexible, tiene más ruido, siendo benefico para posibles  modelos teniendo buena representación de la realidad al no tender al sobreajuste. 
+
+# Autovalores
+
+```{r eigen}
+eigenvalues <- eigen(matriz_cor_af)$values
+
+eigenvalues
+```
+
+### scree plot
+
+
+```{r scree}
+plot(
+  eigenvalues,
+  type = "b",
+  pch = 19,
+  xlab = "Factor o componente",
+  ylab = "Autovalor",
+  main = "Scree Plot"
+)
+
+abline(h = 1, col = "red", lty = 2)
+```
+
+vemos que podemos conservar 3 factores usando el criterio de kaiser,ya que un factor lo supera por mcuho y los otros 2 le superan por poco al criterio de kayser.
+
+# Modelo factorial inicial
+
+Ajustaremos un análisis factorial con tres factores sin rotación.
+
+```{r factanal}
+modelo_fa <- factanal(
+  data_af,
+  factors = 3,
+  rotation = "none"
+)
+
+modelo_fa
+```
+
+el valor p $\ge$ 0.05, no se rechaza la hipótesis nula , lo cual indica que un modelo con 4 factores es  suficiente para modelar la covarianza de los datos sin tener pérdida significativa de información.
+
+
+
+
+
+### número de factores
+
+se eligieron 3 por el criterio de Kayzer
+
+### cargas factoriales
+
+
+
+```{r loadings}
+loadings_df <- as.data.frame(
+  unclass(modelo_fa$loadings)#los carga del modelo
+)
+
+loadings_df$Variable <- rownames(loadings_df)
+
+loadings_long <- loadings_df |>
+  pivot_longer(
+    cols = starts_with("Factor"),
+    names_to = "Factor",
+    values_to = "Carga"
+  )
+
+ggplot(loadings_long, aes(Variable, Carga, fill = Factor)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  labs(
+    title = "Cargas factoriales",
+    subtitle = "Relación entre variables observadas y factores latentes",
+    x = "Variable",
+    y = "Carga factorial"
+  ) +
+  theme_minimal(base_size = 13)
+```
+en la visualización de la carga factorial podemos ver que en el factor:
+
+### unicidad
+
+
+```{r uniqueness}
+modelo_fa$uniquenesses
+```
+
+### comunalidad
+
+```{r comunalidades}
+unicidades <- modelo_fa$uniquenesses
+
+comunalidades <- 1 - unicidades
+
+data.frame(
+  Variable = names(unicidades),
+  Unicidad = unicidades,
+  Comunalidad = comunalidades
+)
+```
+podemos ver que existe  una predominación de una alta unicidad en las variables, mostrando que el modelo no captura su varianza. la unica variable que si es bien representada por el modelo es study satisfaction.
+
+
+#scorees factoriales
+
+
+```{r scores}
+modelo_scores <- factanal(
+  (data_af),
+  factors = 3,
+  scores = "regression"
+)
+
+head(modelo_scores$scores)
+
+
+```
+
+
+```{r plot-scores}
+
+
+scores_df <- as.data.frame(modelo_scores$scores)
+
+scores_df$Depression_num <- data_num$Depression_num
+
+
+library(GGally)
+
+ggpairs(scores_df, 
+        columns = c("Factor1", "Factor2", "Factor3"), # Solo mapeamos los factores
+        mapping = aes(color = as.factor(Depression_num), alpha = 0.5),
+        title = "Matriz de Scores Factoriales por Estado de Depresión") +
+  scale_color_manual(values = c("#2ecc71", "#e74c3c")) + # Verde (No) y Rojo (Sí)
+  scale_fill_manual(values = c("#2ecc71", "#e74c3c")) +
+  theme_minimal()
+
+```
+### interpretación de factores
+
+
+1. existe una carga dominada por  study satisfaction contraria a presión academica, estrés financiero elevado, historial de familiares y horas de trabajo/estudio, mostrando una relación inversa al factor 2.
+
+2.el comportamiento que se percibe es que un conjunto alta presión academica, estrés financiero elevado, historial de familiares y horas de trabajo/estudio, genera una relación inversa para el bienestar del estudiante con base a la calidad de sueño y de alimentación junto a una edad temprana.
+
+3. el estrés academico y la privación del sueño está relacionado de forma negativa a la ideación suicida, historial de enfermedades mentales, presión académica y tiempo de estudio. pero de forma muy debíl ya que no supera el 30 %.
+
+
