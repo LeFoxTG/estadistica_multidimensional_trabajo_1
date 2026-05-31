@@ -2232,3 +2232,35 @@ ggpairs(scores_df,
     forma negativa a la ideación suicida, historial de enfermedades
     mentales, presión académica y tiempo de estudio. pero de forma muy
     debíl ya que no supera el 30 %.
+    
+    
+#Hallazgos más importantes
+
+ - La ideación suicida fue la variable más asociada a la depresión.
+ 
+ - La presión académica apareció de forma recurrente como uno de los principales factores diferenciadores.
+ 
+ - El estrés financiero mostró una relación importante con la presencia de depresión.
+ 
+ - Dormir menos horas se asoció con mayores niveles de depresión.
+
+ - Los hábitos alimenticios menos saludables fueron más frecuentes en estudiantes con depresión.
+
+ - La satisfacción académica fue menor entre estudiantes con depresión.
+
+ - El rendimiento académico (CGPA) tuvo una influencia relativamente baja en comparación con otros factores.
+
+ - La depresión estudiantil se comporta como un fenómeno multidimensional y complejo, sin una única causa dominante.
+
+
+# Conclusión General
+
+El presente estudio permitió analizar los factores asociados a la depresión en estudiantes mediante la aplicación de técnicas de análisis descriptivo, análisis bivariado, análisis multivariado, Análisis de Componentes Principales (PCA), Análisis Factorial Exploratorio (AFE), MANOVA y ANOVA. Los resultados evidenciaron que la depresión no depende de un único factor, sino que corresponde a un fenómeno multidimensional influenciado por variables académicas, económicas, psicológicas y relacionadas con los hábitos de vida.
+
+A lo largo de los diferentes análisis se observó de manera consistente que variables como la presión académica, el estrés financiero, la presencia de pensamientos suicidas, la duración del sueño, la satisfacción con los estudios y los hábitos alimenticios presentan asociaciones importantes con la presencia de depresión. Por el contrario, variables como el rendimiento académico (CGPA), la presión laboral y la satisfacción laboral mostraron una capacidad mucho menor para diferenciar a los estudiantes con depresión de aquellos que no presentan esta condición.
+
+Los resultados del PCA demostraron que la información contenida en el conjunto de datos se encuentra distribuida entre múltiples dimensiones, lo que dificulta una reducción significativa de variables sin pérdida considerable de información. Esta situación fue consistente con los hallazgos del Análisis Factorial Exploratorio, donde se identificó la existencia de factores comunes, pero también altos niveles de unicidad en varias variables, indicando que una parte importante de la variabilidad observada es específica de cada característica analizada.
+
+Por su parte, el MANOVA confirmó estadísticamente que existen diferencias significativas en el perfil multivariado de los estudiantes según la presencia o ausencia de depresión. Posteriormente, los análisis ANOVA permitieron identificar cuáles variables aportan en mayor medida a dicha diferenciación, destacándose especialmente la ideación suicida, la presión académica y el estrés financiero.
+
+En conjunto, los resultados sugieren que las estrategias de prevención e intervención dirigidas a la población estudiantil deberían enfocarse no solamente en el desempeño académico, sino también en el bienestar psicológico, el manejo del estrés, el apoyo financiero, la promoción de hábitos de sueño saludables y el fortalecimiento de redes de apoyo emocional. De esta manera, el estudio demuestra la utilidad de las técnicas de análisis multivariado para comprender fenómenos complejos como la depresión estudiantil y proporciona evidencia que puede servir como base para futuras investigaciones y para el diseño de programas de acompañamiento en instituciones educativas.
