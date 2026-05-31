@@ -46,12 +46,12 @@ indica si un estudiante presenta depresión (1) o no (0).
 Este dataset es pertinente para un análisis estadístico multidimensional
 debido a que:
 
--   Contiene múltiples variables que describen diferentes dimensiones
-    del individuo (académica, personal, económica y psicológica).
--   Permite analizar relaciones entre variables que potencialmente
-    influyen en la depresión.
--   Presenta una combinación de variables numéricas y categóricas, lo
-    cual es ideal para análisis univariado, bivariado y multivariado.
+- Contiene múltiples variables que describen diferentes dimensiones del
+  individuo (académica, personal, económica y psicológica).
+- Permite analizar relaciones entre variables que potencialmente
+  influyen en la depresión.
+- Presenta una combinación de variables numéricas y categóricas, lo cual
+  es ideal para análisis univariado, bivariado y multivariado.
 
 ## Objetivo General
 
@@ -84,26 +84,26 @@ dentro del análisis de depresión estudiantil.
 
 ### Variables cuantitativas
 
--   Age
--   Academic Pressure
--   Work Pressure
--   CGPA
--   Study Satisfaction
--   Job Satisfaction
--   Work/Study Hours
--   Financial Stress
+- Age
+- Academic Pressure
+- Work Pressure
+- CGPA
+- Study Satisfaction
+- Job Satisfaction
+- Work/Study Hours
+- Financial Stress
 
 ### Variables cualitativas
 
--   Gender
--   City
--   Profession
--   Degree
--   Sleep Duration
--   Dietary Habits
--   Suicidal Thoughts
--   Family History of Mental Illness
--   Depression
+- Gender
+- City
+- Profession
+- Degree
+- Sleep Duration
+- Dietary Habits
+- Suicidal Thoughts
+- Family History of Mental Illness
+- Depression
 
 ------------------------------------------------------------------------
 
@@ -202,9 +202,9 @@ indica ausencia casi total de presión laboral.
 
 Esta variable no tiene capacidad explicativa en este dataset y debería:
 
--   eliminarse del modelo, o
--   utilizarse únicamente para confirmar que la población es
-    mayoritariamente no trabajadora.
+- eliminarse del modelo, o
+- utilizarse únicamente para confirmar que la población es
+  mayoritariamente no trabajadora.
 
 ## CGPA (Rendimiento académico)
 
@@ -232,14 +232,14 @@ La distribución muestra una clara concentración en valores altos (7 a
 
 Esto indica que:
 
--   la mayoría de estudiantes tiene buen rendimiento
--   no hay una gran variabilidad académica
+- la mayoría de estudiantes tiene buen rendimiento
+- no hay una gran variabilidad académica
 
 El alto rendimiento no actúa como factor protector contra la depresión,
 Por el contrario, puede estar asociado a:
 
--   autoexigencia
--   presión por mantener resultados
+- autoexigencia
+- presión por mantener resultados
 
 Esto sugerir una relación interesante: “alto rendimiento ≠ bienestar
 emocional”
@@ -274,9 +274,8 @@ variabilidad.
 El estrés financiero sí puede ser un factor discriminante importante,
 especialmente porque:
 
--   no todos los estudiantes lo experimentan igual
--   puede interactuar con otras variables (horas de trabajo, sueño,
-    etc.)
+- no todos los estudiantes lo experimentan igual
+- puede interactuar con otras variables (horas de trabajo, sueño, etc.)
 
 ## Horas de estudio/trabajo (Work/Study Hours)
 
@@ -303,9 +302,9 @@ hay estudiantes con cargas significativamente elevadas.
 Existe un grupo importante en riesgo de sobrecarga académica, lo que
 puede derivar en:
 
--   fatiga
--   burnout
--   alteraciones del sueño
+- fatiga
+- burnout
+- alteraciones del sueño
 
 ## Género (Gender)
 
@@ -331,8 +330,8 @@ puede haber ligera diferencia).
 Por sí sola, esta variable no explica la depresión, pero es fundamental
 en análisis bivariados para detectar:
 
--   diferencias en prevalencia
--   vulnerabilidad diferencial
+- diferencias en prevalencia
+- vulnerabilidad diferencial
 
 ## Ciudad (City)
 
@@ -353,8 +352,8 @@ La alta cardinalidad (52 ciudades) dificulta su análisis univariado.
 
 No es útil de forma individual, pero tiene alto valor si se:
 
--   agrupa (por región, tamaño de ciudad)
--   usa en modelos predictivos
+- agrupa (por región, tamaño de ciudad)
+- usa en modelos predictivos
 
 Sin embargo para el caso de este analisis no se tendra en cuenta pues no
 parece tener una relacion con las causas de la depresion como otras
@@ -392,9 +391,9 @@ Esto evidencia un patrón preocupante: privación de sueño generalizada
 
 Y esto está fuertemente relacionado con:
 
--   ansiedad
--   depresión
--   bajo bienestar
+- ansiedad
+- depresión
+- bajo bienestar
 
 ## Hábitos alimenticios (Dietary Habits)
 
@@ -427,8 +426,8 @@ alto riesgo psicológico.
 
 Esta es probablemente la variable más predictiva de depresión, y además:
 
--   refleja gravedad del problema
--   puede usarse como indicador temprano
+- refleja gravedad del problema
+- puede usarse como indicador temprano
 
 ## Historial familiar
 
@@ -445,8 +444,8 @@ familiares.
 
 Este factor podria sugerir:
 
--   predisposición genética
--   influencia del entorno familiar
+- predisposición genética
+- influencia del entorno familiar
 
 ## Variable objetivo: Depresión
 
@@ -461,10 +460,10 @@ barplot(table(data$Depression),
 Se observa una proporción de aproximadamente 58.5% con depresión, lo
 cual indica:
 
--   el dataset está ligeramente desbalanceado hacia la clase positiva
--   alta prevalencia del fenómeno
--   No es un problema raro → es generalizado
--   Se justifica completamente el análisis
+- el dataset está ligeramente desbalanceado hacia la clase positiva
+- alta prevalencia del fenómeno
+- No es un problema raro → es generalizado
+- Se justifica completamente el análisis
 
 ------------------------------------------------------------------------
 
@@ -547,14 +546,14 @@ influyendo en este fenómeno.
 Estas variables representan el contexto social, los habitos y los
 factores psicologicos
 
--   Gender
--   City
--   Profession
--   Sleep.Duration
--   Dietary.Habits
--   Degree
--   Suicidal thoughts
--   Family history
+- Gender
+- City
+- Profession
+- Sleep.Duration
+- Dietary.Habits
+- Degree
+- Suicidal thoughts
+- Family history
 
 ## 2. Eliminacion de duplicados
 
@@ -662,17 +661,16 @@ ggplot(data_bivariado, aes(x = Depression_Factor, y = Financial.Stress, fill = D
   theme(legend.position = "none")
 ```
 
--   **Interpretación**: Se puede ver qué la mediana de personas que no
-    sufren depresión está en 2, reflejando una mayoria de estres
-    financiero entre 2 y 4, mientras que las que tienen depresión tienen
-    un rango entre 3 a 5 el nivel de estrés financiero , la mediana
-    muestra que está repartida de forma uniforme el estres entre 3 - 4 y
-    4 - 5.
+- **Interpretación**: Se puede ver qué la mediana de personas que no
+  sufren depresión está en 2, reflejando una mayoria de estres
+  financiero entre 2 y 4, mientras que las que tienen depresión tienen
+  un rango entre 3 a 5 el nivel de estrés financiero , la mediana
+  muestra que está repartida de forma uniforme el estres entre 3 - 4 y
+  4 - 5.
 
--   **Conclusión**: el alto nivel de estrés financiera está más presente
-    en la mitad de la población con depresión, lo demuestra comparando
-    las medianas con la mayoría del grupo sin depresión que mantienen en
-    2-4.
+- **Conclusión**: el alto nivel de estrés financiera está más presente
+  en la mitad de la población con depresión, lo demuestra comparando las
+  medianas con la mayoría del grupo sin depresión que mantienen en 2-4.
 
 ## 4.3 Horas de estudio/trabajo vs Depresión
 
@@ -698,16 +696,16 @@ ggplot(data_bivariado, aes(x = Depression_Factor, y = Work.Study.Hours, fill = D
   )
 ```
 
--   **Interpretación**: en la gráfica boxplot se puede ver qué la
-    mayoría de personas con depresión poseen menosrango de horas de
-    trabajo/ estudio, con una mediana de 8 con una forma más alargada
-    inferior, igualando el rango de las personas sin depresión, pero
-    estás la mayoria manejan un rango más alto.
+- **Interpretación**: en la gráfica boxplot se puede ver qué la mayoría
+  de personas con depresión poseen menosrango de horas de trabajo/
+  estudio, con una mediana de 8 con una forma más alargada inferior,
+  igualando el rango de las personas sin depresión, pero estás la
+  mayoria manejan un rango más alto.
 
--   **Conclusión**: la mayoria de personas con depresión tienen alta
-    carga de horas de estudio y trabajo, en comparación con la mediana
-    que no tiene depresión. estos manejan un poco menos carga laboral o
-    de estudio.
+- **Conclusión**: la mayoria de personas con depresión tienen alta carga
+  de horas de estudio y trabajo, en comparación con la mediana que no
+  tiene depresión. estos manejan un poco menos carga laboral o de
+  estudio.
 
 ## 4.4 Hábitos alimenticios vs Depresión
 
@@ -728,16 +726,15 @@ ggplot(data_bivariado, aes(x = factor(Diet_Num), fill = Depression_Factor)) +
   theme_minimal()
 ```
 
--   **Interpretación**: En la gráfica de barras doble se puede ver qué
-    en las barras de personas que tienen una dieta saludable hay más
-    personas sin depresión, aunque la diferencia no es muy grande. En
-    los otros 2 rangos menos saludables existe mayor presencia de gente
-    con depresión, pero hay una mayor diferencia entre la cantidad con
-    depresión que con la que no tiene depresión en la dieta no
-    saludable.
+- **Interpretación**: En la gráfica de barras doble se puede ver qué en
+  las barras de personas que tienen una dieta saludable hay más personas
+  sin depresión, aunque la diferencia no es muy grande. En los otros 2
+  rangos menos saludables existe mayor presencia de gente con depresión,
+  pero hay una mayor diferencia entre la cantidad con depresión que con
+  la que no tiene depresión en la dieta no saludable.
 
--   **Conclusión**: Se puede ver cómo entre menos saludable es la dieta
-    hay una mayor presencia de personas con depresión.
+- **Conclusión**: Se puede ver cómo entre menos saludable es la dieta
+  hay una mayor presencia de personas con depresión.
 
 ## 4.5 Presión académica vs Depresión
 
@@ -764,16 +761,16 @@ ggplot(data_bivariado, aes(x = Depression_Factor, y = Academic.Pressure, fill = 
   )
 ```
 
--   **Interpretación**: los rangos que se manejan son casi completamente
-    distintos,es un factor diferenciador, las medianas están separadas
-    por dos puntos en la escala de presión academica, el rango
-    intercuartilico es el mismo para ambos.
+- **Interpretación**: los rangos que se manejan son casi completamente
+  distintos,es un factor diferenciador, las medianas están separadas por
+  dos puntos en la escala de presión academica, el rango intercuartilico
+  es el mismo para ambos.
 
--   **Conclusión**: el nivel de presión academico es un factor que
-    separa a ambos grupos( los que tienen y no tienen depresión), la
-    mediana de cada grupo está muy alejada, además de estar
-    uniformemente en el centro, una presión academica puede ser un
-    factor que genere depresión según el gráfico.
+- **Conclusión**: el nivel de presión academico es un factor que separa
+  a ambos grupos( los que tienen y no tienen depresión), la mediana de
+  cada grupo está muy alejada, además de estar uniformemente en el
+  centro, una presión academica puede ser un factor que genere depresión
+  según el gráfico.
 
 ## 4.6 Duración del sueño vs Depresión
 
@@ -803,14 +800,14 @@ ggplot(data_bivariado, aes(x = Sleep_Grafico, fill = Depression_Factor)) +
   )
 ```
 
--   **Interpretación**: las barras dobles muestran que no existe una
-    gran diferencia entre el estado mental en las personas que duermen
-    más de 8 horas pero a medida que duermen menos está diferencia se
-    hace más grande.
+- **Interpretación**: las barras dobles muestran que no existe una gran
+  diferencia entre el estado mental en las personas que duermen más de 8
+  horas pero a medida que duermen menos está diferencia se hace más
+  grande.
 
--   **Conclusión**: la mayoría de personas con depresión del dataset
-    duermen menos, está diferencia contra la población que no tiene
-    depresión es cada vez más grande entre menos tiempo duermen.
+- **Conclusión**: la mayoría de personas con depresión del dataset
+  duermen menos, está diferencia contra la población que no tiene
+  depresión es cada vez más grande entre menos tiempo duermen.
 
 # PARTE 6. Análisis Multivariado Básico
 
@@ -1169,20 +1166,20 @@ plotly::ggplotly(g_financial_suicidal)
 Al realizar las nubes de datos de las variables más correlacionadas se
 puede observar que gráficos como:
 
--   "Age vs suicidal_num"y "Work.study.hours vs suicidal_num" tienen una
-    nube horizontal que no muestra una variación, entonces no sirven
-    para reducir dimensionalidad ya que las variables como Suicidal_num
-    son casi contantes por su poca escala .
+- "Age vs suicidal_num"y "Work.study.hours vs suicidal_num" tienen una
+  nube horizontal que no muestra una variación, entonces no sirven para
+  reducir dimensionalidad ya que las variables como Suicidal_num son
+  casi contantes por su poca escala .
 
 <!-- -->
 
--   En "financial Stress vs Academic pressure por su forma casi circular
-    sugiere una correlación baja que no aporta al análisis.
+- En "financial Stress vs Academic pressure por su forma casi circular
+  sugiere una correlación baja que no aporta al análisis.
 
--   "Academic.Pressure y Suicidal_num" y "Financial.Stress y
-    Suicidal_num" se puede ver una elipse con una ligera inclinación
-    positiva que podría ser engañosa pero no existe una correlación
-    lineal significativa que sustente su uso.
+- "Academic.Pressure y Suicidal_num" y "Financial.Stress y Suicidal_num"
+  se puede ver una elipse con una ligera inclinación positiva que podría
+  ser engañosa pero no existe una correlación lineal significativa que
+  sustente su uso.
 
 ------------------------------------------------------------------------
 
@@ -1337,15 +1334,15 @@ ggplot(loadings_long %>% filter(Componente %in% c("PC1", "PC2", "PC3", "PC4", "P
 
 En la grafica de loading podemos ver como
 
--   PC1 representa "la carga de nivel academico, financiero " cuando
-    está aumenta existe una tendencia a ideación suicida
+- PC1 representa "la carga de nivel academico, financiero " cuando está
+  aumenta existe una tendencia a ideación suicida
 
--   PC2 representa "habitos" como la cantidad de horas de horas de sueño
-    o descanso
+- PC2 representa "habitos" como la cantidad de horas de horas de sueño o
+  descanso
 
--   PC3 tiene una carga fuerte al ser casi 1.0 y teniendo proporciones
-    diferentes en los otros componentes se observa que es independiente
-    de otras variables como estrés financiero o presión académica.
+- PC3 tiene una carga fuerte al ser casi 1.0 y teniendo proporciones
+  diferentes en los otros componentes se observa que es independiente de
+  otras variables como estrés financiero o presión académica.
 
 ## Conclusiones del PCA
 
@@ -1398,12 +1395,18 @@ resultado_mardia <- mardia(data_pca_completo)
 print(resultado_mardia)
 ```
 
-Mardia Skewness (Asimetría): Registra un estadístico de 3239.86 con un p-valor de 0 (exactamente $< 0.05$). Esto significa que los datos presentan una deformación o falta de simetría significativa en su distribución conjunta multidimensional.
+Mardia Skewness (Asimetría): Registra un estadístico de 3239.86 con un
+p-valor de 0 (exactamente $< 0.05$). Esto significa que los datos
+presentan una deformación o falta de simetría significativa en su
+distribución conjunta multidimensional.
 
-Mardia Kurtosis (Curtosis): Registra un estadístico de -65.16 y un p-valor de 0 ($< 0.05$). Al ser significativamente distinto de los valores teóricos de una campana perfecta, indica que las colas de la distribución de los datos son más ligeras o pesadas de lo normal (distribución no platicúrtica/mesocúrtica estándar).
+Mardia Kurtosis (Curtosis): Registra un estadístico de -65.16 y un
+p-valor de 0 ($< 0.05$). Al ser significativamente distinto de los
+valores teóricos de una campana perfecta, indica que las colas de la
+distribución de los datos son más ligeras o pesadas de lo normal
+(distribución no platicúrtica/mesocúrtica estándar).
 
-Dado que ambos p-valores son estrictamente menores a 0.05, se rechaza formalmente la hipótesis nula de normalidad. Los datos NO siguen una distribución normal multivariante. Sin embargo, al tratarse de una muestra sumamente grande ($N \approx 27,868$), las desviaciones de la normalidad matemática son perfectamente normales en variables de comportamiento humano y encuestas. El tamaño de la muestra garantiza que los cálculos posteriores del PCA siguen siendo geométricamente estables y totalmente válidos para describir las relaciones del dataset.
-------------------------------------------------------------------------
+## Dado que ambos p-valores son estrictamente menores a 0.05, se rechaza formalmente la hipótesis nula de normalidad. Los datos NO siguen una distribución normal multivariante. Sin embargo, al tratarse de una muestra sumamente grande ($N \approx 27,868$), las desviaciones de la normalidad matemática son perfectamente normales en variables de comportamiento humano y encuestas. El tamaño de la muestra garantiza que los cálculos posteriores del PCA siguen siendo geométricamente estables y totalmente válidos para describir las relaciones del dataset.
 
 ## Nube de datos
 
@@ -1481,7 +1484,13 @@ g_financial_suicidal <- ggplot(data_pca_completo, aes(Financial.Stress, Suicidal
 plotly::ggplotly(g_financial_suicidal)
 ```
 
-Las nubes de datos demuestran que el empeoramiento de la salud mental no ocurre de forma aislada. Existe un patrón de agrupación en el que a medida de que los puntos se desplazan hacia niveles altos de estrés financiero y presión académica, se mueven de manera simultánea hacia los rangos de riesgo suicida e indicadores de depresión, las variables van de la mano, lo que justifica matemáticamente el uso del PCA para fusionarlas en factores comunes.
+Las nubes de datos demuestran que el empeoramiento de la salud mental no
+ocurre de forma aislada. Existe un patrón de agrupación en el que a
+medida de que los puntos se desplazan hacia niveles altos de estrés
+financiero y presión académica, se mueven de manera simultánea hacia los
+rangos de riesgo suicida e indicadores de depresión, las variables van
+de la mano, lo que justifica matemáticamente el uso del PCA para
+fusionarlas en factores comunes.
 
 ------------------------------------------------------------------------
 
@@ -1496,14 +1505,25 @@ data_pca_completo <- as.data.frame(scale(data_pca_completo))
 summary(data_pca_completo)
 ```
 
-Al comparar el primer summary() con el segundo, se observa la transformación matemática de los datos. Antes de la transformación, las variables tenían escalas totalmente heterogéneas donde por ejemplo la edad promediaba los 25.8 años con un máximo de 59, mientras que variables como la ideación suicida (Suicidal_Num) o el historial familiar eran binarias (0 o 1).
+Al comparar el primer summary() con el segundo, se observa la
+transformación matemática de los datos. Antes de la transformación, las
+variables tenían escalas totalmente heterogéneas donde por ejemplo la
+edad promediaba los 25.8 años con un máximo de 59, mientras que
+variables como la ideación suicida (Suicidal_Num) o el historial
+familiar eran binarias (0 o 1).
 
-Tras aplicar scale(), todas las variables cuantitativas pasan a estar en la misma escala métrica:
+Tras aplicar scale(), todas las variables cuantitativas pasan a estar en
+la misma escala métrica:
 
 La media de todas las distribuciones se desplaza exactamente a 0.0000.
 
-Los valores numéricos ahora representan cuántas desviaciones estándar se aleja un estudiante respecto a la media de la muestra. Por ejemplo, un estudiante con el máximo nivel de presión académica está a 1.34 desviaciones estándar por encima del promedio, mientras que el valor máximo de edad (6.76) revela un caso atípico extremo en la distribución de edades.
-    
+Los valores numéricos ahora representan cuántas desviaciones estándar se
+aleja un estudiante respecto a la media de la muestra. Por ejemplo, un
+estudiante con el máximo nivel de presión académica está a 1.34
+desviaciones estándar por encima del promedio, mientras que el valor
+máximo de edad (6.76) revela un caso atípico extremo en la distribución
+de edades.
+
 ------------------------------------------------------------------------
 
 ## Autovalores y Autovectores
@@ -1569,13 +1589,23 @@ fviz_pca_var(res_pca,
              title = "Variables y sus contribuciones al PCA")
 ```
 
-Al examinar los resultados del summary() y los gráficos generados se destaca lo siguiente:
+Al examinar los resultados del summary() y los gráficos generados se
+destaca lo siguiente:
 
-Desviaciones Estándar: Las raíces cuadradas de los autovalores para los tres primeros componentes superan la unidad (PC1 = 1.277, PC2 = 1.022, PC3 = 1.012), mostrando matemáticamente su dominio de información sobre el resto.
+Desviaciones Estándar: Las raíces cuadradas de los autovalores para los
+tres primeros componentes superan la unidad (PC1 = 1.277, PC2 = 1.022,
+PC3 = 1.012), mostrando matemáticamente su dominio de información sobre
+el resto.
 
-En el Scree Plot las barras muestran la proporción de varianza individual decreciente, mientras que la línea continua con puntos mapea el crecimiento de la varianza acumulada, cruzando el umbral del 37% al llegar al tercer nodo.
+En el Scree Plot las barras muestran la proporción de varianza
+individual decreciente, mientras que la línea continua con puntos mapea
+el crecimiento de la varianza acumulada, cruzando el umbral del 37% al
+llegar al tercer nodo.
 
-Círculo de Correlaciones proyecta las variables sobre los ejes principales. La longitud y el color de las flechas (siguiendo el gradiente de contribución) revelan qué variables tienen un peso determinante y cómo se agrupan vectorialmente en el espacio latente.
+Círculo de Correlaciones proyecta las variables sobre los ejes
+principales. La longitud y el color de las flechas (siguiendo el
+gradiente de contribución) revelan qué variables tienen un peso
+determinante y cómo se agrupan vectorialmente en el espacio latente.
 
 ------------------------------------------------------------------------
 
@@ -1599,8 +1629,12 @@ g_scores <- ggplot(scores_pca, aes(PC1, PC2, color = Depression)) +
 g_scores
 ```
 
-Al observar la distribución espacial en el gráfico observamos que existe una clara e indiscutible división en el plano. Los estudiantes diagnosticados con depresión se agrupan marcadamente hacia el extremo izquierdo y superior, mientras que la población sin depresión se concentra firmemente en la zona derecha e inferior.
-    
+Al observar la distribución espacial en el gráfico observamos que existe
+una clara e indiscutible división en el plano. Los estudiantes
+diagnosticados con depresión se agrupan marcadamente hacia el extremo
+izquierdo y superior, mientras que la población sin depresión se
+concentra firmemente en la zona derecha e inferior.
+
 ------------------------------------------------------------------------
 
 ## Visualización de Loadings
@@ -1631,44 +1665,72 @@ ggplot(loadings_long %>% filter(Componente %in% c("PC1", "PC2", "PC3", "PC4", "P
   theme_minimal(base_size = 13)
 ```
 
-PC1: Este primer componente define el núcleo de la vulnerabilidad psicológica. Demuestra de forma matemática que suicidal_num, la presión por los estudios y el estrés económico se mueven juntos en la misma dirección.
+PC1: Este primer componente define el núcleo de la vulnerabilidad
+psicológica. Demuestra de forma matemática que suicidal_num, la presión
+por los estudios y el estrés económico se mueven juntos en la misma
+dirección.
 
-PC2: El signo opuesto entre el rendimiento académico y el bienestar indica que los estudiantes con altas calificaciones (CGPA hacia el negativo) experimentan un impacto directo que reduce drásticamente sus horas de sueño y la satisfacción con su carrera.
+PC2: El signo opuesto entre el rendimiento académico y el bienestar
+indica que los estudiantes con altas calificaciones (CGPA hacia el
+negativo) experimentan un impacto directo que reduce drásticamente sus
+horas de sueño y la satisfacción con su carrera.
 
-PC3: Muestra un grupo de estudiantes con calificaciones sobresalientes y buen sueño, pero que se desmarcan y se oponen a la variable de antecedentes familiares, sugiriendo un esfuerzo académico individual y desconectado de su contexto del hogar.
+PC3: Muestra un grupo de estudiantes con calificaciones sobresalientes y
+buen sueño, pero que se desmarcan y se oponen a la variable de
+antecedentes familiares, sugiriendo un esfuerzo académico individual y
+desconectado de su contexto del hogar.
 
-PC4: Al tener una carga tan masiva y dominante en la historia familiar, este componente representa la vulnerabilidad heredada o preexistente. Separa las crisis del día a día universitario (exámenes o dinero) y aísla el peso que representa para el estudiante que podria arrastrar antecedentes psiquiátricos desde su hogar.
+PC4: Al tener una carga tan masiva y dominante en la historia familiar,
+este componente representa la vulnerabilidad heredada o preexistente.
+Separa las crisis del día a día universitario (exámenes o dinero) y
+aísla el peso que representa para el estudiante que podria arrastrar
+antecedentes psiquiátricos desde su hogar.
 
-PC5: Muestra un perfil donde el esfuerzo por mantener notas altas y estar satisfecho con la carrera choca de frente con una pérdida severa de las horas de sueño, marcando un patrón de autoexigencia extrema a costa del descanso básico.
+PC5: Muestra un perfil donde el esfuerzo por mantener notas altas y
+estar satisfecho con la carrera choca de frente con una pérdida severa
+de las horas de sueño, marcando un patrón de autoexigencia extrema a
+costa del descanso básico.
 
-PC6: Concluye que jornadas extensas de estudio y trabajo desestabilizan y transforman directamente los hábitos más básicos del estudiante representando el desgaste por rutina o burnout físico.
-
+PC6: Concluye que jornadas extensas de estudio y trabajo desestabilizan
+y transforman directamente los hábitos más básicos del estudiante
+representando el desgaste por rutina o burnout físico.
 
 # Parte 11: MANOVA
 
 ## Definición de Grupos
 
-Para evaluar el impacto de la salud mental en el entorno del estudiante, se definen dos grupos mutuamente excluyentes basados en la variable objetivo del estudio:
-* **Grupo 0 (Control):** Estudiantes que no reportan diagnóstico ni sintomatología depresiva.
-* **Grupo 1 (Casos):** Estudiantes con diagnóstico de depresión.
+Para evaluar el impacto de la salud mental en el entorno del estudiante,
+se definen dos grupos mutuamente excluyentes basados en la variable
+objetivo del estudio: \* **Grupo 0 (Control):** Estudiantes que no
+reportan diagnóstico ni sintomatología depresiva. \* **Grupo 1
+(Casos):** Estudiantes con diagnóstico de depresión.
 
 ## Formulación de Hipótesis Estadísticas
 
-Definiendo $\boldsymbol{\mu}$ como el vector que contiene las medias poblacionales de las cuatro variables continuas analizadas:
+Definiendo $\boldsymbol{\mu}$ como el vector que contiene las medias
+poblacionales de las cuatro variables continuas analizadas:
 
 $$\boldsymbol{\mu} = \begin{bmatrix} \mu_{\text{Ideación Suicida}} \\ \mu_{\text{Presión Académica}} \\ \mu_{\text{Estrés Financiero}} \\ \mu_{\text{Horas de Sueño}} \end{bmatrix}$$
 
 Planteamos las siguientes hipótesis de investigación:
 
-* **Hipótesis Nula ($H_0$):** $\boldsymbol{\mu}_{\text{Sin Depresión}} = \boldsymbol{\mu}_{\text{Con Depresión}}$
-  * *Interpretación:* El vector de medias combinadas es idéntico entre estudiantes con y sin depresión. La salud mental no genera diferencias en el perfil multivariado de estas variables.
-  
-* **Hipótesis Alternativa ($H_1$):** $\boldsymbol{\mu}_{\text{Sin Depresión}} \neq \boldsymbol{\mu}_{\text{Con Depresión}}$
-  * *Interpretación:* Existe una diferencia significativa en al menos una de las variables continuas al contrastar ambos grupos. Los centros de gravedad (centroides) de las nubes de datos están separados en el espacio multidimensional.
+- **Hipótesis Nula (**$H_0$):
+  $\boldsymbol{\mu}_{\text{Sin Depresión}} = \boldsymbol{\mu}_{\text{Con Depresión}}$
+  - *Interpretación:* El vector de medias combinadas es idéntico entre
+    estudiantes con y sin depresión. La salud mental no genera
+    diferencias en el perfil multivariado de estas variables.
+- **Hipótesis Alternativa (**$H_1$):
+  $\boldsymbol{\mu}_{\text{Sin Depresión}} \neq \boldsymbol{\mu}_{\text{Con Depresión}}$
+  - *Interpretación:* Existe una diferencia significativa en al menos
+    una de las variables continuas al contrastar ambos grupos. Los
+    centros de gravedad (centroides) de las nubes de datos están
+    separados en el espacio multidimensional.
 
 ## Ejecución del Modelo y Contraste de Wilks' Lambda
 
-A continuación, se ajusta el modelo multivariado en R y se extrae específicamente el estadístico **Lambda de Wilks** para verificar la significancia del modelo global.
+A continuación, se ajusta el modelo multivariado en R y se extrae
+específicamente el estadístico **Lambda de Wilks** para verificar la
+significancia del modelo global.
 
 ```{r modelo-manova-wilks}
 
@@ -1699,28 +1761,48 @@ cat("--- RESULTADOS GLOBAL MANOVA (WILKS' LAMBDA) ---\n")
 summary(modelo_manova, test = "Wilks")
 ```
 
-A partir de la salida del modelo MANOVA, se puede evidenciar lo siguiente:
+A partir de la salida del modelo MANOVA, se puede evidenciar lo
+siguiente:
 
-1. El valor Wilks' $\boldsymbol{\lambda}$ es de 0.48315. Este valor oscila entre 0 y 1, donde 1 indicaría que los grupos son idénticos y 0 que están completamente separados. Un valor de 0.48315 revela que existe una separación multivariada sustancial entre los grupos. En términos prácticos, significa que aproximadamente el 52% (1 - 0.48315) de la varianza general de este conjunto de variables (su centroide) está fuertemente determinada por la presencia o ausencia de depresión.
-2. Con un p-valor tan por debajo del umbral estándar ($\alpha = 0.05$), se rechaza contundentemente la Hipótesis Nula ($H_0$).
+1.  El valor Wilks' $\boldsymbol{\lambda}$ es de 0.48315. Este valor
+    oscila entre 0 y 1, donde 1 indicaría que los grupos son idénticos y
+    0 que están completamente separados. Un valor de 0.48315 revela que
+    existe una separación multivariada sustancial entre los grupos. En
+    términos prácticos, significa que aproximadamente el 52% (1 -
+    0.48315) de la varianza general de este conjunto de variables (su
+    centroide) está fuertemente determinada por la presencia o ausencia
+    de depresión.
+2.  Con un p-valor tan por debajo del umbral estándar ($\alpha = 0.05$),
+    se rechaza contundentemente la Hipótesis Nula ($H_0$).
 
-Con base en los valores encontrados se puede afirmar que el perfil completo del estudiante difiere significativamente dependiendo de si padece o no depresión.
+Con base en los valores encontrados se puede afirmar que el perfil
+completo del estudiante difiere significativamente dependiendo de si
+padece o no depresión.
 
-Al haberse comprobado que existe una diferencia global real, se justifica metodológicamente el paso hacia los Análisis Posteriores (ANOVAs individuales) para desglosar este impacto variable por variable.
+Al haberse comprobado que existe una diferencia global real, se
+justifica metodológicamente el paso hacia los Análisis Posteriores
+(ANOVAs individuales) para desglosar este impacto variable por variable.
 
 ```{r modelo-manova-summary}
 summary.aov(modelo_manova)
 ```
-Al descomponer el modelo multivariado en análisis univariados (ANOVA), se procede a evaluar los estadísticos F de cada variable. Un estadístico F elevado indica que la variable tiene un alto poder discriminante entre estudiantes con y sin depresión. Observando los resultados, las variables que arrojaron los valores F más altos fueron:
 
-1. Suicidal_num = 11860
-2. Academic.pressure = 8112.4
-3. Financial.stress = 4243.3
-4. Age = 1511.3
+Al descomponer el modelo multivariado en análisis univariados (ANOVA),
+se procede a evaluar los estadísticos F de cada variable. Un estadístico
+F elevado indica que la variable tiene un alto poder discriminante entre
+estudiantes con y sin depresión. Observando los resultados, las
+variables que arrojaron los valores F más altos fueron:
+
+1.  Suicidal_num = 11860
+2.  Academic.pressure = 8112.4
+3.  Financial.stress = 4243.3
+4.  Age = 1511.3
 
 # PARTE 12: ANOVA
 
-Con base en el análisis anterior, se determinaron las 4 variables más discriminantes entre estudiantes con y sin depresión, por lo que se les realizará ANOVA a cada una de ellas.
+Con base en el análisis anterior, se determinaron las 4 variables más
+discriminantes entre estudiantes con y sin depresión, por lo que se les
+realizará ANOVA a cada una de ellas.
 
 ## 1. Ideación Suicida
 
@@ -1735,13 +1817,23 @@ cat("Tamaño del Efecto (Eta Cuadrado):\n")
 print(eta_squared(anova_suicidal))
 ```
 
- F-value (11,860) y p-value ($< 2\times 10^{-16}$): El estadístico $F$ es excepcionalmente alto y viene acompañado de la máxima significancia estadística. Esto demuestra que la diferencia en los niveles de ideación suicida entre los estudiantes deprimidos y los no deprimidos es real, rotunda y no se debe al azar.
- 
- Eta al Cuadrado ($\eta^2 = 0.30$): Este indicador mide la proporción de la varianza de la ideación suicida que es explicada directamente por la depresión. En el ámbito de las ciencias sociales y de la salud, un valor de $0.30$ (30%) se clasifica como un tamaño del efecto grande.
+F-value (11,860) y p-value ($< 2\times 10^{-16}$): El estadístico $F$ es
+excepcionalmente alto y viene acompañado de la máxima significancia
+estadística. Esto demuestra que la diferencia en los niveles de ideación
+suicida entre los estudiantes deprimidos y los no deprimidos es real,
+rotunda y no se debe al azar.
 
+Eta al Cuadrado ($\eta^2 = 0.30$): Este indicador mide la proporción de
+la varianza de la ideación suicida que es explicada directamente por la
+depresión. En el ámbito de las ciencias sociales y de la salud, un valor
+de $0.30$ (30%) se clasifica como un tamaño del efecto grande.
 
-La depresión ejerce un impacto directo y severo sobre la ideación suicida, logrando explicar por sí sola el 30% de toda su variabilidad en la muestra. Los datos concluyen matemáticamente que los pensamientos suicidas no son una conducta aislada o secundaria, sino un síntoma central y profundamente arraigado al diagnóstico depresivo dentro de la población estudiantil
-
+La depresión ejerce un impacto directo y severo sobre la ideación
+suicida, logrando explicar por sí sola el 30% de toda su variabilidad en
+la muestra. Los datos concluyen matemáticamente que los pensamientos
+suicidas no son una conducta aislada o secundaria, sino un síntoma
+central y profundamente arraigado al diagnóstico depresivo dentro de la
+población estudiantil
 
 # 2. Presión Academica
 
@@ -1752,12 +1844,24 @@ summary(anova_academic)
 cat("Tamaño del Efecto (Eta Cuadrado):\n")
 print(eta_squared(anova_academic))
 ```
- F-value (8,112) y p-value ($< 2\times 10^{-16}$): El estadístico $F$ es el segundo más alto y viene acompañado de la máxima significancia estadística. Esto demuestra que la diferencia en los niveles de ideación suicida entre los estudiantes deprimidos y los no deprimidos es real, rotunda y no se debe al azar.
- 
- Eta al Cuadrado ($\eta^2 = 0.23$): Este indicador mide la proporción de la varianza de la ideación suicida que es explicada directamente por la depresión. En el ámbito de las ciencias sociales y de la salud, un valor de $0.23$ (23%) se clasifica como un tamaño del efecto grande.
 
+F-value (8,112) y p-value ($< 2\times 10^{-16}$): El estadístico $F$ es
+el segundo más alto y viene acompañado de la máxima significancia
+estadística. Esto demuestra que la diferencia en los niveles de ideación
+suicida entre los estudiantes deprimidos y los no deprimidos es real,
+rotunda y no se debe al azar.
 
-La depresión ejerce un impacto directo y severo sobre la Presión Academica, logrando explicar por sí sola el 23% de toda su variabilidad en la muestra. Los datos concluyen matemáticamente que la Presión Academica no es un dato aislado ni al azar, sino que tiene un impacto profundo y diferencial entre los estudiantes con depresión y los que no tienen.
+Eta al Cuadrado ($\eta^2 = 0.23$): Este indicador mide la proporción de
+la varianza de la ideación suicida que es explicada directamente por la
+depresión. En el ámbito de las ciencias sociales y de la salud, un valor
+de $0.23$ (23%) se clasifica como un tamaño del efecto grande.
+
+La depresión ejerce un impacto directo y severo sobre la Presión
+Academica, logrando explicar por sí sola el 23% de toda su variabilidad
+en la muestra. Los datos concluyen matemáticamente que la Presión
+Academica no es un dato aislado ni al azar, sino que tiene un impacto
+profundo y diferencial entre los estudiantes con depresión y los que no
+tienen.
 
 # 3. Estrés Financiero
 
@@ -1769,11 +1873,20 @@ cat("Tamaño del Efecto (Eta Cuadrado):\n")
 print(eta_squared(anova_financial))
 ```
 
-F-value (4,243) y p-value ($< 2\times 10^{-16}$): El estadístico $F$ es considerablemente alto y cuenta con el nivel máximo de significancia estadística. Esto demuestra de forma irrefutable que las diferencias en los niveles de angustia o estrés económico entre estudiantes sanos y deprimidos son reales y altamente significativas.
+F-value (4,243) y p-value ($< 2\times 10^{-16}$): El estadístico $F$ es
+considerablemente alto y cuenta con el nivel máximo de significancia
+estadística. Esto demuestra de forma irrefutable que las diferencias en
+los niveles de angustia o estrés económico entre estudiantes sanos y
+deprimidos son reales y altamente significativas.
 
-Eta al Cuadrado ($\eta^2 = 0.13$): Este valor indica que la presencia de depresión explica de manera directa el 13% de toda la variabilidad del estrés financiero en la muestra.
+Eta al Cuadrado ($\eta^2 = 0.13$): Este valor indica que la presencia de
+depresión explica de manera directa el 13% de toda la variabilidad del
+estrés financiero en la muestra.
 
-El factor económico tiene un vínculo estrecho y comprobado con el bienestar mental del estudiantado. Aunque su capacidad explicativa directa (13%) es un poco menor en comparación con el impacto observado en la ideación suicida o la presión académica.
+El factor económico tiene un vínculo estrecho y comprobado con el
+bienestar mental del estudiantado. Aunque su capacidad explicativa
+directa (13%) es un poco menor en comparación con el impacto observado
+en la ideación suicida o la presión académica.
 
 ## 4. Edad
 
@@ -1784,11 +1897,21 @@ summary(anova_age)
 cat("Tamaño del Efecto (Eta Cuadrado):\n")
 print(eta_squared(anova_age))
 ```
-F-value (1,511) y p-value ($< 2\times 10^{-16}$): El estadístico $F$ sigue siendo considerablemente alto, siendo la cuarta entre las variables más altas, y cuenta con el nivel máximo de significancia estadística. Esto demuestra que la edad es diferencial entre estudiantes sanos y deprimidos de forma significativa.
 
-Eta al Cuadrado ($\eta^2 = 0.05$): Este valor indica que la presencia de depresión explica de manera directa el 5% de toda la variabilidad de la edad en la muestra.
+F-value (1,511) y p-value ($< 2\times 10^{-16}$): El estadístico $F$
+sigue siendo considerablemente alto, siendo la cuarta entre las
+variables más altas, y cuenta con el nivel máximo de significancia
+estadística. Esto demuestra que la edad es diferencial entre estudiantes
+sanos y deprimidos de forma significativa.
 
-La edad tiene un vínculo significativo y comprobado con el bienestar mental del estudiantado. Aunque su capacidad explicativa directa (5%) es la menor de las 4 variables analizadas en esta sección, es la cuarta con mayor porcentaje de explicabilidad directa entre todas las variables.
+Eta al Cuadrado ($\eta^2 = 0.05$): Este valor indica que la presencia de
+depresión explica de manera directa el 5% de toda la variabilidad de la
+edad en la muestra.
+
+La edad tiene un vínculo significativo y comprobado con el bienestar
+mental del estudiantado. Aunque su capacidad explicativa directa (5%) es
+la menor de las 4 variables analizadas en esta sección, es la cuarta con
+mayor porcentaje de explicabilidad directa entre todas las variables.
 
 ## Visualización de la variablidad
 
@@ -1826,24 +1949,286 @@ ggplot(data_anova_visual, aes(x = Depression, y = Valor, fill = Depression)) +
 
 ### Ideación Suicida
 
-Detalle del Gráfico: Al ser una variable binaria, los boxplots se muestran completamente colapsados o polarizados. En el grupo azul (Sin Depresión), la caja se aplasta por completo en el valor 0, mientras que en el grupo rojo (Con Depresión), la mediana se desplaza drásticamente hacia el valor 1.
+Detalle del Gráfico: Al ser una variable binaria, los boxplots se
+muestran completamente colapsados o polarizados. En el grupo azul (Sin
+Depresión), la caja se aplasta por completo en el valor 0, mientras que
+en el grupo rojo (Con Depresión), la mediana se desplaza drásticamente
+hacia el valor 1.
 
-Conclusión: Esta asimetría visual tan extrema es el reflejo gráfico del Eta Cuadrado de 0.30 (el más alto del estudio). Confirma que la variabilidad de esta variable está prácticamente segmentada por la presencia de la patología: el riesgo de ideación suicida es un comportamiento concentrado casi con exclusividad en el sector estudiantil deprimido.
+Conclusión: Esta asimetría visual tan extrema es el reflejo gráfico del
+Eta Cuadrado de 0.30 (el más alto del estudio). Confirma que la
+variabilidad de esta variable está prácticamente segmentada por la
+presencia de la patología: el riesgo de ideación suicida es un
+comportamiento concentrado casi con exclusividad en el sector
+estudiantil deprimido.
 
 ### Presión Académica
 
-Detalle del Gráfico: La caja roja (Con Depresión) muestra un clarísimo desplazamiento vertical hacia el tope de la escala (valores de 4 y 5), situando su mediana significativamente por encima de la caja azul, la cual se distribuye de forma más equilibrada en la zona media de la puntuación (valores de 2 a 3).
+Detalle del Gráfico: La caja roja (Con Depresión) muestra un clarísimo
+desplazamiento vertical hacia el tope de la escala (valores de 4 y 5),
+situando su mediana significativamente por encima de la caja azul, la
+cual se distribuye de forma más equilibrada en la zona media de la
+puntuación (valores de 2 a 3).
 
-Conclusión: Visualiza de forma limpia el efecto grande obtenido en el ANOVA ($\eta^2 = 0.23$). Aunque la presión académica es un mal común en la universidad, el gráfico demuestra que la población con depresión experimenta una concentración sistemática en los niveles de exigencia más severos e intolerables.
+Conclusión: Visualiza de forma limpia el efecto grande obtenido en el
+ANOVA ($\eta^2 = 0.23$). Aunque la presión académica es un mal común en
+la universidad, el gráfico demuestra que la población con depresión
+experimenta una concentración sistemática en los niveles de exigencia
+más severos e intolerables.
 
-### Estrés Financiero 
+### Estrés Financiero
 
-Detalle del Gráfico: Se observa un patrón muy similar al de la presión académica. La caja de los estudiantes con depresión se encuentra visiblemente desplazada hacia la parte alta de la escala de estrés económico, mientras que el grupo sin depresión abarca un rango más amplio hacia las puntuaciones bajas.
+Detalle del Gráfico: Se observa un patrón muy similar al de la presión
+académica. La caja de los estudiantes con depresión se encuentra
+visiblemente desplazada hacia la parte alta de la escala de estrés
+económico, mientras que el grupo sin depresión abarca un rango más
+amplio hacia las puntuaciones bajas.
 
-Conclusión: Este desfase representa el tamaño de efecto mediano-alto ($\eta^2 = 0.13$). La gráfica evidencia que la falta de recursos y la preocupación financiera actúan de forma constante como una barrera o un peso mayor en los estudiantes que cargan con un diagnóstico de depresión.
+Conclusión: Este desfase representa el tamaño de efecto mediano-alto
+($\eta^2 = 0.13$). La gráfica evidencia que la falta de recursos y la
+preocupación financiera actúan de forma constante como una barrera o un
+peso mayor en los estudiantes que cargan con un diagnóstico de
+depresión.
 
 ### Edad
 
-Detalle del Gráfico: Se puede evidenciar que la caja roja (estudiantes con depresión) tiende a estar un poco más abajo que la caja azul (estudiantes sin depresión), lo cual reafirma que a menor edad, puede haber más depresión y hay una diferenciación notable entre estos dos grupos con respecto a esta variable. Sin embargo, de entre las 4 variables escogidas, esta es en la que las cajas de ambos grupos más se solapan, las medianas están mas cerca una de la otra y por poco se podría decir que una contiene a la otra. La diferenciación es notable pero muy pequeña
+Detalle del Gráfico: Se puede evidenciar que la caja roja (estudiantes
+con depresión) tiende a estar un poco más abajo que la caja azul
+(estudiantes sin depresión), lo cual reafirma que a menor edad, puede
+haber más depresión y hay una diferenciación notable entre estos dos
+grupos con respecto a esta variable. Sin embargo, de entre las 4
+variables escogidas, esta es en la que las cajas de ambos grupos más se
+solapan, las medianas están mas cerca una de la otra y por poco se
+podría decir que una contiene a la otra. La diferenciación es notable
+pero muy pequeña
 
-Conclusión: Esta solapación es coherente con el efecto medio-bajo que se calculó con el ($\eta^2 = 0.05$), lo cual indica que solo un 5% de la varianza de la edad es explicada directamente por la depresión, siendo el porcentaje más pequeño de las variables escogidas y explicando por qué las cajas no están tan separadas como en otras variables. La edad puede dar indicios, pero por si sola no diferencia los grupos tanto como la Ideación suicida o la Presión Académica.
+Conclusión: Esta solapación es coherente con el efecto medio-bajo que se
+calculó con el ($\eta^2 = 0.05$), lo cual indica que solo un 5% de la
+varianza de la edad es explicada directamente por la depresión, siendo
+el porcentaje más pequeño de las variables escogidas y explicando por
+qué las cajas no están tan separadas como en otras variables. La edad
+puede dar indicios, pero por si sola no diferencia los grupos tanto como
+la Ideación suicida o la Presión Académica.
+
+# Análisis factorial
+
+Hallar correlación del dataset sin variable objetivo.
+
+```{r}
+#usar la matriz corr pero sin variable objetivo
+data_af <- as.data.frame(scale(data_num %>% select(-Depression,-Depression_num)))
+                         
+matriz_cor_af <- cor(data_af)
+
+matriz_cor_af
+
+# ya con la matriz de corr podemos ir a encontrar kmo,  para ver si es adecuada
+
+
+
+
+
+
+```
+
+```{r}
+head(data_af)
+
+```
+
+### KMO
+
+## Interpretación general
+
+| KMO     | Interpretación |
+|---------|----------------|
+| \> 0.90 | Excelente      |
+| \> 0.80 | Muy bueno      |
+| \> 0.70 | Aceptable      |
+| \> 0.60 | Regular        |
+| \< 0.50 | Inadecuado     |
+
+```{r}
+
+library(psych)
+
+psych::KMO(matriz_cor_af)
+
+
+
+```
+
+El resultado arroja que tiene un resultado regular cercano al aceptable
+para el dataset en general pero destacan algunas variables como:
+Work.Study.Hours, diet num y financial stress que son las más cercanas a
+un resultado "muy bueno", significa que puede haber una estructura común
+entre las variables.
+
+### Barlett
+
+```{r bartlett}
+psych::cortest.bartlett(matriz_cor_af, n = nrow(data_af))
+```
+
+El p value al ser menor que 0.05 se rechaza la hipotesis nula que dice
+que no existe relación entre las variables, además de presentar un valor
+chi cuadrado grande que demuestra la diferencia entre la matriz de
+correlación y la matriz identidad. al tener un grado de libertad alto ya
+que se usaron 10 variables la prueba puede ser más flexible, tiene más
+ruido, siendo benefico para posibles modelos teniendo buena
+representación de la realidad al no tender al sobreajuste.
+
+### Autovalores
+
+```{r eigen}
+eigenvalues <- eigen(matriz_cor_af)$values
+
+eigenvalues
+```
+
+### scree plot
+
+```{r scree}
+plot(
+  eigenvalues,
+  type = "b",
+  pch = 19,
+  xlab = "Factor o componente",
+  ylab = "Autovalor",
+  main = "Scree Plot"
+)
+
+abline(h = 1, col = "red", lty = 2)
+```
+
+Vemos que podemos conservar 3 factores usando el criterio de kaiser,ya
+que un factor lo supera por mcuho y los otros 2 le superan por poco al
+criterio de Kayser.
+
+### Modelo factorial inicial
+
+Ajustaremos un análisis factorial con tres factores sin rotación.
+
+```{r factanal}
+modelo_fa <- factanal(
+  data_af,
+  factors = 3,
+  rotation = "none"
+)
+
+modelo_fa
+```
+
+El valor p $\ge$ 0.05, no se rechaza la hipótesis nula , lo cual indica
+que un modelo con 4 factores es suficiente para modelar la covarianza de
+los datos sin tener pérdida significativa de información.
+
+### Número de factores
+
+Se eligieron 3 por el criterio de Kayzer
+
+### Cargas factoriales
+
+```{r loadings}
+loadings_df <- as.data.frame(
+  unclass(modelo_fa$loadings)#los carga del modelo
+)
+
+loadings_df$Variable <- rownames(loadings_df)
+
+loadings_long <- loadings_df |>
+  pivot_longer(
+    cols = starts_with("Factor"),
+    names_to = "Factor",
+    values_to = "Carga"
+  )
+
+ggplot(loadings_long, aes(Variable, Carga, fill = Factor)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  labs(
+    title = "Cargas factoriales",
+    subtitle = "Relación entre variables observadas y factores latentes",
+    x = "Variable",
+    y = "Carga factorial"
+  ) +
+  theme_minimal(base_size = 13)
+```
+
+en la visualización de la carga factorial podemos ver que en el factor:
+
+### Unicidad
+
+```{r uniqueness}
+modelo_fa$uniquenesses
+```
+
+### Comunalidad
+
+```{r comunalidades}
+unicidades <- modelo_fa$uniquenesses
+
+comunalidades <- 1 - unicidades
+
+data.frame(
+  Variable = names(unicidades),
+  Unicidad = unicidades,
+  Comunalidad = comunalidades
+)
+```
+
+Podemos ver que existe una predominación de una alta unicidad en las
+variables, mostrando que el modelo no captura su varianza. la unica
+variable que si es bien representada por el modelo es study
+satisfaction.
+
+### Scores factoriales
+
+```{r scores}
+modelo_scores <- factanal(
+  (data_af),
+  factors = 3,
+  scores = "regression"
+)
+
+head(modelo_scores$scores)
+
+
+```
+
+```{r plot-scores}
+
+
+scores_df <- as.data.frame(modelo_scores$scores)
+
+scores_df$Depression_num <- data_num$Depression_num
+
+
+library(GGally)
+
+ggpairs(scores_df, 
+        columns = c("Factor1", "Factor2", "Factor3"), # Solo mapeamos los factores
+        mapping = aes(color = as.factor(Depression_num), alpha = 0.5),
+        title = "Matriz de Scores Factoriales por Estado de Depresión") +
+  scale_color_manual(values = c("#2ecc71", "#e74c3c")) + # Verde (No) y Rojo (Sí)
+  scale_fill_manual(values = c("#2ecc71", "#e74c3c")) +
+  theme_minimal()
+
+```
+
+### Interpretación de factores
+
+1.  existe una carga dominada por study satisfaction contraria a presión
+    academica, estrés financiero elevado, historial de familiares y
+    horas de trabajo/estudio, mostrando una relación inversa al factor
+
+2.  el comportamiento que se percibe es que un conjunto alta presión
+    academica, estrés financiero elevado, historial de familiares y
+    horas de trabajo/estudio, genera una relación inversa para el
+    bienestar del estudiante con base a la calidad de sueño y de
+    alimentación junto a una edad temprana.
+
+3.  el estrés academico y la privación del sueño está relacionado de
+    forma negativa a la ideación suicida, historial de enfermedades
+    mentales, presión académica y tiempo de estudio. pero de forma muy
+    debíl ya que no supera el 30 %.
