@@ -26,7 +26,7 @@ editor_options:
 
 # PARTE 1 - DATASET
 
-## 1. Descripción del conjunto de datos
+## Descripción del conjunto de datos
 
 El dataset utilizado corresponde a un conjunto de datos sobre depresión
 en estudiantes, el cual contiene información relacionada con factores
@@ -52,6 +52,17 @@ debido a que:
     influyen en la depresión.
 -   Presenta una combinación de variables numéricas y categóricas, lo
     cual es ideal para análisis univariado, bivariado y multivariado.
+
+## Objetivo General
+
+Analizar la estructura multidimensional de los factores académicos, socioeconómicos, personales y de estilo de vida asociados a la presencia de depresión en la población estudiantil, mediante la aplicación de técnicas de estadística multivariante, con el fin de identificar perfiles de riesgo y determinar las variables con mayor poder de discriminación.
+
+#### Objetivos Específicos
+
+1. **Reducir la dimensionalidad** del espacio predictivo mediante el Análisis de Componentes Principales (PCA), identificando las combinaciones lineales de variables que maximizan la varianza explicada y determinando los perfiles de vulnerabilidad geométrica de los estudiantes.
+2. **Evaluar diferencias estadísticas significativas** en el perfil multivariante de los estudiantes según su estado de salud mental a través de un Análisis Multivariante de Varianza (MANOVA), mitigando el error de Tipo I y determinando cuáles variables poseen el mayor poder discriminante.
+3. **Identificar constructos o estructuras ocultas** no observables directamente mediante el Análisis Factorial Exploratorio (AFE), determinando la comunalidad, unicidad y cargas de las variables sobre los factores latentes del bienestar estudiantil.
+4. **Contrastar y discutir la eficiencia metodológica** de las técnicas multivariantes utilizadas (PCA, MANOVA y Análisis Factorial) para proponer recomendaciones empíricas orientadas al diseño de políticas de salud mental en el entorno universitario.
 
 ### Carga del Dataset
 
@@ -1544,6 +1555,8 @@ ggplot(df_var, aes(Componente, Varianza)) +
   ) +
   theme_minimal(base_size = 13)
 ```
+
+El fenómeno de la depresión estudiantil demuestra ser altamente multidimensional y complejo: la varianza decrece de forma suave, requiriéndose aproximadamente 5 o 6 componentes para capturar el 80% de la información del sistema original, lo cual sugiere que las variables no están gobernadas por un único factor dominante.
 
 ```{r}
 # Círculo de Correlaciones
