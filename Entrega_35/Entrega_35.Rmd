@@ -1,13 +1,19 @@
 ---
 title: "Análisis de la Depresión Estudiantil"
-author: Angelo Alejandro Ibañez Hernandez 20212020007 <br> Alejandro Gomez Moyano 20222020073 <br> Juan David Córdoba Aguirre 20211020097 <br> Oscar Santiago Duran Benitez 20212020080
+author:
+  - "Angelo Alejandro Ibañez Hernandez (20212020007)"
+  - "Alejandro Gomez Moyano (20222020073)"
+  - "Juan David Córdoba Aguirre (20211020097)"
+  - "Oscar Santiago Duran Benitez (20212020080)"
 date: "`r format(Sys.Date(), '%d/%m/%Y')`"
 subtitle: Student Depression Dataset
+geometry: margin=1.2in
 output:
   html_document:
     toc: true
     toc_depth: 2
     df_print: paged
+    highlight: onedark.theme
   html_notebook:
     toc: true
     toc_depth: 2
@@ -16,15 +22,16 @@ output:
     toc: true
     toc_depth: 2
   pdf_document:
-    latex_engine: xelatex   # 👈 AQUÍ está el cambio importante
+    latex_engine: xelatex
     toc: true
     toc_depth: 2
+    highlight: onedark.theme
 editor_options: 
   markdown: 
     wrap: 72
 ---
 
-# PARTE 1 - DATASET
+# 1. Introducción y contexto del problema
 
 ## Descripción del conjunto de datos
 
@@ -72,7 +79,7 @@ data <- read.csv("Student Depression Dataset.csv", stringsAsFactors = FALSE)
 
 ------------------------------------------------------------------------
 
-# PARTE 2 - ANÁLISIS UNIVARIADO
+# 2. Descripción del dataset
 
 En esta sección se analizan todas las variables del dataset de manera
 individual. Se clasifican según su tipo y se justifica su relevancia
@@ -124,8 +131,8 @@ psicológica.
 ### Gráficos
 
 ```{r}
-hist(data$Age, col = "steelblue", xlab = "Edad" , main = "Distribución de la Edad")
-boxplot(data$Age, col = "steelblue",ylab = "Edad" , main = "Boxplot de la Edad")
+hist(data$Age, col = "steelblue", xlab = "Edad", main = "Distribución de la Edad")
+boxplot(data$Age, col = "steelblue", ylab = "Edad", main = "Boxplot de la Edad")
 mean(data$Age, na.rm = TRUE)
 median(data$Age, na.rm = TRUE)
 sd(data$Age, na.rm = TRUE)
@@ -161,8 +168,8 @@ estudiantes.
 ### Gráficos
 
 ```{r}
-hist(data$Academic.Pressure, col = "steelblue", xlab = "Presión Académica" , main = "Distribución de la Presión Académica")
-boxplot(data$Academic.Pressure, col = "steelblue",ylab = "Presión Académica" , main = "Boxplot de la Presión Académica")
+hist(data$Academic.Pressure, col = "steelblue", xlab = "Presión Académica", main = "Distribución de la Presión Académica")
+boxplot(data$Academic.Pressure, col = "steelblue", ylab = "Presión Académica", main = "Boxplot de la Presión Académica")
 mean(data$Academic.Pressure, na.rm = TRUE)
 median(data$Academic.Pressure, na.rm = TRUE)
 sd(data$Academic.Pressure, na.rm = TRUE)
@@ -190,8 +197,8 @@ trabajan simultáneamente.
 ### Gráficos
 
 ```{r}
-hist(data$Work.Pressure, col = "steelblue", xlab = "Presión Laboral" , main = "Distribución de la Presión Laboral")
-boxplot(data$Work.Pressure, col = "steelblue",ylab = "Presión Laboral" , main = "Boxplot de la Presión Laboral")
+hist(data$Work.Pressure, col = "steelblue", xlab = "Presión Laboral", main = "Distribución de la Presión Laboral")
+boxplot(data$Work.Pressure, col = "steelblue", ylab = "Presión Laboral", main = "Boxplot de la Presión Laboral")
 mean(data$Work.Pressure, na.rm = TRUE)
 median(data$Work.Pressure, na.rm = TRUE)
 sd(data$Work.Pressure, na.rm = TRUE)
@@ -220,8 +227,8 @@ emocional.
 ### Gráficos
 
 ```{r}
-hist(data$CGPA, col = "steelblue", xlab = "CGPA" , main = "Distribución del Rendimiento académico")
-boxplot(data$CGPA, col = "steelblue",ylab = "CGPA" , main = "Boxplot de la Rendimiento académico")
+hist(data$CGPA, col = "steelblue", xlab = "CGPA", main = "Distribución del Rendimiento académico")
+boxplot(data$CGPA, col = "steelblue", ylab = "CGPA", main = "Boxplot de la Rendimiento académico")
 mean(data$CGPA, na.rm = TRUE)
 median(data$CGPA, na.rm = TRUE)
 sd(data$CGPA, na.rm = TRUE)
@@ -257,8 +264,8 @@ El estrés económico es un factor clave en la salud mental.
 ### Gráficos
 
 ```{r}
-hist(data$Financial.Stress, col = "steelblue", xlab = "Estrés financiero" , main = "Distribución del Estrés financiero")
-boxplot(data$Financial.Stress, col = "steelblue",ylab = "Estrés financiero" , main = "Boxplot de la Estrés financiero")
+hist(data$Financial.Stress, col = "steelblue", xlab = "Estrés financiero", main = "Distribución del Estrés financiero")
+boxplot(data$Financial.Stress, col = "steelblue", ylab = "Estrés financiero", main = "Boxplot de la Estrés financiero")
 mean(data$Financial.Stress, na.rm = TRUE)
 median(data$Financial.Stress, na.rm = TRUE)
 sd(data$Financial.Stress, na.rm = TRUE)
@@ -286,8 +293,8 @@ Relaciona carga diaria con fatiga.
 ### Gráficos
 
 ```{r}
-hist(data$Work.Study.Hours, col = "steelblue", xlab = "Horas de estudio/trabajo" , main = "Distribución de Horas de estudio/trabajo")
-boxplot(data$Work.Study.Hours, col = "steelblue",ylab = "Horas de estudio/trabajo" , main = "Boxplot de las Horas de estudio/trabajo")
+hist(data$Work.Study.Hours, col = "steelblue", xlab = "Horas de estudio/trabajo", main = "Distribución de Horas de estudio/trabajo")
+boxplot(data$Work.Study.Hours, col = "steelblue", ylab = "Horas de estudio/trabajo", main = "Boxplot de las Horas de estudio/trabajo")
 mean(data$Work.Study.Hours, na.rm = TRUE)
 median(data$Work.Study.Hours, na.rm = TRUE)
 sd(data$Work.Study.Hours, na.rm = TRUE)
@@ -320,8 +327,9 @@ Permite analizar diferencias de depresión entre hombres y mujeres.
 
 ```{r}
 barplot(table(data$Gender),
-        main = "Distribución por Género",
-        col = c("coral", "steelblue"))
+  main = "Distribución por Género",
+  col = c("coral", "steelblue")
+)
 ```
 
 El gráfico muestra una distribución relativamente balanceada (aunque
@@ -343,8 +351,9 @@ Puede capturar diferencias contextuales.
 
 ```{r}
 barplot(table(data$City),
-        main = "Distribución por Ciudad",
-        col = c("coral", "steelblue"))
+  main = "Distribución por Ciudad",
+  col = c("coral", "steelblue")
+)
 length(unique(data$City))
 ```
 
@@ -365,8 +374,9 @@ variables
 
 ```{r}
 barplot(table(data$Profession),
-        main = "Distribución por Profesion",
-        col = c("coral", "steelblue"))
+  main = "Distribución por Profesion",
+  col = c("coral", "steelblue")
+)
 length(unique(data$Profession))
 ```
 
@@ -380,8 +390,9 @@ agrupación.
 
 ```{r}
 barplot(table(data$Sleep.Duration),
-        main = "Distribución por Duración del sueño",
-        col = c("coral", "steelblue"))
+  main = "Distribución por Duración del sueño",
+  col = c("coral", "steelblue")
+)
 ```
 
 Se observa predominancia menos de 5 horas, lo cual está por debajo del
@@ -401,8 +412,9 @@ Y esto está fuertemente relacionado con:
 
 ```{r}
 barplot(table(data$Dietary.Habits),
-        main = "Distribución por Hábitos alimenticios",
-        col = c("coral", "steelblue"))
+  main = "Distribución por Hábitos alimenticios",
+  col = c("coral", "steelblue")
+)
 ```
 
 Predominan hábitos moderados, pero existe presencia de categorías no
@@ -417,8 +429,9 @@ vida desorganizado - posible falta de autocuidado
 
 ```{r}
 barplot(table(data$Have.you.ever.had.suicidal.thoughts),
-        main = "Distribución por Pensamientos Suicidas",
-        col = c("coral", "steelblue"))
+  main = "Distribución por Pensamientos Suicidas",
+  col = c("coral", "steelblue")
+)
 ```
 
 La presencia significativa de respuestas “Yes” indica una población con
@@ -435,8 +448,9 @@ Esta es probablemente la variable más predictiva de depresión, y además:
 
 ```{r}
 barplot(table(data$Family.History.of.Mental.Illness),
-        main = "Distribución por Historial familiar",
-        col = c("coral", "steelblue"))
+  main = "Distribución por Historial familiar",
+  col = c("coral", "steelblue")
+)
 ```
 
 Existe una proporción importante de estudiantes con antecedentes
@@ -453,8 +467,9 @@ Este factor podria sugerir:
 
 ```{r}
 barplot(table(data$Depression),
-        main = "Distribución por Depresión",
-        col = c("coral", "steelblue"))
+  main = "Distribución por Depresión",
+  col = c("coral", "steelblue")
+)
 ```
 
 Se observa una proporción de aproximadamente 58.5% con depresión, lo
@@ -467,7 +482,7 @@ cual indica:
 
 ------------------------------------------------------------------------
 
-# PARTE 3 - LIMPIEZA DE DATOS
+# 3. Limpieza y preparación de datos
 
 ## 1. Visualización dataset base
 
@@ -592,7 +607,7 @@ data$ID <- NULL
 
 ------------------------------------------------------------------------
 
-# PARTE 4 - ANÁLISIS BIVARIADO
+# 4. Exploración multivariante
 
 En esta sección se analizan las relaciones entre pares de variables,
 especialmente aquellas que potencialmente influyen en la depresión
@@ -608,9 +623,10 @@ library(ggplot2)
 library(dplyr)
 
 # Crear factor de depresión para etiquetas consistentes
-data$Depression_Factor <- factor(data$Depression, 
-                                  levels = c(0, 1), 
-                                  labels = c("Sin Depresión", "Con Depresión"))
+data$Depression_Factor <- factor(data$Depression,
+  levels = c(0, 1),
+  labels = c("Sin Depresión", "Con Depresión")
+)
 
 # Transformar variables categóricas ordinales a numéricas para análisis
 data_bivariado <- data %>%
@@ -639,7 +655,7 @@ data_bivariado <- data %>%
       TRUE ~ NA_real_
     )
   ) %>%
-  filter(!is.na(Sleep_Num), !is.na(Diet_Num))  # Eliminar "Others" de estas variables
+  filter(!is.na(Sleep_Num), !is.na(Diet_Num)) # Eliminar "Others" de estas variables
 ```
 
 ## 4.2 Estrés financiero vs Depresión
@@ -679,8 +695,10 @@ ggplot(data_bivariado, aes(x = Depression_Factor, y = Financial.Stress, fill = D
 
 ```{r}
 ggplot(data_bivariado, aes(x = Depression_Factor, y = Work.Study.Hours, fill = Depression_Factor)) +
-  geom_boxplot(width = 0.5, outlier.shape = 16, outlier.size = 1.5, 
-               outlier.alpha = 0.5, color = "#2c3e50") +
+  geom_boxplot(
+    width = 0.5, outlier.shape = 16, outlier.size = 1.5,
+    outlier.alpha = 0.5, color = "#2c3e50"
+  ) +
   labs(
     title = "Impacto de las Horas de Estudio/Trabajo en la Salud Mental",
     x = "Estado de Salud Mental",
@@ -743,8 +761,10 @@ ggplot(data_bivariado, aes(x = factor(Diet_Num), fill = Depression_Factor)) +
 
 ```{r}
 ggplot(data_bivariado, aes(x = Depression_Factor, y = Academic.Pressure, fill = Depression_Factor)) +
-  geom_boxplot(width = 0.5, outlier.colour = "#e74c3c", outlier.shape = 16,
-               outlier.size = 2, alpha = 0.7, color = "#2c3e50") +
+  geom_boxplot(
+    width = 0.5, outlier.colour = "#e74c3c", outlier.shape = 16,
+    outlier.size = 2, alpha = 0.7, color = "#2c3e50"
+  ) +
   scale_fill_manual(values = c("#3498db", "#e74c3c")) +
   labs(
     title = "Distribución de la Presión Académica según Estado Mental",
@@ -779,8 +799,9 @@ ggplot(data_bivariado, aes(x = Depression_Factor, y = Academic.Pressure, fill = 
 
 ```{r}
 data_bivariado$Sleep_Grafico <- factor(data_bivariado$Sleep_Num,
-                                        levels = c(0, 1, 2, 3),
-                                        labels = c("Menos de 5h", "5-6h", "7-8h", "Más de 8h"))
+  levels = c(0, 1, 2, 3),
+  labels = c("Menos de 5h", "5-6h", "7-8h", "Más de 8h")
+)
 
 ggplot(data_bivariado, aes(x = Sleep_Grafico, fill = Depression_Factor)) +
   geom_bar(position = "dodge") +
@@ -809,7 +830,9 @@ ggplot(data_bivariado, aes(x = Sleep_Grafico, fill = Depression_Factor)) +
   duermen menos, está diferencia contra la población que no tiene
   depresión es cada vez más grande entre menos tiempo duermen.
 
-# PARTE 6. Análisis Multivariado Básico
+------------------------------------------------------------------------
+
+## Exploración Multivariante Básica
 
 ## Matriz de Correlación
 
@@ -831,16 +854,16 @@ data_num <- data %>%
       TRUE ~ NA_real_
     ),
     Depression_num = as.numeric(as.character(Depression)),
-    
     Suicidal_Num = ifelse(trimws(Have.you.ever.had.suicidal.thoughts) == "Yes", 1, 0),
     Family_History_Num = ifelse(trimws(Family.History.of.Mental.Illness) == "Yes", 1, 0)
   ) %>%
-  
-  select(Age, Academic.Pressure, CGPA, Study.Satisfaction, 
-         Work.Study.Hours,
-         Sleep_Num, Diet_Num, Financial.Stress, 
-         Suicidal_Num, Family_History_Num,
-         Depression_num, Depression) %>% 
+  select(
+    Age, Academic.Pressure, CGPA, Study.Satisfaction,
+    Work.Study.Hours,
+    Sleep_Num, Diet_Num, Financial.Stress,
+    Suicidal_Num, Family_History_Num,
+    Depression_num, Depression
+  ) %>%
   na.omit()
 ```
 
@@ -852,12 +875,14 @@ matriz_cor <- cor(data_num %>% select(-Depression))
 colores <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
 
 # Graficar ocultando la diagonal para que se vea más limpio
-corrplot(matriz_cor, method = "color", type = "upper", 
-         col = colores(200),
-         tl.col = "black", tl.srt = 45, 
-         addCoef.col = "black", number.cex = 0.7, 
-         diag = FALSE, 
-         title = "Matriz de Correlación", mar=c(0,0,1,0))
+corrplot(matriz_cor,
+  method = "color", type = "upper",
+  col = colores(200),
+  tl.col = "black", tl.srt = 45,
+  addCoef.col = "black", number.cex = 0.7,
+  diag = FALSE,
+  title = "Matriz de Correlación", mar = c(0, 0, 1, 0)
+)
 ```
 
 ### ¿Qué variables están mas relacionadas?
@@ -888,22 +913,22 @@ por el rendimiento académico numérico (notas).
 
 ```{r}
 # library(GGally)
-# 
+#
 # # 1. Creamos una columna temporal como factor para los colores
 # data_num$Depression_Factor <- as.factor(data_num$Depression_num)
-# 
+#
 # # 2. Generamos el gráfico
 # ggparcoord(data = data_num,
 #            columns = 1:10,
 #            groupColumn = "Depression_Factor",
-#            scale = "std", 
+#            scale = "std",
 #            alphaLines = 0.05) +
 #   scale_color_manual(values = c("0" = "#1f77b4", "1" = "#d62728")) +
 #   theme_minimal() +
 #   labs(title = "Coordenadas Paralelas (Agrupadas por Depresión)",
 #        x = "Variables", y = "Valor Estandarizado") +
 #   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-# 
+#
 # # 3. Borramos la columna temporal para que no afecte la Parte 7 (Medidas descriptivas)
 # data_num$Depression_Factor <- NULL
 ```
@@ -948,7 +973,9 @@ ideaciones suicidas) y el grupo de bienestar (mayor satisfacción de
 estudio, menor presión, mejor alimentación, sin historial familiar, sin
 ideaciones suicidas).
 
-# PARTE 7. Medidas descriptivas multivariantes
+------------------------------------------------------------------------
+
+## Medidas descriptivas multivariantes
 
 ## Media Vectorial
 
@@ -1052,19 +1079,21 @@ son señales tempranas del colapso emocional.
 
 ------------------------------------------------------------------------
 
-# PARTE 9: PCA
+# 5. PCA (Análisis de Componentes Principales)
 
 ```{r}
 # LIBRERÍAS
 
-library(MVN)        # Para normalidad multivariante
-library(car)        # Para elipses de confianza y covarianza
+library(MVN) # Para normalidad multivariante
+library(car) # Para elipses de confianza y covarianza
 library(factoextra) # Para visualizar el PCA
 library(FactoMineR) # Para hacer el PCA
 
 # Cargamos los datos numéricos en una nueva variable para el PCA (se excluye el target)
-data_pca <- data_num[, c("Age", "Academic.Pressure", "Work.Study.Hours", 
-                         "Financial.Stress", "Sleep_Num", "CGPA", "Suicidal_Num")]
+data_pca <- data_num[, c(
+  "Age", "Academic.Pressure", "Work.Study.Hours",
+  "Financial.Stress", "Sleep_Num", "CGPA", "Suicidal_Num"
+)]
 ```
 
 ------------------------------------------------------------------------
@@ -1262,11 +1291,12 @@ factores con pesos similares.
 # Círculo de Correlaciones
 res_pca <- PCA(data_pca, scale.unit = TRUE, graph = FALSE)
 
-fviz_pca_var(res_pca, 
-             col.var = "contrib",
-             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-             repel = TRUE,
-             title = "Variables y sus contribuciones al PCA")
+fviz_pca_var(res_pca,
+  col.var = "contrib",
+  gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+  repel = TRUE,
+  title = "Variables y sus contribuciones al PCA"
+)
 ```
 
 ### Resultados
@@ -1307,7 +1337,7 @@ pertenece el estudiante.
 ## Visualización de Loadings
 
 ```{r}
-loadings_pca <- as.data.frame(pca$rotation) 
+loadings_pca <- as.data.frame(pca$rotation)
 loadings_pca$Variable <- rownames(pca$rotation)
 
 loadings_pca
@@ -1315,12 +1345,14 @@ loadings_pca
 loadings_long <- loadings_pca %>%
   tidyr::pivot_longer(
     cols = starts_with("PC"),
-    names_to = "Componente", 
+    names_to = "Componente",
     values_to = "Loading"
   )
 
-ggplot(loadings_long %>% filter(Componente %in% c("PC1", "PC2", "PC3", "PC4", "PC5", "PC6")),
-       aes(x = reorder(Variable, Loading), y = Loading, fill = Componente)) +
+ggplot(
+  loadings_long %>% filter(Componente %in% c("PC1", "PC2", "PC3", "PC4", "PC5", "PC6")),
+  aes(x = reorder(Variable, Loading), y = Loading, fill = Componente)
+) +
   geom_col(position = "dodge") +
   coord_flip() +
   labs(
@@ -1369,7 +1401,7 @@ que aporta cada dato por separado al transformarlos en componentes.
 
 ------------------------------------------------------------------------
 
-# PARTE 10: PCA COMPLETO
+## PCA con todas las variables
 
 ```{r pca-all-preparacion}
 library(dplyr)
@@ -1381,9 +1413,11 @@ library(tidyr)
 
 # Seleccionamos TODAS las variables predictoras (excluyendo el target)
 data_pca_completo <- data_num %>%
-  select(Age, Academic.Pressure, CGPA, Study.Satisfaction, 
-         Work.Study.Hours, Sleep_Num, Diet_Num, Financial.Stress, 
-         Suicidal_Num, Family_History_Num)
+  select(
+    Age, Academic.Pressure, CGPA, Study.Satisfaction,
+    Work.Study.Hours, Sleep_Num, Diet_Num, Financial.Stress,
+    Suicidal_Num, Family_History_Num
+  )
 ```
 
 ------------------------------------------------------------------------
@@ -1582,11 +1616,12 @@ El fenómeno de la depresión estudiantil demuestra ser altamente multidimension
 # Círculo de Correlaciones
 res_pca <- PCA(data_pca, scale.unit = TRUE, graph = FALSE)
 
-fviz_pca_var(res_pca, 
-             col.var = "contrib",
-             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-             repel = TRUE,
-             title = "Variables y sus contribuciones al PCA")
+fviz_pca_var(res_pca,
+  col.var = "contrib",
+  gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+  repel = TRUE,
+  title = "Variables y sus contribuciones al PCA"
+)
 ```
 
 Al examinar los resultados del summary() y los gráficos generados se
@@ -1640,7 +1675,7 @@ concentra firmemente en la zona derecha e inferior.
 ## Visualización de Loadings
 
 ```{r}
-loadings_pca <- as.data.frame(pca$rotation) 
+loadings_pca <- as.data.frame(pca$rotation)
 loadings_pca$Variable <- rownames(pca$rotation)
 
 loadings_pca
@@ -1648,12 +1683,14 @@ loadings_pca
 loadings_long <- loadings_pca %>%
   tidyr::pivot_longer(
     cols = starts_with("PC"),
-    names_to = "Componente", 
+    names_to = "Componente",
     values_to = "Loading"
   )
 
-ggplot(loadings_long %>% filter(Componente %in% c("PC1", "PC2", "PC3", "PC4", "PC5", "PC6")),
-       aes(x = reorder(Variable, Loading), y = Loading, fill = Componente)) +
+ggplot(
+  loadings_long %>% filter(Componente %in% c("PC1", "PC2", "PC3", "PC4", "PC5", "PC6")),
+  aes(x = reorder(Variable, Loading), y = Loading, fill = Componente)
+) +
   geom_col(position = "dodge") +
   coord_flip() +
   labs(
@@ -1695,7 +1732,9 @@ PC6: Concluye que jornadas extensas de estudio y trabajo desestabilizan
 y transforman directamente los hábitos más básicos del estudiante
 representando el desgaste por rutina o burnout físico.
 
-# Parte 11: MANOVA
+------------------------------------------------------------------------
+
+# 6. MANOVA (Análisis Multivariante de Varianza)
 
 ## Definición de Grupos
 
@@ -1733,10 +1772,9 @@ específicamente el estadístico **Lambda de Wilks** para verificar la
 significancia del modelo global.
 
 ```{r modelo-manova-wilks}
-
 variables_dependientes <- cbind(
-  data_num$Age, 
-  data_num$Academic.Pressure, 
+  data_num$Age,
+  data_num$Academic.Pressure,
   data_num$CGPA,
   data_num$Study.Satisfaction,
   data_num$Work.Study.Hours,
@@ -1748,10 +1786,12 @@ variables_dependientes <- cbind(
 )
 
 # Les ponemos nombres para que la salida sea fácil de leer
-colnames(variables_dependientes) <- c("Age", "Academic.Pressure", "CGPA", 
-                                      "Study.Satisfaction", "Work.Study.Hours", 
-                                      "Sleep_Num", "Diet_Num", "Financial.Stress", 
-                                      "Suicidal_Num", "Family_History_Num")
+colnames(variables_dependientes) <- c(
+  "Age", "Academic.Pressure", "CGPA",
+  "Study.Satisfaction", "Work.Study.Hours",
+  "Sleep_Num", "Diet_Num", "Financial.Stress",
+  "Suicidal_Num", "Family_History_Num"
+)
 
 # Ajustamos el modelo MANOVA basado en el factor Depression
 modelo_manova <- manova(variables_dependientes ~ Depression, data = data_num)
@@ -1798,7 +1838,9 @@ variables que arrojaron los valores F más altos fueron:
 3.  Financial.stress = 4243.3
 4.  Age = 1511.3
 
-# PARTE 12: ANOVA
+------------------------------------------------------------------------
+
+## ANOVAs individuales posteriores
 
 Con base en el análisis anterior, se determinaron las 4 variables más
 discriminantes entre estudiantes con y sin depresión, por lo que se les
@@ -1807,7 +1849,6 @@ realizará ANOVA a cada una de ellas.
 ## 1. Ideación Suicida
 
 ```{r}
-
 library(effectsize)
 
 anova_suicidal <- aov(Suicidal_Num ~ Depression, data = data_num)
@@ -1923,16 +1964,21 @@ data_anova_visual <- data_num %>%
 
 # Ajustamos los nombres para que se vean mejor en el gráfico
 data_anova_visual$Variable <- factor(data_anova_visual$Variable,
-                                     levels = c("Suicidal_Num", "Academic.Pressure", "Financial.Stress", "Age"),
-                                     labels = c("Ideación Suicida (0-1)", "Presión Académica (1-5)", 
-                                                "Estrés Financiero (1-5)", "Edad"))
+  levels = c("Suicidal_Num", "Academic.Pressure", "Financial.Stress", "Age"),
+  labels = c(
+    "Ideación Suicida (0-1)", "Presión Académica (1-5)",
+    "Estrés Financiero (1-5)", "Edad"
+  )
+)
 
 # Generamos el gráfico de cajas agrupado
 ggplot(data_anova_visual, aes(x = Depression, y = Valor, fill = Depression)) +
   geom_boxplot(alpha = 0.8, outlier.shape = 16, outlier.alpha = 0.5) +
   facet_wrap(~Variable, scales = "free_y") +
-  scale_fill_manual(values = c("0" = "#3498db", "1" = "#e74c3c"), 
-                    labels = c("Sin Depresión", "Con Depresión")) +
+  scale_fill_manual(
+    values = c("0" = "#3498db", "1" = "#e74c3c"),
+    labels = c("Sin Depresión", "Con Depresión")
+  ) +
   labs(
     title = "Comparación de Medias: Las 4 Variables de Mayor Impacto",
     subtitle = "El desplazamiento vertical de las cajas refleja la Varianza Explicada (Efecto)",
@@ -2010,30 +2056,25 @@ qué las cajas no están tan separadas como en otras variables. La edad
 puede dar indicios, pero por si sola no diferencia los grupos tanto como
 la Ideación suicida o la Presión Académica.
 
-# Análisis factorial
+------------------------------------------------------------------------
+
+# 7. Análisis factorial (AFE)
 
 Hallar correlación del dataset sin variable objetivo.
 
 ```{r}
-#usar la matriz corr pero sin variable objetivo
-data_af <- as.data.frame(scale(data_num %>% select(-Depression,-Depression_num)))
-                         
+# usar la matriz corr pero sin variable objetivo
+data_af <- as.data.frame(scale(data_num %>% select(-Depression, -Depression_num)))
+
 matriz_cor_af <- cor(data_af)
 
 matriz_cor_af
 
 # ya con la matriz de corr podemos ir a encontrar kmo,  para ver si es adecuada
-
-
-
-
-
-
 ```
 
 ```{r}
 head(data_af)
-
 ```
 
 ### KMO
@@ -2049,13 +2090,9 @@ head(data_af)
 | \< 0.50 | Inadecuado     |
 
 ```{r}
-
 library(psych)
 
 psych::KMO(matriz_cor_af)
-
-
-
 ```
 
 El resultado arroja que tiene un resultado regular cercano al aceptable
@@ -2131,7 +2168,7 @@ Se eligieron 3 por el criterio de Kayzer
 
 ```{r loadings}
 loadings_df <- as.data.frame(
-  unclass(modelo_fa$loadings)#los carga del modelo
+  unclass(modelo_fa$loadings) # los carga del modelo
 )
 
 loadings_df$Variable <- rownames(loadings_df)
@@ -2192,13 +2229,9 @@ modelo_scores <- factanal(
 )
 
 head(modelo_scores$scores)
-
-
 ```
 
 ```{r plot-scores}
-
-
 scores_df <- as.data.frame(modelo_scores$scores)
 
 scores_df$Depression_num <- data_num$Depression_num
@@ -2206,14 +2239,14 @@ scores_df$Depression_num <- data_num$Depression_num
 
 library(GGally)
 
-ggpairs(scores_df, 
-        columns = c("Factor1", "Factor2", "Factor3"), # Solo mapeamos los factores
-        mapping = aes(color = as.factor(Depression_num), alpha = 0.5),
-        title = "Matriz de Scores Factoriales por Estado de Depresión") +
+ggpairs(scores_df,
+  columns = c("Factor1", "Factor2", "Factor3"), # Solo mapeamos los factores
+  mapping = aes(color = as.factor(Depression_num), alpha = 0.5),
+  title = "Matriz de Scores Factoriales por Estado de Depresión"
+) +
   scale_color_manual(values = c("#2ecc71", "#e74c3c")) + # Verde (No) y Rojo (Sí)
   scale_fill_manual(values = c("#2ecc71", "#e74c3c")) +
   theme_minimal()
-
 ```
 
 ### Interpretación de factores
@@ -2232,9 +2265,155 @@ ggpairs(scores_df,
     forma negativa a la ideación suicida, historial de enfermedades
     mentales, presión académica y tiempo de estudio. pero de forma muy
     debíl ya que no supera el 30 %.
+
+------------------------------------------------------------------------
+
+# 8. Integración metodológica
+
+En esta sección se articula de forma integral cómo cada una de las tres técnicas multivariantes empleadas (PCA, MANOVA y Análisis Factorial Exploratorio) respondió a una pregunta específica de investigación dentro del estudio sobre depresión estudiantil. El objetivo es mostrar que las tres técnicas no operaron de forma aislada, sino que se complementaron para ofrecer una visión completa del fenómeno: primero se resumió la información disponible, luego se contrastaron formalmente los grupos y finalmente se buscaron las causas latentes detrás de los patrones observados.
+
+---
+
+## ¿Cómo se resumieron las variables? — Análisis de Componentes Principales (PCA)
+
+El Análisis de Componentes Principales es una técnica de reducción de dimensionalidad que busca transformar un conjunto de variables correlacionadas en un número menor de variables sintéticas llamadas *componentes principales*. Cada componente es una combinación lineal de las variables originales y se construye de forma que maximice la varianza capturada, sujeto a la restricción de ser ortogonal (independiente) respecto a las anteriores. De esta manera, el PCA permite "comprimir" la información distribuida en muchas variables en unos pocos ejes que concentren la mayor parte de la variabilidad del sistema. 
+
+En nuestro caso, el dataset de depresión estudiantil contiene variables con escalas muy heterogéneas: la edad va de 18 a 59 años, mientras que la ideación suicida es binaria (0 o 1). Para que todas participaran en igualdad de condiciones se estandarizaron antes de ejecutar el PCA:
+
+```r
+data_pca_completo <- as.data.frame(scale(data_pca_completo))
+```
+
+Posteriormente se extrajeron los componentes principales con `prcomp` y se evaluó cuánta varianza captura cada uno:
+
+```r
+pca <- prcomp(data_pca_completo, center = TRUE, scale. = TRUE)
+var <- (pca$sdev^2) / sum(pca$sdev^2)
+```
+
+Los resultados mostraron que se necesitan al menos 5 o 6 componentes para alcanzar el 80% de varianza acumulada, lo cual confirmó que la depresión estudiantil es un fenómeno inherentemente multidimensional y que no existe un único "super-factor" que domine el problema. El primer componente (PC1, ~22%) cargó fuertemente sobre presión académica, estrés financiero e ideación suicida, configurando un eje de *vulnerabilidad psicológica*. El segundo componente (PC2, ~14.5%) se asoció principalmente con hábitos de sueño y rendimiento académico, representando un eje de *hábitos y desempeño*.
+
+El círculo de correlaciones permitió visualizar cómo se agrupan vectorialmente las variables:
+
+```r
+fviz_pca_var(res_pca, col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE)
+```
+
+Y la visualización de los *scores* reveló que, al proyectar cada estudiante sobre los dos primeros componentes, los grupos con y sin depresión muestran una separación espacial apreciable a lo largo de PC1:
+
+```r
+ggplot(scores_pca, aes(PC1, PC2, color = Depression)) +
+  geom_point(size = 2.5, alpha = 0.85)
+```
+
+**En resumen**, el PCA cumplió la función de condensar las 10 variables predictoras en componentes interpretables, revelando que la presión académica, el estrés financiero y la ideación suicida son los principales contribuyentes al perfil de riesgo, mientras que el rendimiento académico (CGPA) mostró una contribución marginal. La técnica no solo resumió las variables, sino que proporcionó el mapa geométrico del fenómeno.
+
+---
+
+## ¿Cómo se compararon los grupos? — MANOVA
+
+El Análisis Multivariante de Varianza (MANOVA) es una extensión del ANOVA clásico que permite contrastar simultáneamente las medias de *múltiples* variables dependientes entre dos o más grupos, en lugar de hacerlo variable por variable. Su ventaja principal es que controla la tasa de error de Tipo I: si se realizaran 10 ANOVAs independientes (una por cada variable), la probabilidad de obtener al menos un falso positivo se inflaría considerablemente. El MANOVA evalúa la significancia de la diferencia entre los *centroides* (vectores de medias) de los grupos en el espacio multidimensional completo.
+
+En nuestro estudio, los dos grupos a contrastar fueron los estudiantes sin depresión (grupo 0) y con depresión (grupo 1). Se alimentaron las 10 variables predictoras como variables dependientes y la variable `Depression` como factor de agrupación:
+
+```r
+variables_dependientes <- cbind(
+  data_num$Age, data_num$Academic.Pressure, data_num$CGPA,
+  data_num$Study.Satisfaction, data_num$Work.Study.Hours,
+  data_num$Sleep_Num, data_num$Diet_Num, data_num$Financial.Stress,
+  data_num$Suicidal_Num, data_num$Family_History_Num
+)
+modelo_manova <- manova(variables_dependientes ~ Depression, data = data_num)
+summary(modelo_manova, test = "Wilks")
+```
+
+El contraste con la Lambda de Wilks arrojó un valor de **0.48315**, lo que indica que aproximadamente el **52%** de la varianza conjunta de todas las variables está determinada por la pertenencia al grupo con o sin depresión. Con un p-valor esencialmente igual a cero, se rechazó contundentemente la hipótesis nula ($H_0: \boldsymbol{\mu}_{\text{Sin Depresión}} = \boldsymbol{\mu}_{\text{Con Depresión}}$), confirmando que el perfil multivariado completo del estudiante difiere significativamente según su estado de salud mental.
+
+Tras confirmar la diferencia global, se descompuso el modelo con ANOVAs individuales para identificar qué variables contribuían más a la separación:
+
+```r
+summary.aov(modelo_manova)
+```
+
+Las variables con los estadísticos F más altos fueron la ideación suicida (F = 11860), la presión académica (F = 8112), el estrés financiero (F = 4243) y la edad (F = 1511). Para cuantificar el impacto práctico de cada una, se calculó el tamaño del efecto con Eta Cuadrado ($\eta^2$):
+
+```r
+eta_squared(anova_suicidal)   # η² = 0.30
+eta_squared(anova_academic)   # η² = 0.23
+eta_squared(anova_financial)  # η² = 0.13
+```
+
+**En resumen**, el MANOVA permitió validar estadísticamente que los dos grupos de estudiantes ocupan regiones distintas del espacio multidimensional, y los ANOVAs posteriores desglosaron esa separación para identificar cuáles variables tienen mayor poder discriminante. Sin esta prueba global previa, hacer ANOVAs sueltos habría inflado artificialmente la significancia de los resultados.
+
+---
+
+## ¿Cómo se identificaron estructuras ocultas? — Análisis Factorial Exploratorio
+
+El Análisis Factorial Exploratorio (AFE) parte de una premisa conceptualmente diferente al PCA: en lugar de buscar las combinaciones lineales que maximicen varianza, busca *factores latentes* (no observables directamente) que expliquen las correlaciones entre las variables observadas. Es decir, si varias variables se mueven juntas, el AFE asume que lo hacen porque existe un constructo subyacente común que las está "jalando". Cada variable tiene una parte de su varianza explicada por los factores comunes (comunalidad) y una parte propia que no comparte con ninguna otra (unicidad).
+
+Antes de ajustar el modelo, se verificó la adecuación de los datos mediante las pruebas estándar. El test de esfericidad de Bartlett confirmó que la matriz de correlación no es una identidad (es decir, que sí existen correlaciones significativas por explotar):
+
+```r
+psych::cortest.bartlett(matriz_cor_af, n = nrow(data_af))
+```
+
+Y el índice KMO evaluó si las correlaciones parciales son lo suficientemente pequeñas como para justificar la extracción de factores:
+
+```r
+psych::KMO(matriz_cor_af)
+```
+
+El KMO general fue *regular* (cercano a 0.70), con variables como `Work.Study.Hours`, `Diet_Num` y `Financial.Stress` acercándose a la categoría de "muy bueno", lo que indicó que existe una estructura factorial aprovechable aunque no es fuerte en todas las variables.
+
+Se retuvieron **3 factores** según el criterio de Kaiser (autovalores mayores que 1), confirmado por el Scree Plot, y se ajustó el modelo con `factanal`:
+
+```r
+modelo_fa <- factanal(data_af, factors = 3, rotation = "none")
+```
+
+Los factores latentes identificados se interpretan como:
+
+- **Factor 1 — Carga académica-financiera:** Agrupa la presión académica, el estrés financiero, las horas de trabajo/estudio y el historial familiar, en oposición inversa a la satisfacción con los estudios. Este factor representa el "peso acumulado" del sistema sobre el estudiante.
+- **Factor 2 — Hábitos y autocuidado:** Refleja cómo las condiciones de alta presión deterioran simultáneamente la calidad del sueño y la alimentación, especialmente en edades tempranas.
+- **Factor 3 — Vulnerabilidad psicológica latente:** Captura la relación entre estrés académico, privación de sueño e ideación suicida, aunque con cargas más débiles (por debajo del 30%).
+
+El análisis de unicidad reveló que la mayoría de las variables conservan una alta proporción de varianza no compartida, lo que significa que buena parte de la variabilidad individual de cada variable no se reduce a los factores comunes:
+
+```r
+comunalidades <- 1 - modelo_fa$uniquenesses
+```
+
+Únicamente `Study.Satisfaction` mostró una comunalidad aceptable, siendo la variable mejor representada por el modelo factorial.
+
+Finalmente, los scores factoriales se proyectaron coloreando por estado de depresión, lo que permitió visualizar cómo los constructos latentes separan (o no) a los dos grupos:
+
+```r
+ggpairs(scores_df, 
+        columns = c("Factor1", "Factor2", "Factor3"),
+        mapping = aes(color = as.factor(Depression_num)))
+```
+
+**En resumen**, el AFE reveló que detrás de las 10 variables observadas existen tres constructos latentes que organizan la información: uno relacionado con la sobrecarga sistémica del estudiante, otro con el deterioro de hábitos básicos y un tercero con la vulnerabilidad psicológica profunda. Sin embargo, la alta unicidad de varias variables confirma que la depresión estudiantil tiene componentes específicos de cada factor que no se reducen fácilmente a causas comunes, lo cual es coherente con lo encontrado en el PCA (se necesitan muchos componentes) y con la separación multivariada confirmada por el MANOVA.
+
+---
+
+## Síntesis de la integración
+
+Las tres técnicas se complementan de forma lógica y secuencial:
+
+| Pregunta de investigación | Técnica | Resultado clave |
+|---|---|---|
+| ¿Cómo resumir las variables? | **PCA** | Se necesitan ≥5 componentes para capturar el 80% de la varianza. PC1 (vulnerabilidad psicológica) y PC2 (hábitos) son los ejes principales. |
+| ¿Cómo comparar los grupos? | **MANOVA** | Wilks' λ = 0.48 → el 52% de la varianza conjunta se explica por el estado de depresión. La ideación suicida (η² = 0.30) y la presión académica (η² = 0.23) son los principales discriminadores. |
+| ¿Cómo identificar estructuras ocultas? | **Factorial** | Se identificaron 3 factores latentes (carga sistémica, deterioro de hábitos, vulnerabilidad psicológica), aunque la alta unicidad confirma la complejidad irreducible del fenómeno. |
+
+El PCA mostró *cuántas dimensiones* tiene el problema y *dónde* se concentra la variabilidad. El MANOVA demostró que esas diferencias dimensionales son *estadísticamente reales* entre los dos grupos. Y el Análisis Factorial propuso *por qué* esas variables se mueven juntas, identificando los constructos latentes que las organizan. Juntas, las tres técnicas establecen que la depresión estudiantil es un fenómeno multifactorial donde la sobrecarga académica-financiera, el deterioro de hábitos de vida y la vulnerabilidad psicológica operan como sistemas interconectados pero parcialmente independientes.
+
+---
     
-    
-#Hallazgos más importantes
+## Hallazgos más importantes
 
  - La ideación suicida fue la variable más asociada a la depresión.
  
@@ -2252,15 +2431,25 @@ ggpairs(scores_df,
 
  - La depresión estudiantil se comporta como un fenómeno multidimensional y complejo, sin una única causa dominante.
 
+------------------------------------------------------------------------
 
-# Conclusión General
+# 9. Conclusiones
 
-El presente estudio permitió analizar los factores asociados a la depresión en estudiantes mediante la aplicación de técnicas de análisis descriptivo, análisis bivariado, análisis multivariado, Análisis de Componentes Principales (PCA), Análisis Factorial Exploratorio (AFE), MANOVA y ANOVA. Los resultados evidenciaron que la depresión no depende de un único factor, sino que corresponde a un fenómeno multidimensional influenciado por variables académicas, económicas, psicológicas y relacionadas con los hábitos de vida.
+El presente estudio permitió analizar los factores asociados a la depresión en estudiantes mediante la aplicación de técnicas de análisis descriptivo, análisis bivariado, análisis multivariado, Análisis de Componentes Principales (PCA), Análisis Factorial Exploratorio (AFE), MANOVA y ANOVA. Los resultados evidenciaron que la depresión no depende de un único factor, sino que corresponde a un fenómeno multidimensional influenciado por variables académicas, económicas, psicológicas y relacionadas con los hábitos de vida; de hecho, fue necesario analizar simultáneamente al menos **5 dimensiones diferentes** de la vida del estudiante para capturar el **80.4% de toda la información relevante** del fenómeno.
 
-A lo largo de los diferentes análisis se observó de manera consistente que variables como la presión académica, el estrés financiero, la presencia de pensamientos suicidas, la duración del sueño, la satisfacción con los estudios y los hábitos alimenticios presentan asociaciones importantes con la presencia de depresión. Por el contrario, variables como el rendimiento académico (CGPA), la presión laboral y la satisfacción laboral mostraron una capacidad mucho menor para diferenciar a los estudiantes con depresión de aquellos que no presentan esta condición.
+A lo largo de los diferentes análisis se observó de manera consistente que variables como la presión académica, el estrés financiero, la presencia de pensamientos suicidas, la duración del sueño, la satisfacción con los estudios y los hábitos alimenticios presentan asociaciones importantes con la presencia de depresión. Por el contrario, el rendimiento académico (CGPA) mostró una capacidad prácticamente nula para diferenciar a los estudiantes con depresión de aquellos que no presentan esta condición, explicando apenas el **0.03% de las diferencias** entre grupos, lo que demuestra que obtener buenas notas no protege al estudiante de sufrir depresión.
 
-Los resultados del PCA demostraron que la información contenida en el conjunto de datos se encuentra distribuida entre múltiples dimensiones, lo que dificulta una reducción significativa de variables sin pérdida considerable de información. Esta situación fue consistente con los hallazgos del Análisis Factorial Exploratorio, donde se identificó la existencia de factores comunes, pero también altos niveles de unicidad en varias variables, indicando que una parte importante de la variabilidad observada es específica de cada característica analizada.
+Los resultados del PCA demostraron que la información contenida en el conjunto de datos se encuentra distribuida entre múltiples dimensiones, lo que dificulta una reducción significativa de variables sin pérdida considerable de información. Esta situación fue consistente con los hallazgos del Análisis Factorial Exploratorio, donde se identificó la existencia de **3 grandes dinámicas ocultas** que organizan la vulnerabilidad del estudiante (sobrecarga del entorno, deterioro de hábitos básicos y vulnerabilidad psicológica), pero también altos niveles de unicidad en varias variables, indicando que una parte importante de la variabilidad observada es específica de cada característica analizada.
 
-Por su parte, el MANOVA confirmó estadísticamente que existen diferencias significativas en el perfil multivariado de los estudiantes según la presencia o ausencia de depresión. Posteriormente, los análisis ANOVA permitieron identificar cuáles variables aportan en mayor medida a dicha diferenciación, destacándose especialmente la ideación suicida, la presión académica y el estrés financiero.
+Por su parte, el MANOVA confirmó estadísticamente que **más de la mitad de todas las diferencias observadas entre ambos grupos (51.7%)** se explican directa y exclusivamente por la presencia o ausencia de depresión. Posteriormente, los análisis ANOVA permitieron identificar cuáles variables aportan en mayor medida a dicha diferenciación: la **ideación suicida** (con el **30% del impacto** total), la **presión académica** (**23%**) y el **estrés financiero** (**13%**), siendo esta jerarquía de impacto el resultado más contundente y accionable del estudio.
 
 En conjunto, los resultados sugieren que las estrategias de prevención e intervención dirigidas a la población estudiantil deberían enfocarse no solamente en el desempeño académico, sino también en el bienestar psicológico, el manejo del estrés, el apoyo financiero, la promoción de hábitos de sueño saludables y el fortalecimiento de redes de apoyo emocional. De esta manera, el estudio demuestra la utilidad de las técnicas de análisis multivariado para comprender fenómenos complejos como la depresión estudiantil y proporciona evidencia que puede servir como base para futuras investigaciones y para el diseño de programas de acompañamiento en instituciones educativas.
+
+# 10. Reflexión metodológica
+
+La elección de cada técnica respondió directamente a la naturaleza del problema analizado. El PCA fue adecuado porque el dataset contiene múltiples variables medidas en escalas heterogéneas y con altas correlaciones entre sí; esta técnica permite condensar esa información en ejes interpretables sin imponer una estructura previa, lo que resulta ideal para una exploración inicial de un fenómeno poco comprendido. 
+
+El MANOVA fue la herramienta correcta para la comparación de grupos porque evalúa simultáneamente todas las variables dependientes, evitando el error estadístico que se acumula al hacer comparaciones individuales repetidas; además, al tener un factor de grupo binario y bien definido (depresión sí/no), la estructura del análisis se ajustaba perfectamente a los datos. 
+
+Finalmente, el Análisis Factorial Exploratorio fue pertinente porque la teoría no permite asumir de antemano cuáles variables comparten una causa común: el AFE deja que sean los propios datos los que revelen esas agrupaciones latentes, lo cual es metodológicamente honesto cuando el objetivo es descubrir estructura en lugar de confirmarla.
+
